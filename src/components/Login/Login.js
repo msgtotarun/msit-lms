@@ -4,11 +4,9 @@ import './Login.css'
 class Login extends Component {
   render() {
     const userName='user';
-
-    return (
-      <div>
-         <NavBar userName={userName}></NavBar>
-         <div class = "container h-100" >
+    if(userName==="")
+var login=
+<div class = "container h-100" >
             <div class = "d-flex justify-content-center h-100" >
             <div class = "user_card" >
             <div class = "d-flex justify-content-center" >
@@ -60,6 +58,10 @@ class Login extends Component {
             </div> 
             </div> 
             </div>
+    return (
+      <div class='loginFix'>
+         <NavBar userName={userName}></NavBar>
+         {login}
 
       </div>
     );
