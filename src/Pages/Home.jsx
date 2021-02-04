@@ -1,11 +1,9 @@
 import React from 'react'
-import NavBar from '../components/NavBar'
+
 import Login from '../components/Login'
 const Home = ()=>{
-    const msg='Hi! '
     return(
-        <div>
-        <NavBar userName={msg+"Tarun"}></NavBar>
+        <div class='nav-fix'>
         <Login></Login>
         </div>
         );
