@@ -1,8 +1,13 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
+import Login from '../components/Login'
 const Home = ()=>{
+    const msg='Hi! '
     return(
-        <NavBar></NavBar>
+        <div>
+        <NavBar userName={msg+"Tarun"}></NavBar>
+        <Login></Login>
+        </div>
         );
 }
 
