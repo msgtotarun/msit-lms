@@ -16,6 +16,7 @@ class ProgramCatalog extends Component {
     if(this.state.layout){
 
     }
+
     return (<div class="container">
             <GridContainer><GridContainer/>
             </div>);
@@ -24,11 +25,18 @@ class ProgramCatalog extends Component {
 
 function GridContainer(props){
   return (<div class="container">
-          
+          {props.children}
           </div>);
 }
 
 function Rows(props){
-  return (<div class="row">props.children</div>);
+  return (<div class="row">
+          {props.children}
+          </div>);
 }
+
+function Cols(props){
+  
+}
+
 export default ProgramCatalog;
