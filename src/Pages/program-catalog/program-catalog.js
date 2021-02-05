@@ -31,7 +31,7 @@ class ProgramCatalog extends Component {
   }
 
   handleLayout(){
-    this.setState({layout: false});
+    this.setState(prevstate => {layout: !prevstate.layout});
   }
 
   getRenderList() {
@@ -45,6 +45,11 @@ class ProgramCatalog extends Component {
 
   setList(List){
 
+    List.map(program => {
+      return <Cols view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"><Cols/>
+    });
+
+    return List;
   }
 
   setCard(List){
@@ -58,15 +63,29 @@ class ProgramCatalog extends Component {
 
   setLayout()
   {
-      var copyList = this.state.list;
-      if(this.state.layout){
-         return this.setCard(copyList)
+      const {layout} = this.state;
+      const {list} = this.state;
+      if(layout){
+         return this.setCard(list)
       }
+
+      return this.setList(list)
   }
 
   render() {
 
     list = this.setLayout();
+
+    if(!this.state.layout){
+      return(<select class="form-select" aria-label="Default select example">
+                <option selected > <span>Layout</span> </option>
+                <option value = "grid"> One </option>
+                <option value = "list"> Two </option>
+              </select>
+            <div class="accordion" id="accordionExample">
+
+            </div>);
+    }
 
     return (<select class="form-select" aria-label="Default select example">
               <option selected > <span>Layout</span> </option>
