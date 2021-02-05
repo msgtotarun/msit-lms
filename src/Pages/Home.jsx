@@ -1,10 +1,11 @@
 import React from 'react'
-import NavBar from '../components/NavBar'
-import Cards from '../components/Cards'
+
+import Login from '../components/Login'
 const Home = ()=>{
     return(
-        <NavBar></NavBar>,
-        <Cards></Cards>
+        <div class='nav-fix'>
+        <Login></Login>
+        </div>
         );
 }
 
