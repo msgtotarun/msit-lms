@@ -43,7 +43,7 @@ class ProgramCatalog extends Component {
     }
   }
 
-  setList(){
+  setList(List){
 
   }
 
