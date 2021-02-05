@@ -3,15 +3,15 @@ import  './Cards.css';
 
 class Cards extends Component {
 render()
-{ 
- 
+{
+
 return(
 
   <div class="col-sm d-flex flex-direction:column">
 	    {/* <div class="card card-body flex-fill"> */}
         <div className ="w-25 p-3 h-25 d-inline-block" >
             <div class="card" >
-                <img src="{this.props.image}" class="card-img-top" alt="..."/>
+                <img src={this.props.image} class="card-img-top" alt="..."/>
                 <div class="card-body">
                       <h5 class="card-title">{this.props.title}</h5>
                       <p class="card-text">{this.props.description}</p>
@@ -26,8 +26,8 @@ return(
 
 
 
-      
-      
+
+
     );
   }
 }
