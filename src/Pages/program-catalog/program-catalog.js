@@ -92,9 +92,7 @@ class ProgramCatalog extends Component {
               <option value = "grid"> One </option>
               <option value = "list"> Two </option>
             </select>
-            <div class="container">
-            <Rows>{list}<Rows/>
-            </div>);
+            <Rows>{list}<Rows/>);
   }
 
 }
