@@ -4,6 +4,8 @@ import ListProgram from '../../components/list-programs/list-programs';
 import Card from '../../components/Cards/Cards';
 import LargeCard from '../../components/Cards/LargeCard/LargeCard';
 
+var showList = [];
+
 class ProgramCatalog extends Component {
 
   constructor(props) {
@@ -46,53 +48,61 @@ class ProgramCatalog extends Component {
   setList(List){
 
     List.map(program => {
-      return <Cols view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"><Cols/>
+      return <ListProgram view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"><ListProgram/>
     });
 
-    return List;
+    showList = List;
   }
 
   setCard(List){
 
       List.map(program => {
-        return <Cols view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"><Cols/>
+        <Cols view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"><Cols/>
       });
 
-      return List;
+      showList = List;
   }
 
   setLayout()
   {
-      const {layout} = this.state;
-      const {list} = this.state;
-      if(layout){
-         return this.setCard(list)
-      }
 
-      return this.setList(list)
+    showList = this.state.layout?this.setCard(this.state.list):this.setList(this.state.list)
+
+      // if(this.state.layout)
+      // {
+      //    showList = this.setCard(this.state.list)
+      // }
+      // else{
+      //   showList = this.setList(this.state.list)
+      // }
   }
 
   render() {
 
-    list = this.setLayout();
+      this.setLayout()
 
-    if(!this.state.layout){
-      return(<select class="form-select" aria-label="Default select example">
-                <option selected > <span>Layout</span> </option>
-                <option value = "grid"> One </option>
-                <option value = "list"> Two </option>
-              </select>
-            <div class="accordion" id="accordionExample">
-
-            </div>);
-    }
-
-    return (<select class="form-select" aria-label="Default select example">
-              <option selected > <span>Layout</span> </option>
-              <option value = "grid"> One </option>
-              <option value = "list"> Two </option>
-            </select>
-            <Rows>{list}<Rows/>);
+      var doc = null;
+      if (this.state.layout === false) {
+             doc =(<div class="container">
+                     <select class="form-select" aria-label="Default select example">
+                        <option selected > <span>Layout</span> </option>
+                        <option value = "grid"> One </option>
+                        <option value = "list"> Two </option>
+                     </select>
+                      {showList}
+                      </div>)
+      } else {
+      doc =
+        (<div class="container">
+                  <select class="form-select" aria-label="Default select example">
+                    <option selected > <span>Layout</span> </option>
+                    <option value = "grid"> One </option>
+                    <option value = "list"> Two </option>
+                  </select>
+                  {showList}
+                  </div>)
+      }
+        return doc;
   }
 
 }
@@ -114,7 +124,7 @@ function Rows(props){
 
 function Cols(props){
 
-  if(props.view != 'program'){
+  if(props.view !== 'program'){
     return (<div class="row">
     <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>
     <LargeCard/>

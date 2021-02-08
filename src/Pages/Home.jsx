@@ -4,10 +4,12 @@ import Login from '../components/Login'
 
 const Home = ()=>{
     return(
+      <div class="container">
         <div class='nav-fix'>
-        <Login><Login/>
+        <Login></Login>
         </div>
-        <ProgramCatalog view="program"><ProgramCatalog/>
+        <ProgramCatalog view="program"></ProgramCatalog>
+      </div>
         );
 }
 
