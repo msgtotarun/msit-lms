@@ -46,21 +46,19 @@ class ProgramCatalog extends Component {
   }
 
   setList(List){
-
-    List.map(program => {
-      return <ListProgram view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"><ListProgram/>
+    showList = List.map(program => {
+      return <ListProgram view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"></ListProgram>
     });
 
-    showList = List;
+    return showList;
   }
 
   setCard(List){
+      showList = List.map((program) =>
+        <Cols view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"></Cols>
+      )
 
-      List.map(program => {
-        <Cols view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"><Cols/>
-      });
-
-      showList = List;
+      return showList;
   }
 
   setLayout()
@@ -79,8 +77,8 @@ class ProgramCatalog extends Component {
 
   render() {
 
-      this.setLayout()
-
+      this.setLayout();
+      console.log(this.props.view)
       var doc = null;
       if (this.state.layout === false) {
              doc =(<div class="container">
@@ -90,7 +88,7 @@ class ProgramCatalog extends Component {
                         <option value = "list"> Two </option>
                      </select>
                       {showList}
-                      </div>)
+                    </div>);
       } else {
       doc =
         (<div class="container">
@@ -100,7 +98,7 @@ class ProgramCatalog extends Component {
                     <option value = "list"> Two </option>
                   </select>
                   {showList}
-                  </div>)
+                </div>);
       }
         return doc;
   }
@@ -127,12 +125,12 @@ function Cols(props){
   if(props.view !== 'program'){
     return (<div class="row">
     <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>
-    <LargeCard/>
+    </LargeCard>
     </div>);
   }
 
   return (<div class="col">
-      <Card title={props.title} description={props.description} button={props.button} image={props.image}><Card/>
+      <Card title={props.title} description={props.description} button={props.button} image={props.image}></Card>
           </div>);
 }
 

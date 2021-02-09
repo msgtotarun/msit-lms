@@ -5,7 +5,7 @@ class LargeCard extends Component {
     return (<div class="card mb-3" style="max-width: 540px;">
   <div class="row g-0">
     <div class="col-md-4">
-      <img src={this.props.image} alt="...">
+      <img src={this.props.image} alt="..."></img>
     </div>
     <div class="col-md-8">
       <div class="card-body">

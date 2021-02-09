@@ -42,7 +42,6 @@
     "@babel/core": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
     "@testing-library/react": "^11.2.3",
-    "babel-loader": "^8.2.2",
     "create-react-component-folder": "^0.3.7",
     "dotenv-webpack": "^6.0.0",
     "enzyme": "^3.11.0",
