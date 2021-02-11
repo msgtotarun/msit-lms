@@ -6,9 +6,15 @@ const Home = ()=>{
     return(
         <div className='nav-fix container'>
             <NavBar/>
-            <Login/>
         </div>
+
       );
+
+        <Login/>
+        <ProgramCatalog view="program"></ProgramCatalog>
+      </div>
+        );
+
 }
 
 export default Home
