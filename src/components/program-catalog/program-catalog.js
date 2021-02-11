@@ -25,9 +25,8 @@ class ProgramCatalog extends Component {
   async getPrograms(userID) {
     // example code
     try {
-      console.log(process.env.REACT_APP_API)
+      console.log(process.env.REACT_APP_APIBASE_URL)
       var token = localStorage.getItem('token');
-      const response = await fetch(process.env.REACT_APP_API+'/program/get/enrolled_programs/'+userID+'/?token='+token);
       const response = await fetch(process.env.REACT_APP_APIBASE_URL+'/program/get/enrolled_programs/'+userID+'/?token='+token);
       const json = await response.json();
       this.setState({ list:json })
