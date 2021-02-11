@@ -54,7 +54,7 @@ async handleLogin(event){
       };
       
       
-     fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
+     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result)
