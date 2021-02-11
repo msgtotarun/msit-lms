@@ -3,17 +3,17 @@ import {Link} from "react-router-dom";
 import './NavBar.css'
 
 class NavBar extends Component {
- 
+
   render() {
     var userName=this.props.userName
-   
+
     if(userName!==undefined || userName!=null )
-      var userNav=  
+      var userNav=
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 {/* <ul className ="navbar-nav mr-auto mb-lg-0">
-                  
+
                 </ul> */}
-                
+
                 <ul className ="nav navbar-nav ml-auto">
                     <li className ="nav-item">
                         <Link className ="nav-link" to='#'>Credits</Link>
@@ -28,10 +28,10 @@ class NavBar extends Component {
                     <Link className ="nav-link " to="#">Logout</Link>
                   </li>
                 </ul>
-              
+
           </div>
-      
-    
+
+
     return (
       <div className='navFix'>
       <nav className="navbar fixed-top navbar-expand-md navbar-colour navbar-dark">

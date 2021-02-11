@@ -15,12 +15,12 @@ class ProgramCatalog extends Component {
       layout: true,
       list: []
     };
-    this.getRenderList = this.getRenderList.bind(this);
   }
 
-  // componentWillMount() {
-  //   this.getRenderList()
-  // }
+  componentDidMount() {
+    console.log('inside cdm')
+    this.getRenderList();
+  }
 
   async getPrograms(userID) {
     // example code
@@ -44,8 +44,11 @@ class ProgramCatalog extends Component {
   }
 
   getRenderList() {
+    console.log('inside get render list');
+    var userID = localStorage.getItem('id');
+    console.log(`userID = ${userID}, props.view = ${this.props.view}`);
+
     if ("programs"==this.props.view){
-        var userID = localStorage.getItem('id');
         this.getPrograms(userID);
     }
     else{
@@ -85,10 +88,20 @@ class ProgramCatalog extends Component {
 
   render() {
       this.setLayout();
+      var user = localStorage.getItem('id')
+
+      if(user===null){
+        return (<div class="alert alert-warning" role="alert">
+            You are not authorized to acces this page!
+            </div>);
+      }
+
       console.log(this.props.view)
       var doc = null;
       if (this.state.layout === false) {
              doc =(<div className="container">
+               <NavBar userName={user}/>
+               <div className="container">
                <select class="form-select" aria-label="Default select example" onChange={this.handleLayout}>
                  <option selected value="true">View: Grid</option>
                  <option value="false">View: List</option>
@@ -96,16 +109,19 @@ class ProgramCatalog extends Component {
     <div class="accordion" id="accordionExample">
     {showList}
     </div>
-  </div>);
+  </div></div>);
       } else {
       doc =
         (<div className="container">
+          <NavBar userName={user}/>
+          <div className="container">
           <select class="form-select" aria-label="Default select example" onChange={this.handleLayout}>
             <option selected value="true">View: Grid</option>
             <option value="false">View: List</option>
           </select>
                   <Rows view={this.props.view}>{showList}</Rows>
-                </div>);
+                </div>
+              </div>);
       }
         return doc;
   }
@@ -131,14 +147,14 @@ function Cols(props){
 
   if(props.view !== 'program'){
     return (<div className="row">
-    
+
     <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>
     </LargeCard>
     </div>);
   }
 
   return (<div className="col">
-      
+
       <Card title={props.title} description={props.description} button={props.button} image={props.image}></Card>
           </div>);
 }
