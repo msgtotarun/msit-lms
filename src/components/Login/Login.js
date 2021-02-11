@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import {Link,withRouter} from "react-router-dom";
 import './Login.css'
-import { Redirect } from 'react-router'
 const {REACT_APP_APIBASE_URL,}=process.env
 class  Login extends Component {
   constructor(props){
@@ -37,7 +36,7 @@ async handleLogin(event){
         localStorage.setItem('token',data.token)
           if(data.valid==='admin'){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
-              console.log("need admin redirect: "+localStorage.getItem('token'))
+              console.log("need admin redirect: "+data.token)
 
           }
         }
@@ -49,6 +48,8 @@ async handleLogin(event){
         redirect: 'follow'
       };
 
+
+
      await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
       .then(response => response.text())
       .then(result => {
@@ -56,18 +57,13 @@ async handleLogin(event){
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
         this.props.history.push('/program-catalog')
-
       }
       ).catch(error => console.log('error', error));
-
-      window.location.href = `${REACT_APP_APIBASE_URL}/program-catalog`;
-      // <Redirect to=`${REACT_APP_APIBASE_URL}/program-catalog`/>
 
   }
   render() {
     if(localStorage.getItem('token')===null){
 var login=
-
             <div className  = "d-flex justify-content-center h-100" >
             <div className  = "user_card" >
             <div className  = "d-flex justify-content-center" >
@@ -124,10 +120,7 @@ var login=
             </div>
             </div>
             </div>
-            </div> 
-            </div> 
-            console.log('redirect: ',this.state.redirect)
-    }
+ }
     return (
       <div className  = "container h-100 loginFix" >
       {login}

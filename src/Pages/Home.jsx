@@ -4,14 +4,11 @@ import Login from '../components/Login'
 
 const Home = ()=>{
     return(
+      <div>
         <div className='nav-fix container'>
             <NavBar/>
         </div>
-
-      );
-
         <Login/>
-        <ProgramCatalog view="program"></ProgramCatalog>
       </div>
         );
 
