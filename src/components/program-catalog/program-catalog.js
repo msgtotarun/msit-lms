@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { Component } from "react";
-import NavBar from '../../components/NavBar/NavBar';
-import ListProgram from '../../components/list-programs/list-programs';
-import Card from '../../components/Cards/Cards';
-import LargeCard from '../../components/Cards/LargeCard/LargeCard';
+import NavBar from '../NavBar/NavBar';
+import ListProgram from '../list-programs/list-programs';
+import Card from '../Cards/Cards';
+import LargeCard from '../Cards/LargeCard/LargeCard';
 
 var showList = [];
 
@@ -27,7 +27,7 @@ class ProgramCatalog extends Component {
     try {
       console.log(process.env.REACT_APP_API)
       var token = localStorage.getItem('token');
-      const response = await fetch(process.env.REACT_APP_API+'/program/get/enrolled_programs/'+userID+'/?token='+token);
+      const response = await fetch(process.env.REACT_APP_APIBASE_URL+'/program/get/enrolled_programs/'+userID+'/?token='+token);
       const json = await response.json();
       this.setState({ list:json })
     } catch (error) {

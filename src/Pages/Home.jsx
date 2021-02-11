@@ -1,5 +1,4 @@
 import React from 'react'
-import ProgramCatalog from './program-catalog'
 import Login from '../components/Login'
 import NavBar from '../components/NavBar'
 

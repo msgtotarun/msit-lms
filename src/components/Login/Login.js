@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import {Link} from "react-router-dom";
 import './Login.css'
+import { Redirect } from 'react-router'
 const {REACT_APP_APIBASE_URL,}=process.env
 var bg;
 class  Login extends Component {
@@ -21,7 +22,7 @@ class  Login extends Component {
      [event.target.name]:event.target.value
   })
 }
-  
+
 async handleLogin(event){
 
     var requestOptions = {
@@ -42,18 +43,18 @@ async handleLogin(event){
           if(data.valid==='admin'){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
               console.log("need admin redirect: "+localStorage.getItem('token'))
-            
+
           }
         }
       )
       .catch(error => console.log('error', error));
-      
+
       requestOptions = {
         method: 'GET',
         redirect: 'follow'
       };
-      
-      
+
+
      fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
       .then(response => response.text())
       .then(result => {
@@ -62,7 +63,9 @@ async handleLogin(event){
         localStorage.setItem('id',id.id)
       }
       ).catch(error => console.log('error', error));
-      
+
+      <Redirect to="/program-catalog"/>
+
   }
   render() {
     if(localStorage.getItem('token')===null){
@@ -78,7 +81,7 @@ var login=
             className  = "brand_logo"
             alt = ""/>
             </div>
-            </div> 
+            </div>
             <div className  = "d-flex justify-content-center form_container" >
             <form>
             <
@@ -95,12 +98,12 @@ var login=
             placeholder = "username"
             onChange={this.handleInputChange}
             />
-            
-            </div> 
+
+            </div>
             <div className  = "input-group mb-2" >
             < div className  = "input-group-append" >
             <span className  = "input-group-text" > < i className  = "fas fa-key" > </i> </span>
-            </div> 
+            </div>
             <input type = "password"
             name = "password"
             className  = "form-control input_pass"
@@ -109,21 +112,21 @@ var login=
             onChange={this.handleInputChange}
             />
 
-            </div> 
+            </div>
             <div className  = "mt-4" >
             <div className  = "d-flex justify-content-center links" >
-            <Link to = "#" > Forgot your password ? </Link> 
-            </div> 
-            </div> 
+            <Link to = "#" > Forgot your password ? </Link>
+            </div>
+            </div>
             <div className  = "d-flex justify-content-center mt-3 login_container" >
             <button type = "button"
             name = "button"
-            className  = "btn login_btn"  onClick={this.handleLogin}> Login </button> 
-            </div> 
-            </form> 
+            className  = "btn login_btn"  onClick={this.handleLogin}> Login </button>
             </div>
-            </div> 
-            </div> 
+            </form>
+            </div>
+            </div>
+            </div>
     }
     return (
       <div className  = "container h-100 loginFix" >
