@@ -131,13 +131,14 @@ function Cols(props){
 
   if(props.view !== 'program'){
     return (<div className="row">
-      <p>program</p>
+    
     <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>
     </LargeCard>
     </div>);
   }
 
   return (<div className="col">
+      
       <Card title={props.title} description={props.description} button={props.button} image={props.image}></Card>
           </div>);
 }
