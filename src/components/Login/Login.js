@@ -64,7 +64,8 @@ async handleLogin(event){
       }
       ).catch(error => console.log('error', error));
 
-      <Redirect to="/program-catalog"/>
+      window.location.href = `${REACT_APP_APIBASE_URL}/program-catalog`;
+      // <Redirect to=`${REACT_APP_APIBASE_URL}/program-catalog`/>
 
   }
   render() {
