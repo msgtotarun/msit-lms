@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { Component } from "react";
-import NavBar from '../../components/NavBar/NavBar';
-import ListProgram from '../../components/list-programs/list-programs';
-import Card from '../../components/Cards/Cards';
-import LargeCard from '../../components/Cards/LargeCard/LargeCard';
+import NavBar from '../NavBar/NavBar';
+import ListProgram from '../list-programs/list-programs';
+import Card from '../Cards/Cards';
+import LargeCard from '../Cards/LargeCard/LargeCard';
 
 var showList = [];
 
@@ -131,6 +131,7 @@ function Cols(props){
 
   if(props.view !== 'program'){
     return (<div className="row">
+      <p>program</p>
     <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>
     </LargeCard>
     </div>);
