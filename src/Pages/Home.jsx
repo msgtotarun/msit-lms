@@ -5,8 +5,8 @@ import NavBar from '../components/NavBar'
 
 const Home = ()=>{
     return(
-      <div class="container">
-        <div class='nav-fix'>
+      <div className="container">
+        <div className='nav-fix'>
         <NavBar userName=''></NavBar>
         </div>
         <ProgramCatalog view="program"></ProgramCatalog>
