@@ -1,19 +1,14 @@
 import React, { Component } from "react"
-import {Link} from "react-router-dom";
+import {Link,withRouter} from "react-router-dom";
 import './Login.css'
 import { Redirect } from 'react-router'
 const {REACT_APP_APIBASE_URL,}=process.env
-var bg;
 class  Login extends Component {
   constructor(props){
     super(props)
     this.state ={
       username:'',
-      password:''
-    }
-    bg={
-      token:'',
-      valid:''
+      password:'',
     }
    this.handleLogin= this.handleLogin.bind(this)
   }
@@ -54,13 +49,14 @@ async handleLogin(event){
         redirect: 'follow'
       };
 
-
-     fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
+     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
       .then(response => response.text())
       .then(result => {
         console.log(result)
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
+        this.props.history.push('/program-catalog')
+
       }
       ).catch(error => console.log('error', error));
 
@@ -128,6 +124,9 @@ var login=
             </div>
             </div>
             </div>
+            </div> 
+            </div> 
+            console.log('redirect: ',this.state.redirect)
     }
     return (
       <div className  = "container h-100 loginFix" >
@@ -136,4 +135,4 @@ var login=
       );
 }
 }
-export default Login;
+export default withRouter(Login);

@@ -27,6 +27,7 @@ class ProgramCatalog extends Component {
     try {
       console.log(process.env.REACT_APP_API)
       var token = localStorage.getItem('token');
+      const response = await fetch(process.env.REACT_APP_API+'/program/get/enrolled_programs/'+userID+'/?token='+token);
       const response = await fetch(process.env.REACT_APP_APIBASE_URL+'/program/get/enrolled_programs/'+userID+'/?token='+token);
       const json = await response.json();
       this.setState({ list:json })
@@ -131,6 +132,7 @@ function Cols(props){
 
   if(props.view !== 'program'){
     return (<div className="row">
+      <p>program</p>
     <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>
     </LargeCard>
     </div>);
