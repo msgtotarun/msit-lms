@@ -5,11 +5,11 @@ import NavBar from '../components/NavBar'
 
 const Home = ()=>{
     return(
-      <div className="container">
-        <div className='nav-fix'>
-        <NavBar userName=''></NavBar>
+        <div className="container">
+        <div class='nav-fix'>
+            <NavBar/>
         </div>
-        <ProgramCatalog view="program"></ProgramCatalog>
+        <Login/>
       </div>
         );
 }
