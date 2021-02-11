@@ -1,5 +1,8 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
+import {Link} from "react-router-dom";
 import './Login.css'
+const {REACT_APP_APIBASE_URL,}=process.env
+var bg;
 class  Login extends Component {
   constructor(props){
     super(props)
@@ -7,6 +10,11 @@ class  Login extends Component {
       username:'',
       password:''
     }
+    bg={
+      token:'',
+      valid:''
+    }
+   this.handleLogin= this.handleLogin.bind(this)
   }
   handleInputChange=(event)=>{
    this.setState({
@@ -14,16 +22,50 @@ class  Login extends Component {
   })
 }
   
-  handleLogin(event){
-    var user=document.querySelector(".input_user").value;
-    var Pass=document.querySelector(".input_pass").value;
+async handleLogin(event){
 
-    
+    var requestOptions = {
+      method: 'POST',
+      body: new URLSearchParams({
+        "email": this.state.username,
+        "password":this.state.password
+      }),
+      redirect: 'follow'
+    };
+    var data
+    await fetch(`${REACT_APP_APIBASE_URL}/api/auth/login`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        // console.log(result)
+        data=JSON.parse(result);
+        localStorage.setItem('token',data.token)
+          if(data.valid==='admin'){
+              // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
+              console.log("need admin redirect: "+localStorage.getItem('token'))
+            
+          }
+        }
+      )
+      .catch(error => console.log('error', error));
+      
+      requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      
+      
+     fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result)
+       var id=JSON.parse(result)
+        localStorage.setItem('id',id.id)
+      }
+      ).catch(error => console.log('error', error));
+      
   }
   render() {
-    var userName=this.props.userName;
-    console.log('username: ',userName)
-    if(userName===undefined || userName===null)
+    if(localStorage.getItem('token')===null){
 var login=
 
             <div className  = "d-flex justify-content-center h-100" >
@@ -70,7 +112,7 @@ var login=
             </div> 
             <div className  = "mt-4" >
             <div className  = "d-flex justify-content-center links" >
-            <a href = "#" > Forgot your password ? </a> 
+            <Link to = "#" > Forgot your password ? </Link> 
             </div> 
             </div> 
             <div className  = "d-flex justify-content-center mt-3 login_container" >
@@ -82,6 +124,7 @@ var login=
             </div>
             </div> 
             </div> 
+    }
     return (
       <div className  = "container h-100 loginFix" >
       {login}
