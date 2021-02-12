@@ -32,14 +32,17 @@ async handleLogin(event){
     await fetch(`${REACT_APP_APIBASE_URL}/api/auth/login`, requestOptions)
       .then(response => response.text())
       .then(result => {
-        // console.log(result)
         data=JSON.parse(result);
+        if(data.token!==undefined){
         localStorage.setItem('token',data.token)
+        this.setState({
+          isLogined: true
+        })
           if(data.valid==='admin'){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
               console.log("need admin redirect: "+data.token)
-
           }
+        }
         }
       )
       .catch(error => console.log('error', error));
@@ -50,20 +53,16 @@ async handleLogin(event){
       };
 
 
-
+    if(!data.token===undefined){
      await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
       .then(response => response.text())
       .then(result => {
-        console.log(result)
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
-        this.setState({
-          isLogined:'true'
-        })
         this.props.history.push('/program-catalog')
       }
       ).catch(error => console.log('error', error));
-
+    }
   }
   render() {
     if(localStorage.getItem('token')===null){
