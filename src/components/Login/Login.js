@@ -45,7 +45,7 @@ async handleLogin(event){
         }
         }
       )
-      .catch(error => console.log('error', error));
+      .catch(error =>console.log('error', error));
 
       requestOptions = {
         method: 'GET',
@@ -62,6 +62,9 @@ async handleLogin(event){
         this.props.history.push('/program-catalog')
       }
       ).catch(error => console.log('error', error));
+    }
+    else{
+      document.getElementById('login-error').innerHTML='check email or Password'
     }
   }
   render() {
@@ -80,12 +83,9 @@ var login=
             </div>
             <div className  = "d-flex justify-content-center form_container" >
             <form>
-            <
-            div className  = "input-group mb-3" >
-            <
-            div className  = "input-group-append" >
-            <
-            span className  = "input-group-text" > < i className  = "fas fa-user" > </i></span >
+            <div className  = "input-group mb-3" >
+            <div className  = "input-group-append" >
+            <span className  = "input-group-text" > < i className  = "fas fa-user" > </i></span >
             </div>
             <input type = "text"
             name = "username"
@@ -118,6 +118,9 @@ var login=
             <button type = "button"
             name = "button"
             className  = "btn login_btn"  onClick={this.handleLogin}> Login </button>
+            </div>
+            <div className  = "mt-4 mb-2" >
+            <span id='login-error'/>
             </div>
             </form>
             </div>
