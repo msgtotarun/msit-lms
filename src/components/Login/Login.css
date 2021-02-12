@@ -67,3 +67,13 @@
     box-shadow: none !important;
     outline: 0px !important;
 }
+#login-error {
+    color: #cc0000;
+    margin: 0px;
+  }
+  .errorMsg {
+    color: #cc0000;
+    margin: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
