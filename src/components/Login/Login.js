@@ -1,18 +1,14 @@
 import React, { Component } from "react"
-import {Link} from "react-router-dom";
+import {Link,withRouter} from "react-router-dom";
 import './Login.css'
 const {REACT_APP_APIBASE_URL,}=process.env
-var bg;
 class  Login extends Component {
   constructor(props){
     super(props)
     this.state ={
       username:'',
-      password:''
-    }
-    bg={
-      token:'',
-      valid:''
+      password:'',
+      isLogined:'false'
     }
    this.handleLogin= this.handleLogin.bind(this)
   }
@@ -21,7 +17,7 @@ class  Login extends Component {
      [event.target.name]:event.target.value
   })
 }
-  
+
 async handleLogin(event){
 
     var requestOptions = {
@@ -36,38 +32,44 @@ async handleLogin(event){
     await fetch(`${REACT_APP_APIBASE_URL}/api/auth/login`, requestOptions)
       .then(response => response.text())
       .then(result => {
-        // console.log(result)
         data=JSON.parse(result);
+        if(data.token!==undefined){
         localStorage.setItem('token',data.token)
+        this.setState({
+          isLogined: true
+        })
           if(data.valid==='admin'){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
-              console.log("need admin redirect: "+localStorage.getItem('token'))
-            
+              console.log("need admin redirect: "+data.token)
           }
         }
+        }
       )
-      .catch(error => console.log('error', error));
-      
+      .catch(error =>console.log('error', error));
+
       requestOptions = {
         method: 'GET',
         redirect: 'follow'
       };
-      
-      
-     fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
+
+
+    if(!data.token===undefined){
+     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
       .then(response => response.text())
       .then(result => {
-        console.log(result)
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
+        this.props.history.push('/program-catalog')
       }
       ).catch(error => console.log('error', error));
-      
+    }
+    else{
+      document.getElementById('login-error').innerHTML='check email or Password'
+    }
   }
   render() {
     if(localStorage.getItem('token')===null){
 var login=
-
             <div className  = "d-flex justify-content-center h-100" >
             <div className  = "user_card" >
             <div className  = "d-flex justify-content-center" >
@@ -78,15 +80,12 @@ var login=
             className  = "brand_logo"
             alt = ""/>
             </div>
-            </div> 
+            </div>
             <div className  = "d-flex justify-content-center form_container" >
             <form>
-            <
-            div className  = "input-group mb-3" >
-            <
-            div className  = "input-group-append" >
-            <
-            span className  = "input-group-text" > < i className  = "fas fa-user" > </i></span >
+            <div className  = "input-group mb-3" >
+            <div className  = "input-group-append" >
+            <span className  = "input-group-text" > < i className  = "fas fa-user" > </i></span >
             </div>
             <input type = "text"
             name = "username"
@@ -95,12 +94,12 @@ var login=
             placeholder = "username"
             onChange={this.handleInputChange}
             />
-            
-            </div> 
+
+            </div>
             <div className  = "input-group mb-2" >
             < div className  = "input-group-append" >
             <span className  = "input-group-text" > < i className  = "fas fa-key" > </i> </span>
-            </div> 
+            </div>
             <input type = "password"
             name = "password"
             className  = "form-control input_pass"
@@ -109,22 +108,25 @@ var login=
             onChange={this.handleInputChange}
             />
 
-            </div> 
+            </div>
             <div className  = "mt-4" >
             <div className  = "d-flex justify-content-center links" >
-            <Link to = "#" > Forgot your password ? </Link> 
-            </div> 
-            </div> 
+            <Link to = "#" > Forgot your password ? </Link>
+            </div>
+            </div>
             <div className  = "d-flex justify-content-center mt-3 login_container" >
             <button type = "button"
             name = "button"
-            className  = "btn login_btn"  onClick={this.handleLogin}> Login </button> 
-            </div> 
-            </form> 
+            className  = "btn login_btn"  onClick={this.handleLogin}> Login </button>
             </div>
-            </div> 
-            </div> 
-    }
+            <div className  = "mt-4 mb-2" >
+            <span id='login-error'/>
+            </div>
+            </form>
+            </div>
+            </div>
+            </div>
+ }
     return (
       <div className  = "container h-100 loginFix" >
       {login}
@@ -132,4 +134,4 @@ var login=
       );
 }
 }
-export default Login;
+export default withRouter(Login);
