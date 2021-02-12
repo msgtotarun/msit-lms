@@ -56,8 +56,11 @@ async handleLogin(event){
       };
 
 
-    if(!data.token===undefined){
-     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
+    if(data.token===undefined){
+      document.getElementById('login-error').innerHTML='check email or Password' 
+    }
+    else{
+      await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
       .then(response => response.text())
       .then(result => {
        var id=JSON.parse(result)
@@ -65,9 +68,6 @@ async handleLogin(event){
         this.props.history.push('/program-catalog')
       }
       ).catch(error => console.log('error', error));
-    }
-    else{
-      document.getElementById('login-error').innerHTML='check email or Password'
     }
   }
   }
