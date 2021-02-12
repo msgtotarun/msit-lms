@@ -8,6 +8,7 @@ class  Login extends Component {
     this.state ={
       username:'',
       password:'',
+      isLogined:'false'
     }
    this.handleLogin= this.handleLogin.bind(this)
   }
@@ -56,6 +57,9 @@ async handleLogin(event){
         console.log(result)
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
+        this.setState({
+          isLogined:'true'
+        })
         this.props.history.push('/program-catalog')
       }
       ).catch(error => console.log('error', error));
