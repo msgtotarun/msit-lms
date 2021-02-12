@@ -70,10 +70,12 @@
     outline: 0px !important;
 
 }
-.errorMsg {
+#login-error {
     color: #cc0000;
     margin: 0px;
   }
-
-}
+  .errorMsg {
+    color: #cc0000;
+    margin: 0px;
+  }
 
