@@ -3,26 +3,24 @@ import React, { Component} from 'react'
 class ListPrograms extends Component{
   render(){
     return (
-      <div className="accordion-item">
-        <h2 className="accordion-header" id="headingOne">
-            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                {this.props.title}
-            </button>
-        </h2>
-        <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div className="row">
-                <div className="col-sm-1">
-                    <img src={this.props.image} />
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Accordion Item #1
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div>
+                        <img src={this.props.image} />
+                    </div>
+                        <p>{this.props.description}</p>
                 </div>
-                <div className="accordion-body" className="col-sm-10">
-                    {this.props.description}
+                <div>
+                    <button type="button" class="btn btn-outline-primary" className="button1">{this.props.button}</button>
+                </div>
                 </div>
             </div>
-            <div>
-                <button type="button" class="btn btn-primary" className="button1">{this.props.button}</button>
-            </div>
-        </div>
-      </div>
     );
 }
 }
