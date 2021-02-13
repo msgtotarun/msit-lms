@@ -54,10 +54,11 @@ async handleLogin(event){
         console.log(result)
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
+        localStorage.setItem('mail',this.state.username)
         // this.props.history.push('/program-catalog')
         this.props.history.push({
   pathname: '/program-catalog',
-  state: { view: 'programs', email: this.state.username }
+  state: { view: 'programs'}
     })
       }
       ).catch(error => console.log('error', error));
