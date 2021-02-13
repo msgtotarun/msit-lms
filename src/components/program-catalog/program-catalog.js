@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { Component } from "react";
 import NavBar from '../NavBar/NavBar';
-import ListProgram from '../list-programs/list-programs';
+import ListPrograms from '../list-programs/list-programs';
 import Card from '../Cards/Cards';
 import LargeCard from '../Cards/LargeCard/LargeCard';
+import './program-catalog.css';
 
 var showList = [];
 
@@ -24,31 +25,43 @@ class ProgramCatalog extends Component {
 
   async getPrograms(userID) {
     // example code
-    try {
-      console.log(process.env.REACT_APP_APIBASE_URL)
-      var token = localStorage.getItem('token');
-      const response = await fetch(process.env.REACT_APP_APIBASE_URL+'/program/get/enrolled_programs/'+userID+'/?token='+token);
-      const json = await response.json();
-      this.setState({ list:json })
-    } catch (error) {
-      console.log(error)
-    }
+   console.log(process.env.REACT_APP_APIBASE_URL)
+   var token = localStorage.getItem('token');
+   await fetch(process.env.REACT_APP_APIBASE_URL+'/api/program/get/enrolled_programs/'+userID+'/?token='+token)
+  .then(response => response.text())
+  .then(result => {
+    var json = JSON.parse(result);
+    // json = json[0]['enrollments'];
+    // console.log(json);
+    this.setState({ list:json[0]['enrollments']},()=>{
+      console.log('list state updated');
+      console.log(this.state.list);
+    });
+  }).catch(error => console.log('error', error));
+
+
   }
 
   getCourses(programID){
 
   }
 
-  handleLayout(e){
-    this.setState({layout: !this.state.layout});
+  handleLayout(value){
+    if (this.state.layout !== value)
+    {
+      this.setState({layout: !this.state.layout});
+    }
+
+    return;
   }
 
   getRenderList() {
     console.log('inside get render list');
     var userID = localStorage.getItem('id');
-    console.log(`userID = ${userID}, props.view = ${this.props.view}`);
-
-    if ("programs"==this.props.view){
+    var view = this.props.location.state.view;
+    console.log(`userID = ${userID}, props.view = ${view}`);
+    console.log(view=='programs');
+    if ("programs"==view){
         this.getPrograms(userID);
     }
     else{
@@ -58,25 +71,27 @@ class ProgramCatalog extends Component {
 
   setList(List){
     List = List.map(program => {
-      return <ListProgram view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"></ListProgram>
+      return <ListPrograms key={program['programID']['_id']} view={this.props.location.state.view} title={program['programID']['programName']} description={program['programID']['programDescription']} image={program['programID']['programImage']} button="Enter"></ListPrograms>
     });
 
     return List;
   }
 
   setCard(List){
+    console.log('inside set card');
       List = List.map((program) =>
-        <Cols view={this.props.view} title={program['title']} description={program['description']} image={program['image']} button="Enter"></Cols>
+        <Cols key={program['programID']['_id']} view={this.props.location.state.view} title={program['programID']['programName']} description={program['programID']['programDescription']} image={program['programID']['programImage']} button="Enter"></Cols>
       )
-
       return List;
   }
 
   setLayout()
   {
-
+    console.log('inside set layout');
+    console.log(this.state.list);
     showList = this.state.layout?this.setCard(this.state.list):this.setList(this.state.list)
-
+    console.log("showlist");
+    console.log(showList);
       // if(this.state.layout)
       // {
       //    showList = this.setCard(this.state.list)
@@ -87,8 +102,9 @@ class ProgramCatalog extends Component {
   }
 
   render() {
+      var user = this.props.location.state.email;
+
       this.setLayout();
-      var user = localStorage.getItem('id')
 
       if(user===null){
         return (<div class="alert alert-warning" role="alert">
@@ -96,16 +112,21 @@ class ProgramCatalog extends Component {
             </div>);
       }
 
-      console.log(this.props.view)
+      console.log(this.props.location.state.view)
       var doc = null;
       if (this.state.layout === false) {
              doc =(<div className="container">
                <NavBar userName={user}/>
                <div className="container">
-               <select class="form-select" aria-label="Default select example" onChange={this.handleLayout}>
-                 <option selected value="true">View: Grid</option>
-                 <option value="false">View: List</option>
-               </select>
+                 <div class="btn-group w-25 p-3 marged">
+    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-display"></i> View
+    </button>
+    <ul class="dropdown-menu">
+      <li onClick={()=>{this.handleLayout(true)}}><i class="bi bi-grid-3x3-gap" ></i> Grid</li>
+      <li onClick={()=>{this.handleLayout(false)}}><i class="bi bi-list-task"></i> List</li>
+    </ul>
+  </div>
     <div class="accordion" id="accordionExample">
     {showList}
     </div>
@@ -114,14 +135,17 @@ class ProgramCatalog extends Component {
       doc =
         (<div className="container">
           <NavBar userName={user}/>
-          <div className="container">
-          <select class="form-select" aria-label="Default select example" onChange={this.handleLayout}>
-            <option selected value="true">View: Grid</option>
-            <option value="false">View: List</option>
-          </select>
-                  <Rows view={this.props.view}>{showList}</Rows>
-                </div>
-              </div>);
+            <div class="btn-group w-25 p-3 marged">
+  <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+  <i class="bi bi-display"></i> View
+  </button>
+  <ul class="dropdown-menu">
+  <li onClick={()=>{this.handleLayout(true)}}><i class="bi bi-grid-3x3-gap" ></i> Grid</li>
+  <li onClick={()=>{this.handleLayout(false)}}><i class="bi bi-list-task"></i> List</li>
+  </ul>
+  </div>
+      <Rows view={this.props.location.state.view}>{showList}</Rows>
+  </div>);
       }
         return doc;
   }
@@ -130,7 +154,7 @@ class ProgramCatalog extends Component {
 
 function Rows(props){
 
-  if(props.view == 'program')
+  if(props.view == 'programs')
   {
     return (<div className="container">
             <div className="row row-cols-3">
@@ -144,8 +168,8 @@ function Rows(props){
 }
 
 function Cols(props){
-
-  if(props.view !== 'program'){
+  console.log(props);
+  if(props.view !== 'programs'){
     return (<div className="row">
 
     <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>

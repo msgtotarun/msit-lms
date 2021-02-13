@@ -1,6 +1,9 @@
 import React, { Component} from 'react'
 
 class ListPrograms extends Component{
+  constructor(props){
+    super(props);
+  }
   render(){
     return (
       <div className="accordion-item">
@@ -10,17 +13,19 @@ class ListPrograms extends Component{
             </button>
         </h2>
         <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div className="row">
-                <div className="col-sm-1">
-                    <img src={this.props.image} />
-                </div>
-                <div className="accordion-body" className="col-sm-10">
-                    {this.props.description}
-                </div>
+        <div class="card mb-3" style={{maxWidth: "540px"}}>
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src={this.props.image} alt="..."></img>
             </div>
-            <div>
-                <button type="button" class="btn btn-primary" className="button1">{this.props.button}</button>
+            <div class="col-md-8">
+              <div class="card-body">
+                <p class="card-text">{this.props.description}</p>
+                <button type="button" class="btn btn-outline-primary">Primary</button>
+              </div>
             </div>
+          </div>
+        </div>
         </div>
       </div>
     );

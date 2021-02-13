@@ -57,7 +57,7 @@ async handleLogin(event){
         // this.props.history.push('/program-catalog')
         this.props.history.push({
   pathname: '/program-catalog',
-  state: { view: 'programs' }
+  state: { view: 'programs', email: this.state.username }
     })
       }
       ).catch(error => console.log('error', error));
