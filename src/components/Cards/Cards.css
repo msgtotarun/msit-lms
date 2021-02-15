@@ -4,6 +4,11 @@
     max-width: fit-content;
     width: 350px;
 }
+
+.img-height{
+    height: 280px;
+}
+
 .bigblue{
     color: "red";
     backgroundColor:"DodgerBlue";

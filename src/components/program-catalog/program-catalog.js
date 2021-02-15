@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React, { Component } from "react";
 import NavBar from '../NavBar/NavBar';
 import ListPrograms from '../list-programs/list-programs';
 import Card from '../Cards/Cards';
 import LargeCard from '../Cards/LargeCard/LargeCard';
+import {Link,withRouter} from "react-router-dom";
 import './program-catalog.css';
 
 var showList = [];
@@ -42,7 +42,20 @@ class ProgramCatalog extends Component {
 
   }
 
-  getCourses(programID){
+  async getCourses(programID){
+    var token = localStorage.getItem('token');
+    var userID = localStorage.getItem('id');
+    await fetch(process.env.REACT_APP_APIBASE_URL+'/api/course/get/courseinfo/' + userID + '/' + programID + '/?token=' + token)
+   .then(response => response.text())
+   .then(result => {
+     var json = JSON.parse(result);
+     // json = json[0]['enrollments'];
+     // console.log(json);
+     this.setState({ list:json['courses']},()=>{
+       console.log('list state updated');
+       console.log(this.state.list);
+     });
+   }).catch(error => console.log('error', error));
 
   }
 
@@ -60,29 +73,54 @@ class ProgramCatalog extends Component {
     var userID = localStorage.getItem('id');
     var view = this.props.location.state.view;
     console.log(`userID = ${userID}, props.view = ${view}`);
-    console.log(view=='programs');
-    if ("programs"==view){
+    console.log(view==='programs');
+    if ("programs"===view){
         this.getPrograms(userID);
     }
     else{
-        this.getCourses();
+      var id = this.props.location.state.id;
+        this.getCourses(id);
     }
   }
 
   setList(List){
+    var view = this.props.location.state.view;
     List = List.map(program => {
-      return <ListPrograms key={program['programID']['_id']} view={this.props.location.state.view} title={program['programID']['programName']} description={program['programID']['programDescription']} image={program['programID']['programImage']} button="Enter"></ListPrograms>
+      var [ID,Title,Desc,Img] = this.getData(view,program);
+      return <ListPrograms id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></ListPrograms>
     });
 
     return List;
   }
 
   setCard(List){
+    var view = this.props.location.state.view;
     console.log('inside set card');
-      List = List.map((program) =>
-        <Cols key={program['programID']['_id']} view={this.props.location.state.view} title={program['programID']['programName']} description={program['programID']['programDescription']} image={program['programID']['programImage']} button="Enter"></Cols>
-      )
+      List = List.map((program) =>{
+        var [ID,Title,Desc,Img] = this.getData(view,program);
+        console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
+        return <Cols id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></Cols>
+      }
+    )
       return List;
+  }
+
+  getData(view,program){
+    var [ID,Title,Desc,Img] = [null,null,null,null];
+    if(view==='programs'){
+      ID = program['programID']['_id'];
+      Title = program['programID']['programName'];
+      Desc = program['programID']['programDescription'];
+      Img = program['programID']['programImage'];
+    }
+    else{
+      ID = program['courseID']['courseID'];
+      Title = program['courseID']['courseName'];
+      Desc = program['courseID']['courseDescription'];
+      Img = program['courseID']['image'];
+    }
+
+    return [ID,Title,Desc,Img];
   }
 
   setLayout()
@@ -102,7 +140,7 @@ class ProgramCatalog extends Component {
   }
 
   render() {
-      var user = this.props.location.state.email;
+      var user = localStorage.getItem('mail');
 
       this.setLayout();
 
@@ -154,7 +192,7 @@ class ProgramCatalog extends Component {
 
 function Rows(props){
 
-  if(props.view == 'programs')
+  if(props.view === 'programs')
   {
     return (<div className="container">
             <div className="row row-cols-3">
@@ -172,14 +210,14 @@ function Cols(props){
   if(props.view !== 'programs'){
     return (<div className="row">
 
-    <LargeCard title={props.title} description={props.description} button={props.button} image={props.image}>
+    <LargeCard key={props.id} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}>
     </LargeCard>
     </div>);
   }
 
   return (<div className="col">
 
-      <Card title={props.title} description={props.description} button={props.button} image={props.image}></Card>
+      <Card key={props.id} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}></Card>
           </div>);
 }
 
