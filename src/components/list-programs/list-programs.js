@@ -4,8 +4,10 @@ import './list-programs.css';
 class ListPrograms extends Component{
   constructor(props){
     super(props);
-  }  
+  }
   render(){
+    console.log('inside list programs component');
+    console.log(this.props);
     return (
         <div className="accordion-item">
         <h2 className="accordion-header" id="headingOne">
@@ -14,7 +16,7 @@ class ListPrograms extends Component{
           </button>
         </h2>
         <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-    
+
           <div className="accordion-body" id="flow1">
               <div>
                   <img classNameName="flow" src={this.props.image} />
@@ -23,9 +25,9 @@ class ListPrograms extends Component{
             <p className="flow2">{this.props.description}</p>
             </div>
               <button type="button" className="btn btn-outline-primary" style="float: right;">{this.props.button}</button>
-              
+
           </div>
-          
+
         </div>
       </div>
     );

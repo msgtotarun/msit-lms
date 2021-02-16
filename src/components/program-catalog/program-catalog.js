@@ -50,7 +50,8 @@ class ProgramCatalog extends Component {
    .then(result => {
      var json = JSON.parse(result);
      // json = json[0]['enrollments'];
-     // console.log(json);
+     console.log('course data');
+     console.log(json);
      this.setState({ list:json['courses']},()=>{
        console.log('list state updated');
        console.log(this.state.list);
@@ -64,8 +65,6 @@ class ProgramCatalog extends Component {
     {
       this.setState({layout: !this.state.layout});
     }
-
-    return;
   }
 
   getRenderList() {
@@ -84,9 +83,12 @@ class ProgramCatalog extends Component {
   }
 
   setList(List){
+    console.log('inside set list function');
     var view = this.props.location.state.view;
+    console.log(`view = ${view}`);
     List = List.map(program => {
       var [ID,Title,Desc,Img] = this.getData(view,program);
+      console.log(`List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
       return <ListPrograms id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></ListPrograms>
     });
 
@@ -106,6 +108,8 @@ class ProgramCatalog extends Component {
   }
 
   getData(view,program){
+    console.log('fetched data from api');
+    console.log(program);
     var [ID,Title,Desc,Img] = [null,null,null,null];
     if(view==='programs'){
       ID = program['programID']['_id'];
@@ -153,6 +157,7 @@ class ProgramCatalog extends Component {
       console.log(this.props.location.state.view)
       var doc = null;
       if (this.state.layout === false) {
+            console.log('changed to list layout');
              doc =(<div className="container">
                <NavBar userName={user}/>
                <div className="container">
@@ -185,6 +190,9 @@ class ProgramCatalog extends Component {
       <Rows view={this.props.location.state.view}>{showList}</Rows>
   </div>);
       }
+
+      console.log(doc);
+
         return doc;
   }
 

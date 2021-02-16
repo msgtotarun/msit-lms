@@ -23,7 +23,7 @@ return(<div class="card h-adjust" >
                       <p class="card-text">{this.props.description}</p>
                       <div class="d-grid gap-2 col-6 mx-auto" style={{ display: "flex",justifyContent: "center",
                           alignItems: "center"}}>
-                            <a href="#" class="btn btn-primary " onClick={()=>{this.handleClick(id)}}>{this.props.button}</a>
+                            <a href="#" class="btn btn-primary " onClick={()=>{this.handleClick(this.props.id)}}>{this.props.button}</a>
                       </div>
                  </div>
             </div>
@@ -31,4 +31,4 @@ return(<div class="card h-adjust" >
   }
 }
 
-export default Cards;
+export default withRouter(Cards);
