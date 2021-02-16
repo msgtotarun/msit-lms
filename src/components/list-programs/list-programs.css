@@ -1,3 +1,20 @@
 .button1{
     float: right;
 }
+
+.flow{
+	margin-right: 8px;
+	width: 30%;
+	float: left;
+}
+
+#flow1{
+
+    padding-bottom: 50px;
+
+}
+.flow2{
+	text-align: justify;
+	margin-left: 32%;
+	padding-bottom: 15px;
+}
