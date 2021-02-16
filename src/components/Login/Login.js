@@ -20,7 +20,7 @@ class  Login extends Component {
 }
 
 async handleLogin(event){
-  if(this.validateForm(event)){
+  if(this.validateForm()){
     var requestOptions = {
       method: 'POST',
       body: new URLSearchParams({
@@ -34,8 +34,13 @@ async handleLogin(event){
       .then(response => response.text())
       .then(result => {
         data=JSON.parse(result);
-        if(data.token!==undefined){
+        }
+      )
+      .catch(error =>document.getElementById('login-error').innerHTML=error)
+      if(data!==undefined)
+      if( data.token!==undefined){
         localStorage.setItem('token',data.token)
+        localStorage.setItem('username',this.state.username.split('@')[0])
         this.setState({
           isLogined: true
         })
@@ -43,21 +48,11 @@ async handleLogin(event){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
               console.log("need admin redirect: ")
           }
-        }
-        }
-      )
-      .catch(error =>console.log('error', error));
-
-      requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
-
-    if(data.token===undefined){
-      document.getElementById('login-error').innerHTML='Wrong E-mail or Password'
-    }
-    else{
-      await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
+          requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+          };
+          await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)   
       .then(response => response.text())
       .then(result => {
        var id=JSON.parse(result)
@@ -66,9 +61,12 @@ async handleLogin(event){
       }
       ).catch(error => console.log('error', error));
     }
+    else
+      document.getElementById('login-error').innerHTML=`Wrong Email or Password`
+    
   }
   }
-  validateForm(e) {
+  validateForm() {
     let errors = {};
     let valid = true;
        // console.log(this.state.username);

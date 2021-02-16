@@ -8,10 +8,10 @@ import test from './Pages/t'
 const Routes = () => {
   return (
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
-    <Route path='*' exact={true} component={pageNotFound} />
       <Route exact path='/' component={Home}></Route>
       <Route exact path='/program-catalog' component={ProgramCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
+      <Route path='*' exact={true} component={pageNotFound} />
     </Switch>
   );
 }
