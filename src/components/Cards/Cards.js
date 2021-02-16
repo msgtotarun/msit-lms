@@ -8,7 +8,6 @@ handleClick(ID){
   this.props.history.push({
 pathname: '/program-catalog',
   state: { view: 'courses',
-  email: this.state.username,
   id: ID
   }
 })
