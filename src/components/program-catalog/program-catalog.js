@@ -21,7 +21,13 @@ class ProgramCatalog extends Component {
   componentDidMount() {
     console.log('inside cdm')
     this.getRenderList();
+    // this.setLayout();
   }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   this.setLayout();
+  //   return true;
+  // }
 
   async getPrograms(userID) {
     // example code
@@ -32,11 +38,9 @@ class ProgramCatalog extends Component {
   .then(result => {
     var json = JSON.parse(result);
     // json = json[0]['enrollments'];
-    // console.log(json);
-    this.setState({ list:json[0]['enrollments']},()=>{
-      console.log('list state updated');
-      console.log(this.state.list);
-    });
+    console.log('get programs api fetched');
+    console.log(json[0]['enrollments']);
+    this.setState({ list:json[0]['enrollments']});
   }).catch(error => console.log('error', error));
 
 
@@ -91,7 +95,8 @@ class ProgramCatalog extends Component {
       console.log(`List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
       return <ListPrograms id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></ListPrograms>
     });
-
+    console.log('list in html dom format is as shown below');
+    console.log(List);
     return List;
   }
 
@@ -104,6 +109,10 @@ class ProgramCatalog extends Component {
         return <Cols id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></Cols>
       }
     )
+
+    console.log('card in html dom format is as shown below');
+    console.log(List);
+
       return List;
   }
 
@@ -191,6 +200,7 @@ class ProgramCatalog extends Component {
   </div>);
       }
 
+      console.log('doc is as follows');
       console.log(doc);
 
         return doc;

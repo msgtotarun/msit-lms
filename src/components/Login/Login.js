@@ -43,6 +43,8 @@ async handleLogin(event){
       )
       .catch(error => console.log('error', error));
 
+      console.log(`data = ${data}`);
+
       requestOptions = {
         method: 'GET',
         redirect: 'follow'

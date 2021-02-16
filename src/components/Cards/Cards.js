@@ -5,6 +5,7 @@ import {Link,withRouter} from "react-router-dom";
 class Cards extends Component {
 
 handleClick(ID){
+  console.log('ID after recieving = '+ID);
   this.props.history.push({
 pathname: '/program-catalog',
   state: { view: 'courses',
@@ -16,6 +17,7 @@ pathname: '/program-catalog',
 render()
 {
 var id = this.props.id;
+console.log(`id = ${id}`);
 return(<div class="card h-adjust" >
                 <img src={this.props.image} class="card-img-top img-height" alt="..."/>
                 <div class="card-body text-wrap">

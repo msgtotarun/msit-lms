@@ -6,8 +6,9 @@ class ListPrograms extends Component{
     super(props);
   }
   render(){
-    console.log('inside list programs component');
-    console.log(this.props);
+    // console.log('inside list programs component');
+    // console.log('props in list-programs is as follows');
+    // console.log(this.props);
     return (
         <div className="accordion-item">
         <h2 className="accordion-header" id="headingOne">
@@ -24,7 +25,7 @@ class ListPrograms extends Component{
             <div>
             <p className="flow2">{this.props.description}</p>
             </div>
-              <button type="button" className="btn btn-outline-primary" style="float: right;">{this.props.button}</button>
+              <button type="button" className="btn btn-outline-primary" style={{float: "right"}}>{this.props.button}</button>
 
           </div>
 
