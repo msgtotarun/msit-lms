@@ -13,7 +13,7 @@ class NavBar extends Component {
       <div className='navFix'>
       <nav className="navbar fixed-top navbar-expand-sm navbar-colour navbar-dark">
       <div className ="container-fluid">
-        <Link className ="navbar-brand" to='/' >LMS</Link>
+        <Link className ="navbar-brand" href="#">LMS</Link>
         <button className ="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
