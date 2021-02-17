@@ -1,7 +1,8 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
 import ProgramCatalog from './components/program-catalog/program-catalog'
-import Home from './Pages/Home';
+import Home from './Pages/Home'
+import pageNotFound from './Pages/pageNotFound'
 import test from './Pages/t'
 
 const Routes = () => {
@@ -11,6 +12,7 @@ const Routes = () => {
       <Route key="prorams" exact path='/program-catalog' component={ProgramCatalog}></Route>
       <Route key="courses" exact path='/courses-catalog' component={ProgramCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
+      <Route path='*' exact={true} component={pageNotFound} />
     </Switch>
   );
 }
