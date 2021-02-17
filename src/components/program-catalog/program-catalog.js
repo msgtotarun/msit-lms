@@ -7,6 +7,7 @@ import {Link,withRouter} from "react-router-dom";
 import './program-catalog.css';
 
 var showList = [];
+var view = null;
 
 class ProgramCatalog extends Component {
 
@@ -18,7 +19,7 @@ class ProgramCatalog extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     console.log('inside cdm')
     this.getRenderList();
     // this.setLayout();
@@ -74,7 +75,7 @@ class ProgramCatalog extends Component {
   getRenderList() {
     console.log('inside get render list');
     var userID = localStorage.getItem('id');
-    var view = this.props.location.state.view;
+    view = this.props.location.state.view;
     console.log(`userID = ${userID}, props.view = ${view}`);
     console.log(view==='programs');
     if ("programs"===view){
@@ -88,10 +89,10 @@ class ProgramCatalog extends Component {
 
   setList(List){
     console.log('inside set list function');
-    var view = this.props.location.state.view;
+    // view = this.props.location.state.view;
     console.log(`view = ${view}`);
     List = List.map(program => {
-      var [ID,Title,Desc,Img] = this.getData(view,program);
+      var [ID,Title,Desc,Img] = this.getData(program);
       console.log(`List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
       return <ListPrograms id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></ListPrograms>
     });
@@ -101,10 +102,13 @@ class ProgramCatalog extends Component {
   }
 
   setCard(List){
-    var view = this.props.location.state.view;
+    console.log('state object print');
+    console.log(this.props.location.state);
+    console.log('**********************');
+    // var view = this.props.location.state.view;
     console.log('inside set card');
       List = List.map((program) =>{
-        var [ID,Title,Desc,Img] = this.getData(view,program);
+        var [ID,Title,Desc,Img] = this.getData(program);
         console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
         return <Cols id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></Cols>
       }
@@ -116,7 +120,7 @@ class ProgramCatalog extends Component {
       return List;
   }
 
-  getData(view,program){
+  getData(program){
     console.log('fetched data from api');
     console.log(program);
     var [ID,Title,Desc,Img] = [null,null,null,null];
@@ -163,7 +167,7 @@ class ProgramCatalog extends Component {
             </div>);
       }
 
-      console.log(this.props.location.state.view)
+      // console.log(this.props.location.state.view)
       var doc = null;
       if (this.state.layout === false) {
             console.log('changed to list layout');
@@ -196,7 +200,7 @@ class ProgramCatalog extends Component {
   <li onClick={()=>{this.handleLayout(false)}}><i class="bi bi-list-task"></i> List</li>
   </ul>
   </div>
-      <Rows view={this.props.location.state.view}>{showList}</Rows>
+      <Rows view={view}>{showList}</Rows>
   </div>);
       }
 

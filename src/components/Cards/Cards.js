@@ -7,7 +7,7 @@ class Cards extends Component {
 handleClick(ID){
   console.log('ID after recieving = '+ID);
   this.props.history.push({
-pathname: '/program-catalog',
+pathname: '/courses-catalog',
   state: { view: 'courses',
   id: ID
   }
