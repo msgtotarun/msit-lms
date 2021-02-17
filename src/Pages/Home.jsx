@@ -1,17 +1,16 @@
 import React from 'react'
-import ProgramCatalog from './program-catalog'
-import Login from '../components/Login'
 import NavBar from '../components/NavBar'
+import Login from '../components/Login'
+import ProgramCatalog from '../components/program-catalog'
 
 const Home = ()=>{
-    return(
-      <div className="container">
-        <div className='nav-fix'>
-        <NavBar userName=''></NavBar>
+    return(<div className="container">
+        <div className='nav-fix container'>
+            <NavBar/>
         </div>
-        <ProgramCatalog view="program"></ProgramCatalog>
-      </div>
-        );
+        <Login/>
+      </div>);
+
 }
 
 export default Home
