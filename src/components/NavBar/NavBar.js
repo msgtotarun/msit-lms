@@ -10,10 +10,10 @@ class NavBar extends Component {
     const userName='Hi! '+localStorage.getItem('username')
       
     return (
-      <div className='navFix'>
+      <div className='nav-fix'>
       <nav className="navbar fixed-top navbar-expand-sm navbar-colour navbar-dark">
       <div className ="container-fluid">
-        <Link className ="navbar-brand" href="#">LMS</Link>
+        <Link className ="navbar-brand" to='/' >LMS</Link>
         <button className ="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@ class NavBar extends Component {
                  <Link className ="nav-link" to='#'>Credits</Link>
                  </li>  
                 </ul>
-                <ul className ="nav navbar-nav ms-auto">
+                <ul className ="navbar-nav ms-auto">
                    
                     <li className ="nav-item">
                         <Link  className ="nav-link " to="#">Course status</Link>
