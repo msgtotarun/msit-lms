@@ -5,10 +5,11 @@ import {Link,withRouter} from "react-router-dom";
 class Cards extends Component {
 
 handleClick(ID){
+  var layoutStyle = this.props.layout;
   console.log('ID after recieving = '+ID);
   this.props.history.push({
-pathname: '/program-catalog',
-  state: { view: 'courses',
+pathname: '/courses-catalog',
+  state: { view: 'courses',layout:layoutStyle,
   id: ID
   }
 })

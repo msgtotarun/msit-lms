@@ -1,10 +1,27 @@
 import React, { Component} from 'react'
+import {Link,withRouter} from "react-router-dom";
 import './list-programs.css';
 
 class ListPrograms extends Component{
   constructor(props){
     super(props);
   }
+
+  handleListClick(ID){
+    var layoutStyle = this.props.layout;
+    if(this.props.view==='programs')
+    {
+      this.props.history.push({
+    pathname: '/courses-catalog',
+      state: { view: 'courses',layout:layoutStyle,
+      id: ID
+      }
+    })
+    }else{
+
+    }
+  }
+
   render(){
     // console.log('inside list programs component');
     // console.log('props in list-programs is as follows');
@@ -25,7 +42,7 @@ class ListPrograms extends Component{
             <div>
             <p className="flow2">{this.props.description}</p>
             </div>
-              <button type="button" className="btn btn-outline-primary" style={{float: "right"}}>{this.props.button}</button>
+              <button type="button" className="btn btn-outline-primary" onClick={()=>{this.handleListClick(this.props.ID)}} style={{float: "right"}}>{this.props.button}</button>
 
           </div>
 
@@ -34,4 +51,4 @@ class ListPrograms extends Component{
     );
 }
 }
-export default ListPrograms;
+export default withRouter(ListPrograms);
