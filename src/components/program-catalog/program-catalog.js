@@ -8,6 +8,7 @@ import './program-catalog.css';
 
 var showList = [];
 var view = null;
+var layoutStyle = null;
 
 class ProgramCatalog extends Component {
 
@@ -21,6 +22,7 @@ class ProgramCatalog extends Component {
 
   componentWillMount() {
     console.log('inside cdm')
+    layoutStyle = this.props.location.state.layout;
     this.getRenderList();
     // this.setLayout();
   }
@@ -32,6 +34,7 @@ class ProgramCatalog extends Component {
 
   async getPrograms(userID) {
     // example code
+
    console.log(process.env.REACT_APP_APIBASE_URL)
    var token = localStorage.getItem('token');
    await fetch(process.env.REACT_APP_APIBASE_URL+'/api/program/get/enrolled_programs/'+userID+'/?token='+token)
@@ -41,7 +44,7 @@ class ProgramCatalog extends Component {
     // json = json[0]['enrollments'];
     console.log('get programs api fetched');
     console.log(json[0]['enrollments']);
-    this.setState({ list:json[0]['enrollments']});
+    this.setState({ list:json[0]['enrollments'],layout:layoutStyle});
   }).catch(error => console.log('error', error));
 
 
@@ -57,7 +60,7 @@ class ProgramCatalog extends Component {
      // json = json[0]['enrollments'];
      console.log('course data');
      console.log(json);
-     this.setState({ list:json['courses']},()=>{
+     this.setState({ list:json['courses'],layout:layoutStyle},()=>{
        console.log('list state updated');
        console.log(this.state.list);
      });
@@ -232,14 +235,14 @@ function Cols(props){
   if(props.view !== 'programs'){
     return (<div className="row">
 
-    <LargeCard key={props.id} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}>
+    <LargeCard key={props.id} layout={layoutStyle} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}>
     </LargeCard>
     </div>);
   }
 
   return (<div className="col">
 
-      <Card key={props.id} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}></Card>
+      <Card key={props.id} layout={layoutStyle} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}></Card>
           </div>);
 }
 

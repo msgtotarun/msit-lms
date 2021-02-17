@@ -61,14 +61,14 @@ async handleLogin(event){
         // this.props.history.push('/program-catalog')
         this.props.history.push({
   pathname: '/program-catalog',
-  state: { view: 'programs'}
+  state: { view: 'programs', layout:true}
     })
       }
       ).catch(error => console.log('error', error));
     }
     else
       document.getElementById('login-error').innerHTML=`Wrong Email or Password`
-    
+
   }
   }
   validateForm() {
@@ -79,7 +79,7 @@ async handleLogin(event){
         errors["username"] = "*Enter your email-ID.";
         valid=false;
       }
-  
+
       if (typeof this.state.username !== "undefined") {
         //console.log("user",fields["username"]);
         //regular expression for email validation
@@ -89,12 +89,12 @@ async handleLogin(event){
           valid=false;
         }
       }
-  
+
       if (this.state.password === null) {
         errors["password"] = "*Enter your password.";
         valid=false;
       }
-  
+
       if (typeof this.state.password !== "undefined") {
         // if (!this.state.password.match(/^.*(?=.{6,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)) {
         if (!this.state.password.match(/^.*(?=.{6,}).*$/)) {
@@ -102,7 +102,7 @@ async handleLogin(event){
           valid=false;
         }
       }
-  
+
       this.setState({
         errors: errors
       });
