@@ -20,7 +20,7 @@ class ProgramCatalog extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     console.log('inside cdm')
     layoutStyle = this.props.location.state.layout;
     this.getRenderList();
@@ -175,7 +175,9 @@ class ProgramCatalog extends Component {
       if (this.state.layout === false) {
             console.log('changed to list layout');
              doc =(<div className="container">
-               <NavBar userName={user}/>
+             <div className='nav-fix container'>
+             <NavBar/>
+             </div>
                <div className="container">
                  <div class="btn-group w-25 p-3 marged">
     <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -193,7 +195,9 @@ class ProgramCatalog extends Component {
       } else {
       doc =
         (<div className="container">
-          <NavBar userName={user}/>
+          <div className='nav-fix container'>
+          <NavBar/>
+          </div>
             <div class="btn-group w-25 p-3 marged">
   <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
   <i class="bi bi-display"></i> View
