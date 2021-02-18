@@ -96,7 +96,7 @@ async handleLogin(event){
     }
 
     if (typeof this.state.password !== "undefined") {
-      if (!this.state.password.match(/^.*(?=.{6,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)) {
+      if (!this.state.password.match(/^.*(?=.{6,}).*$/)) {
         errors["password"] = "*Enter correct password.";
         valid=false;
       }
@@ -123,9 +123,9 @@ var login=
             </div>
             <div className  = "d-flex justify-content-center form_container" >
             <form>
-            <div className  = "input-group mb-3" >
-            <div className  = "input-group-append" >
-            <span className  = "input-group-text" > < i className  = "fas fa-user" > </i></span >
+            <div className  = "input-group mb-3">
+            <div className  = "input-group-append">
+            <span className  = "input-group-text"> <i className  = "bi bi-person-fill"> </i> </span>
             </div>
             <input type = "text"
             name = "username"
@@ -137,8 +137,8 @@ var login=
             </div>
             <div className="errorMsg">{this.state.errors.username}</div>
             <div className  = "input-group mb-2" >
-            < div className  = "input-group-append" >
-            <span className  = "input-group-text" > < i className  = "fas fa-key" > </i> </span>
+            <div className  = "input-group-append" >
+            <span className  = "input-group-text" > <i className  = "bi bi-key-fill"> </i> </span>
             </div>
             <input type = "password"
             name = "password"
