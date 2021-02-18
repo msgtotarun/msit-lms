@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 class LargeCard extends Component {
   render() {
-    return (<div class="card mb-3" style="max-width: 540px;">
+    return (<div class="card mb-3" style={{maxWidth: "540px"}}
+>
   <div class="row g-0">
     <div class="col-md-4">
       <img src={this.props.image} alt="..."></img>
