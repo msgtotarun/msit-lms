@@ -145,6 +145,10 @@ class ProgramCatalog extends Component {
 
   setLayout()
   {
+    if(this.state.list == null){
+      return;
+    }
+
     console.log('inside set layout');
     console.log(this.state.list);
     showList = this.state.layout?this.setCard(this.state.list):this.setList(this.state.list)
@@ -160,7 +164,7 @@ class ProgramCatalog extends Component {
   }
 
   render() {
-      var user = localStorage.getItem('mail');
+      var user = localStorage.getItem('token');
 
       this.setLayout();
 
@@ -168,6 +172,13 @@ class ProgramCatalog extends Component {
         return (<div class="alert alert-warning" role="alert">
             You are not authorized to acces this page!
             </div>);
+      }else if(this.state.list===null){
+        return(<div class="alert alert-dark" role="alert">
+  <h4 class="alert-heading">No {view} to display</h4>
+  <p>You are not enrolled in any programs</p>
+  <hr></hr>
+  <p class="mb-0">Kindly, contact your mentor to enroll into programs.</p>
+</div>);
       }
 
       // console.log(this.props.location.state.view)
@@ -250,4 +261,4 @@ function Cols(props){
           </div>);
 }
 
-export default ProgramCatalog;
+export default withRouter(ProgramCatalog);
