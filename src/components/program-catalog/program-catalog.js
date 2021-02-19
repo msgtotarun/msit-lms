@@ -16,7 +16,7 @@ class ProgramCatalog extends Component {
     super(props);
     this.state = {
       layout: true,
-      list: []
+      list: null
     };
   }
 
@@ -44,7 +44,10 @@ class ProgramCatalog extends Component {
     // json = json[0]['enrollments'];
     console.log('get programs api fetched');
     console.log(json[0]['enrollments']);
-    this.setState({ list:json[0]['enrollments'],layout:layoutStyle});
+
+    if(json[0]['enrollments'][0]['programID'] !== null){
+      this.setState({ list:json[0]['enrollments'],layout:layoutStyle});
+    }
   }).catch(error => console.log('error', error));
 
 
@@ -60,10 +63,12 @@ class ProgramCatalog extends Component {
      // json = json[0]['enrollments'];
      console.log('course data');
      console.log(json);
-     this.setState({ list:json['courses'],layout:layoutStyle},()=>{
-       console.log('list state updated');
-       console.log(this.state.list);
-     });
+     if(json['courses'][0]['courseID'] !== null){
+       this.setState({ list:json['courses'],layout:layoutStyle},()=>{
+         console.log('list state updated');
+         console.log(this.state.list);
+       });
+    }
    }).catch(error => console.log('error', error));
 
   }
@@ -124,61 +129,67 @@ class ProgramCatalog extends Component {
   }
 
   getData(program){
-    console.log('fetched data from api');
-    console.log(program);
-    var [ID,Title,Desc,Img] = [null,null,null,null];
-    if(view==='programs'){
-      ID = program['programID']['_id'];
-      Title = program['programID']['programName'];
-      Desc = program['programID']['programDescription'];
-      Img = program['programID']['programImage'];
-    }
-    else{
-      ID = program['courseID']['courseID'];
-      Title = program['courseID']['courseName'];
-      Desc = program['courseID']['courseDescription'];
-      Img = program['courseID']['image'];
-    }
+      console.log('fetched data from api');
+      console.log(program);
+      var [ID,Title,Desc,Img] = [null,null,null,null];
+      if(view==='programs'){
+        ID = program['programID']['_id'];
+        Title = program['programID']['programName'];
+        Desc = program['programID']['programDescription'];
+        Img = program['programID']['programImage'];
+      }
+      else{
+        ID = program['courseID']['courseID'];
+        Title = program['courseID']['courseName'];
+        Desc = program['courseID']['courseDescription'];
+        Img = program['courseID']['image'];
+      }
 
-    return [ID,Title,Desc,Img];
+      return [ID,Title,Desc,Img];
   }
 
   setLayout()
   {
-    if(this.state.list == null){
-      return;
+
+    var ret = null;
+    console.log(`setlist if check = ${this.state.list === null}`);
+    if(this.state.list===null|this.state.list === undefined){
+      ret = (<div className=" container">
+            <NavBar/>
+            <div class="alert alert-dark" role="alert">
+            <h4 class="alert-heading">No {view} to display</h4>
+            <p>You are not enrolled in any programs</p>
+            <hr></hr>
+            <p class="mb-0">Kindly, contact your mentor to enroll into programs.</p>
+          </div>
+        </div>);
+
+    }else{
+      console.log('inside set layout');
+      console.log(this.state.list);
+      showList = this.state.layout?this.setCard(this.state.list):this.setList(this.state.list)
+      console.log("showlist");
+      console.log(showList);
     }
 
-    console.log('inside set layout');
-    console.log(this.state.list);
-    showList = this.state.layout?this.setCard(this.state.list):this.setList(this.state.list)
-    console.log("showlist");
-    console.log(showList);
-      // if(this.state.layout)
-      // {
-      //    showList = this.setCard(this.state.list)
-      // }
-      // else{
-      //   showList = this.setList(this.state.list)
-      // }
+    return ret;
   }
 
   render() {
       var user = localStorage.getItem('token');
-
-      this.setLayout();
-
+      console.log(`render list =`);
+      console.log(this.state.list);
       if(user===null){
         return (<div class="alert alert-warning" role="alert">
             You are not authorized to acces this page!
             </div>);
-      }else if(this.state.list===null){
-        return(<div class="alert alert-dark" role="alert">
-  <h4 class="alert-heading">No {view} to display</h4>
-  <p>You are not enrolled in any programs</p>
-  <hr></hr>
-  <p class="mb-0">Kindly, contact your mentor to enroll into programs.</p>
-</div>);
+      }
+
+      var value = this.setLayout();
+      console.log(`value =`);
+      console.log(value);
+      if(value !== null){
+        return value;
       }
 
       // console.log(this.props.location.state.view)
