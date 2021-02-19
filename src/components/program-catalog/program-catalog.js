@@ -185,11 +185,8 @@ class ProgramCatalog extends Component {
       var doc = null;
       if (this.state.layout === false) {
             console.log('changed to list layout');
-             doc =(<div className="container">
-             <div className='nav-fix container'>
-             <NavBar/>
-             </div>
-               <div className="container">
+             doc =(<div className=" container">
+               <NavBar/>
                  <div class="btn-group w-25 p-3 marged">
     <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-display"></i> View
@@ -202,13 +199,11 @@ class ProgramCatalog extends Component {
     <div class="accordion" id="accordionExample">
     {showList}
     </div>
-  </div></div>);
+  </div>)
       } else {
       doc =
         (<div className="container">
-          <div className='nav-fix container'>
-          <NavBar/>
-          </div>
+              <NavBar/>
             <div class="btn-group w-25 p-3 marged">
   <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
   <i class="bi bi-display"></i> View
