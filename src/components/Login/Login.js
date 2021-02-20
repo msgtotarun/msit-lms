@@ -58,11 +58,10 @@ async handleLogin(event){
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
         localStorage.setItem('mail',this.state.username)
-        // this.props.history.push('/program-catalog')
-        this.props.history.push({
-  pathname: '/program-catalog',
-  state: { view: 'programs', layout:true}
-    })
+  //       this.props.history.push({
+  // pathname: '/program-catalog',
+  // state: { view: 'programs', layout:true}
+  //   })
       }
       ).catch(error => console.log('error', error));
     }
@@ -168,15 +167,19 @@ var login=
             </div>
             </div>
             </div>
+ return (
+  <div className  = "container h-100 loginFix" >
+  {login}
+  </div>
+  );
  }
  else{
-      window.location.replace("/program-catalog");
- }
-    return (
-      <div className  = "container h-100 loginFix" >
-      {login}
-      </div>
-      );
+  this.props.history.push(
+    {
+    pathname: '/program-catalog',
+    state: { view: 'programs', layout:true}
+      })
+  }
 }
 }
 export default withRouter(Login);

@@ -6,13 +6,15 @@ class NavBar extends Component {
 
 
   render() {
-    var isLogined=localStorage.getItem('id')!==null
+    var isLogined=localStorage.getItem('username')!==null
     const userName='Hi! '+localStorage.getItem('username')   
+    // var home=isLogined?'/program-catalog':'/'
     return (
       <div className='nav-fix'>
       <nav className="navbar fixed-top navbar-expand-sm navbar-colour navbar-dark">
       <div className ="container-fluid">
-        <Link className ="navbar-brand" to="/" >LMS</Link>
+        {/* <Link className ="navbar-brand" to={home} >LMS</Link> */}
+        <Link className ="navbar-brand" to='/' >LMS</Link>
         <button className ="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>

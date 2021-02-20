@@ -111,7 +111,7 @@ class ProgramCatalog extends Component {
 
   setCard(List){
     console.log('state object print');
-    console.log(this.props.location.state);
+    // console.log(this.props.location.state);
     console.log('**********************');
     // var view = this.props.location.state.view;
     console.log('inside set card');
