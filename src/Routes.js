@@ -5,11 +5,15 @@ import Home from './Pages/Home'
 import pageNotFound from './Pages/pageNotFound'
 import test from './Pages/t'
 
+function withProgramProps(Component){
+  return(<Component view="programs" layout={true}></Component>);
+}
+
 const Routes = () => {
   return (
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
       <Route exact path='/' component={Home}></Route>
-      <Route key="prorams" exact path='/program-catalog' component={ProgramCatalog}></Route>
+      <Route key="prorams" exact path='/program-catalog' render={() => <ProgramCatalog layout={true} view="programs"/>}></Route>
       <Route key="courses" exact path='/courses-catalog' component={ProgramCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
       <Route path='*' exact={true} component={pageNotFound} />
