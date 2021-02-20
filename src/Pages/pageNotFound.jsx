@@ -7,7 +7,7 @@ const pageNotFound = ()=>{
     return(
 
       <div>
-        <div className='nav container'>
+        <div className='nav-404 container'>
             <NavBar/>
         </div>
     <h1>404</h1>
