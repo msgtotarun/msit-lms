@@ -20,6 +20,7 @@ class  Login extends Component {
 }
 
 async handleLogin(event){
+  event.preventDefault();
   if(this.validateForm()){
     var requestOptions = {
       method: 'POST',
@@ -58,10 +59,7 @@ async handleLogin(event){
        var id=JSON.parse(result)
         localStorage.setItem('id',id.id)
         localStorage.setItem('mail',this.state.username)
-  //       this.props.history.push({
-  // pathname: '/program-catalog',
-  // state: { view: 'programs', layout:true}
-  //   })
+    this.props.history.push('/program-catalog')
       }
       ).catch(error => console.log('error', error));
     }
@@ -122,7 +120,7 @@ var login=
             </div>
             </div>
             <div className  = "d-flex justify-content-center form_container" >
-            <form>
+            <form   onSubmit={this.handleLogin}>
             <div className  = "input-group mb-3" >
             <div className  = "input-group-append" >
             <span className  = "input-group-text" > < i className  = "bi bi-person-fill" > </i></span >
@@ -156,9 +154,9 @@ var login=
             </div>
             </div>
             <div className  = "d-flex justify-content-center mt-3 login_container" >
-            <button type = "button"
+            <button type = "submit"
             name = "button"
-            className  = "btn login_btn"  onClick={this.handleLogin}> Login </button>
+            className  = "btn login_btn"> Login </button>
             </div>
             <div className  = "mt-4 mb-2" >
             <span id='login-error'/>
@@ -167,19 +165,15 @@ var login=
             </div>
             </div>
             </div>
- return (
-  <div className  = "container h-100 loginFix" >
-  {login}
-  </div>
-  );
  }
  else{
-  this.props.history.push(
-    {
-    pathname: '/program-catalog',
-    state: { view: 'programs', layout:true}
-      })
-  }
+   return null
+ }
+    return (
+      <div className  = "container h-100 loginFix" >
+      {login}
+      </div>
+      );
 }
 }
 export default withRouter(Login);

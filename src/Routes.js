@@ -9,7 +9,7 @@ const Routes = () => {
   return (
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
       <Route exact path='/' component={Home}></Route>
-      <Route key="prorams" exact path='/program-catalog' component={ProgramCatalog}></Route>
+      <Route key="prorams" exact path='/program-catalog' render={() => <ProgramCatalog layout={true} view="programs"/>}></Route>
       <Route key="courses" exact path='/courses-catalog' component={ProgramCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
       <Route path='*' exact={true} component={pageNotFound} />
