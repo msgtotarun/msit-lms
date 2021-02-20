@@ -174,6 +174,8 @@ class ProgramCatalog extends Component {
   {
 
     var ret = null;
+    console.log('set layout list = ');
+    console.log(this.state.list);
     console.log(`setlist if check = ${this.state.list === null}`);
     if(this.state.list===null|this.state.list === undefined){
       ret = (<div className=" container">

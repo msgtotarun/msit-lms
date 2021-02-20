@@ -1,0 +1,19 @@
+.image {
+    max-height: inherit;
+    max-width: inherit;
+}
+
+.text-prop{
+  text-align:justify;
+  position: inherit;
+}
+
+.pad {
+    padding-left: inherit;
+    padding-right: inherit;
+}
+
+.pos{
+  margin-left: 65%;
+  position: inherit;
+}
