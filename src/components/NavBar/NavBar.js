@@ -7,11 +7,7 @@ class NavBar extends Component {
 
   render() {
     var isLogined=localStorage.getItem('id')!==null
-    const userName='Hi! '+localStorage.getItem('username')
-  //   var home=""
-  // isLogined?home='/program-catalog':home='/'
-    
-      
+    const userName='Hi! '+localStorage.getItem('username')   
     return (
       <div className='nav-fix'>
       <nav className="navbar fixed-top navbar-expand-sm navbar-colour navbar-dark">
