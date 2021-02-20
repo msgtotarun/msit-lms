@@ -49,18 +49,7 @@ async handleLogin(event){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
               console.log("need admin redirect: ")
           }
-          requestOptions = {
-            method: 'GET'
-          };
-     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        var id=JSON.parse(result)
-        localStorage.setItem('id',id.id)
-        localStorage.setItem('mail',this.state.username)
-        setInterval()
-      }
-      ).catch(error => console.log('error', error));
+         
       
     }
     else
