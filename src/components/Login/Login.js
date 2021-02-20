@@ -169,6 +169,9 @@ var login=
             </div>
             </div>
  }
+ else{
+      window.location.replace("/program-catalog");
+ }
     return (
       <div className  = "container h-100 loginFix" >
       {login}

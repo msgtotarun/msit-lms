@@ -17,7 +17,7 @@
   border-radius: 15px;
 }
 .loginFix {
-  margin-top: 180px;
+  margin-top: -80px;
 }
 
 .brand_logo_container {
@@ -82,4 +82,9 @@
   margin: 0px;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+@media screen and (max-width:768px) {
+  .loginFix{
+    margin-top: -250px;
+  }
 }
