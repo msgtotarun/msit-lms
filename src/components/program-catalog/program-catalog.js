@@ -20,10 +20,27 @@ class ProgramCatalog extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     console.log('inside cdm')
-    layoutStyle = this.props.location.state.layout;
-    this.getRenderList();
+
+    var token = localStorage.getItem('token');
+    var userID = localStorage.getItem('id');
+
+    if(token === null){
+      return;
+    }
+
+    try{
+      layoutStyle = this.props.location.state.layout;
+    }
+    catch(err){
+        if(err.name === 'TypeError')
+        {
+          layoutStyle = this.props.layout;
+        }
+    }
+
+    this.getRenderList(userID,token);
     // this.setLayout();
   }
 
@@ -32,11 +49,10 @@ class ProgramCatalog extends Component {
   //   return true;
   // }
 
-  async getPrograms(userID) {
+  async getPrograms(userID,token) {
     // example code
 
    console.log(process.env.REACT_APP_APIBASE_URL)
-   var token = localStorage.getItem('token');
    await fetch(process.env.REACT_APP_APIBASE_URL+'/api/program/get/enrolled_programs/'+userID+'/?token='+token)
   .then(response => response.text())
   .then(result => {
@@ -53,9 +69,7 @@ class ProgramCatalog extends Component {
 
   }
 
-  async getCourses(programID){
-    var token = localStorage.getItem('token');
-    var userID = localStorage.getItem('id');
+  async getCourses(programID,userID,token){
     await fetch(process.env.REACT_APP_APIBASE_URL+'/api/course/get/courseinfo/' + userID + '/' + programID + '/?token=' + token)
    .then(response => response.text())
    .then(result => {
@@ -80,18 +94,26 @@ class ProgramCatalog extends Component {
     }
   }
 
-  getRenderList() {
+  getRenderList(userID,token) {
     console.log('inside get render list');
-    var userID = localStorage.getItem('id');
-    view = this.props.location.state.view;
+    try{
+      view = this.props.location.state.view;
+    }
+    catch(err){
+        if(err.name === 'TypeError')
+        {
+          view = this.props.view;
+        }
+    }
+
     console.log(`userID = ${userID}, props.view = ${view}`);
     console.log(view==='programs');
     if ("programs"===view){
-        this.getPrograms(userID);
+        this.getPrograms(userID,token);
     }
     else{
       var id = this.props.location.state.id;
-        this.getCourses(id);
+        this.getCourses(id,userID,token);
     }
   }
 
@@ -176,6 +198,7 @@ class ProgramCatalog extends Component {
   }
 
   render() {
+
       var user = localStorage.getItem('token');
       console.log(`render list =`);
       console.log(this.state.list);
@@ -238,33 +261,17 @@ class ProgramCatalog extends Component {
 
 function Rows(props){
 
-  if(props.view === 'programs')
-  {
-    return (<div className="container">
-            <div className="row row-cols-3">
-            {props.children}
-            </div>
-          </div>);
-  }
-
   return (<div className="container">{props.children}</div>);
 
 }
 
 function Cols(props){
+
   console.log(props);
-  if(props.view !== 'programs'){
-    return (<div className="row">
-
+    return (
     <LargeCard key={props.id} layout={layoutStyle} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}>
-    </LargeCard>
-    </div>);
-  }
+    </LargeCard>);
 
-  return (<div className="col">
-
-      <Card key={props.id} layout={layoutStyle} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}></Card>
-          </div>);
 }
 
 export default withRouter(ProgramCatalog);
