@@ -22,10 +22,10 @@ console.log(`id = ${id}`);
 return(<div class="card h-adjust" >
                 <img src={this.props.image} class="card-img-top img-height" alt="..."/>
                 <div class="card-body text-wrap">
-                      <h5 class="card-title">{this.props.title}</h5>
+                      <h3 class="card-title">{this.props.title}</h3>
                       <p class="card-text">{this.props.description}</p>
-                      <div class="d-grid gap-2 col-6 mx-auto" style={{ display: "flex",justifyContent: "center",
-                          alignItems: "center"}}>
+                      <div class="d-grid mx-auto" style={{ display: "flex",justifyContent: "center",
+                          alignItems: "center",float:"right"}}>
                             <a href="#" class="btn btn-primary " onClick={()=>{this.handleClick(this.props.id)}}>{this.props.button}</a>
                       </div>
                  </div>

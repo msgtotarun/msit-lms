@@ -1,0 +1,17 @@
+.btn-outline-primary {
+    color: #563d7c;
+    border-color: #563d7c;
+    margin-bottom: 10px;
+}
+.button-fix{
+    float: right;
+}
+.card-body {
+    text-align: left;
+    flex: 1 1 auto;
+    padding: 1rem 1rem;
+}
+
+body, h1, h2, h3, h4, h5, h6  {
+    font-family: "Times New Roman", Times, serif;
+  }

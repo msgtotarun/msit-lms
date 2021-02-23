@@ -37,7 +37,7 @@ class ListPrograms extends Component{
 
           <div className="accordion-body" id="flow1">
               <div>
-                  <img classNameName="flow" src={this.props.image} />
+                  <img className="flow" src={this.props.image} />
               </div>
             <div>
             <p className="flow2">{this.props.description}</p>

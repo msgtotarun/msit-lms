@@ -138,7 +138,7 @@ var login=
             </div>
             <div className="errorMsg">{this.state.errors.username}</div>
             <div className  = "input-group mb-2">
-            < div className  = "input-group-append" >
+            <div className  = "input-group-append" >
             <span className  = "input-group-text" > <i className  = "bi bi-key-fill" > </i> </span>
             </div>
             <input type = "password"

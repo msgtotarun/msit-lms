@@ -2,5 +2,12 @@
     background-color: #563d7c;
 }
 .navFix{
-    margin-bottom: 80px;
+    padding-top: 250px;
+}
+
+
+@media screen and (max-width:768px) {
+    .nav-fix{
+      padding-top: 45px;  
+    }
 }
