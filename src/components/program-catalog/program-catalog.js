@@ -58,7 +58,8 @@ class ProgramCatalog extends Component {
 
   async getPrograms(userID,token) {
     // example code
-
+    token = localStorage.getItem('token');
+    userID = localStorage.getItem('id');
    console.log(process.env.REACT_APP_APIBASE_URL)
    await fetch(process.env.REACT_APP_APIBASE_URL+'/api/program/get/enrolled_programs/'+userID+'/?token='+token)
   .then(response => response.text())
@@ -77,6 +78,10 @@ class ProgramCatalog extends Component {
   }
 
   async getCourses(programID,userID,token){
+
+    token = localStorage.getItem('token');
+    userID = localStorage.getItem('id');
+
     await fetch(process.env.REACT_APP_APIBASE_URL+'/api/course/get/courseinfo/' + userID + '/' + programID + '/?token=' + token)
    .then(response => response.text())
    .then(result => {
@@ -84,7 +89,7 @@ class ProgramCatalog extends Component {
      // json = json[0]['enrollments'];
      console.log('course data');
      console.log(json);
-     if(json['courses'][0]['courseID'] !== null){
+     if(json['courses'].length()===0|json['courses'][0]['courseID'] !== null){
        this.setState({ list:json['courses'],layout:layoutStyle},()=>{
          console.log('list state updated');
          console.log(this.state.list);
@@ -119,8 +124,8 @@ class ProgramCatalog extends Component {
         this.getPrograms(userID,token);
     }
     else{
-      var id = this.props.location.state.id;
-        this.getCourses(id,userID,token);
+      var id = localStorage.getItem('program')
+      this.getCourses(id,userID,token);
     }
   }
 
@@ -181,6 +186,8 @@ class ProgramCatalog extends Component {
   {
 
     var ret = null;
+    console.log('set layout list = ');
+    console.log(this.state.list);
     console.log(`setlist if check = ${this.state.list === null}`);
     if(this.state.list===null|this.state.list === undefined){
       ret = (<div className=" container">
