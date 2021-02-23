@@ -51,7 +51,8 @@ class ProgramCatalog extends Component {
 
   async getPrograms(userID,token) {
     // example code
-
+    token = localStorage.getItem('token');
+    userID = localStorage.getItem('id');
    console.log(process.env.REACT_APP_APIBASE_URL)
    await fetch(process.env.REACT_APP_APIBASE_URL+'/api/program/get/enrolled_programs/'+userID+'/?token='+token)
   .then(response => response.text())
@@ -70,6 +71,10 @@ class ProgramCatalog extends Component {
   }
 
   async getCourses(programID,userID,token){
+
+    token = localStorage.getItem('token');
+    userID = localStorage.getItem('id');
+
     await fetch(process.env.REACT_APP_APIBASE_URL+'/api/course/get/courseinfo/' + userID + '/' + programID + '/?token=' + token)
    .then(response => response.text())
    .then(result => {
