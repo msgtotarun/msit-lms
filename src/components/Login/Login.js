@@ -124,9 +124,9 @@ var login=
             </div>
             <div className  = "d-flex justify-content-center form_container" >
             <form>
-            <div className  = "input-group mb-3" >
+            <div className  = "input-group mb-3">
             <div className  = "input-group-append" >
-            <span className  = "input-group-text" > < i className  = "bi bi-person-fill" > </i></span >
+            <span className  = "input-group-text"> <i className  = "bi bi-person-fill" > </i></span>
             </div>
             <input type = "text"
             name = "username"
@@ -135,12 +135,11 @@ var login=
             placeholder = "username"
             onChange={this.handleInputChange}
             />
-
             </div>
             <div className="errorMsg">{this.state.errors.username}</div>
-            <div className  = "input-group mb-2" >
-            < div className  = "input-group-append" >
-            <span className  = "input-group-text" > < i className  = "bi bi-key-fill" > </i> </span>
+            <div className  = "input-group mb-2">
+            <div className  = "input-group-append" >
+            <span className  = "input-group-text" > <i className  = "bi bi-key-fill" > </i> </span>
             </div>
             <input type = "password"
             name = "password"
