@@ -49,8 +49,8 @@ async handleLogin(event){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
               console.log("need admin redirect: ")
           }
-         
-      
+
+
     }
     else
       document.getElementById('login-error').innerHTML=`Wrong Email or Password`
@@ -94,12 +94,12 @@ async handleLogin(event){
       });
       return valid;
    }
- 
+
   render() {
     if(localStorage.getItem('token')===null){
       // return login form if there is no user loggedin
       return (
-        <div className  = "container h-100 loginFix" >     
+        <div className  = "container h-100 loginFix" >
     <div className  = "d-flex justify-content-center h-100" >
     <div className  = "user_card" >
     <div className  = "d-flex justify-content-center" >
@@ -163,7 +163,7 @@ async handleLogin(event){
  else{
   this.props.history.push('/program-catalog')
   return null;
- }  
+ }
 }
 }
 export default withRouter(Login);
