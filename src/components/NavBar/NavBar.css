@@ -1,13 +1,6 @@
 .navbar-colour{
     background-color: #563d7c;
 }
-.navFix{
-    padding-top: 250px;
-}
-
-
-@media screen and (max-width:768px) {
-    .nav-fix{
-      padding-top: 45px;  
-    }
+.nav-fix{
+   padding-top: 16rem;
 }
