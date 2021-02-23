@@ -49,46 +49,8 @@ async handleLogin(event){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
               console.log("need admin redirect: ")
           }
-<<<<<<< HEAD
-          requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-          };
-     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
-      .then(response => response.text())
-      .then(result => {
-       var id=JSON.parse(result)
-        localStorage.setItem('id',id.id)
-        localStorage.setItem('mail',this.state.username)
-        this.props.history.push('/program-catalog')
-  //       this.props.history.push({
-  // pathname: '/program-catalog',
-  // state: { view: 'programs', layout:true}
-  //   })
-      }
-      ).catch(error => console.log('error', error));
-||||||| merged common ancestors
-          requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-          };
-     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
-      .then(response => response.text())
-      .then(result => {
-       var id=JSON.parse(result)
-        localStorage.setItem('id',id.id)
-        localStorage.setItem('mail',this.state.username)
-        // this.props.history.push('/program-catalog')
-        this.props.history.push({
-  pathname: '/program-catalog',
-  state: { view: 'programs', layout:true}
-    })
-      }
-      ).catch(error => console.log('error', error));
-=======
-         
-      
->>>>>>> ca20ef61c2fc619a4169266444f846c2206f464e
+
+
     }
     else
       document.getElementById('login-error').innerHTML=`Wrong Email or Password`
@@ -132,12 +94,12 @@ async handleLogin(event){
       });
       return valid;
    }
- 
+
   render() {
     if(localStorage.getItem('token')===null){
       // return login form if there is no user loggedin
       return (
-        <div className  = "container h-100 loginFix" >     
+        <div className  = "container h-100 loginFix" >
     <div className  = "d-flex justify-content-center h-100" >
     <div className  = "user_card" >
     <div className  = "d-flex justify-content-center" >
@@ -201,7 +163,7 @@ async handleLogin(event){
  else{
   this.props.history.push('/program-catalog')
   return null;
- }  
+ }
 }
 }
 export default withRouter(Login);

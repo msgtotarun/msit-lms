@@ -8,13 +8,12 @@ class LargeCard extends Component {
   }
 
   handleClick(ID){
+    localStorage.setItem('program',ID)
     var layoutStyle = this.props.layout;
     console.log('ID after recieving = '+ID);
     this.props.history.push({
   pathname: '/courses-catalog',
-    state: { view: 'courses',layout:layoutStyle,
-    id: ID
-    }
+    state: { view: 'courses',layout:layoutStyle}
   })
   }
 

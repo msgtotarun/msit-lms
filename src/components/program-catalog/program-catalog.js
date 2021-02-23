@@ -89,7 +89,7 @@ class ProgramCatalog extends Component {
      // json = json[0]['enrollments'];
      console.log('course data');
      console.log(json);
-     if(json['courses'][0]['courseID'] !== null){
+     if(json['courses'].length()===0|json['courses'][0]['courseID'] !== null){
        this.setState({ list:json['courses'],layout:layoutStyle},()=>{
          console.log('list state updated');
          console.log(this.state.list);
@@ -124,8 +124,8 @@ class ProgramCatalog extends Component {
         this.getPrograms(userID,token);
     }
     else{
-      var id = this.props.location.state.id;
-        this.getCourses(id,userID,token);
+      var id = localStorage.getItem('program')
+      this.getCourses(id,userID,token);
     }
   }
 
