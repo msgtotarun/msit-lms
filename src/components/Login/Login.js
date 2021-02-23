@@ -20,14 +20,14 @@ class  Login extends Component {
 }
 
 async handleLogin(event){
+  event.preventDefault();
   if(this.validateForm()){
     var requestOptions = {
       method: 'POST',
       body: new URLSearchParams({
         "email": this.state.username,
         "password":this.state.password
-      }),
-      redirect: 'follow'
+      })
     };
     var data
     await fetch(`${REACT_APP_APIBASE_URL}/api/auth/login`, requestOptions)
@@ -36,7 +36,8 @@ async handleLogin(event){
         data=JSON.parse(result);
         }
       )
-      .catch(error =>document.getElementById('login-error').innerHTML=error)
+      .catch(error =>{console.log('error',error)
+        document.getElementById('login-error').innerHTML="Failed to fetch"})
       if(data!==undefined)
       if( data.token!==undefined){
         localStorage.setItem('token',data.token)
@@ -48,6 +49,7 @@ async handleLogin(event){
               // window.location.href=environment.adminUrl+"/dashboard/?token="+this.bg.token;
               console.log("need admin redirect: ")
           }
+<<<<<<< HEAD
           requestOptions = {
             method: 'GET',
             redirect: 'follow'
@@ -65,6 +67,28 @@ async handleLogin(event){
   //   })
       }
       ).catch(error => console.log('error', error));
+||||||| merged common ancestors
+          requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+          };
+     await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,requestOptions)
+      .then(response => response.text())
+      .then(result => {
+       var id=JSON.parse(result)
+        localStorage.setItem('id',id.id)
+        localStorage.setItem('mail',this.state.username)
+        // this.props.history.push('/program-catalog')
+        this.props.history.push({
+  pathname: '/program-catalog',
+  state: { view: 'programs', layout:true}
+    })
+      }
+      ).catch(error => console.log('error', error));
+=======
+         
+      
+>>>>>>> ca20ef61c2fc619a4169266444f846c2206f464e
     }
     else
       document.getElementById('login-error').innerHTML=`Wrong Email or Password`
@@ -108,72 +132,76 @@ async handleLogin(event){
       });
       return valid;
    }
+ 
   render() {
     if(localStorage.getItem('token')===null){
-var login=
-            <div className  = "d-flex justify-content-center h-100" >
-            <div className  = "user_card" >
-            <div className  = "d-flex justify-content-center" >
-            <div className  = "brand_logo_container" >
-            <img src = "/image.jpg"
-            width = "400"
-            height = "400"
-            className  = "brand_logo"
-            alt = ""/>
-            </div>
-            </div>
-            <div className  = "d-flex justify-content-center form_container" >
-            <form>
-            <div className  = "input-group mb-3" >
-            <div className  = "input-group-append" >
-            <span className  = "input-group-text" > < i className  = "bi bi-person-fill" > </i></span >
-            </div>
-            <input type = "text"
-            name = "username"
-            className  = "form-control input_user"
-            value = {this.state.username}
-            placeholder = "username"
-            onChange={this.handleInputChange}
-            />
+      // return login form if there is no user loggedin
+      return (
+        <div className  = "container h-100 loginFix" >     
+    <div className  = "d-flex justify-content-center h-100" >
+    <div className  = "user_card" >
+    <div className  = "d-flex justify-content-center" >
+    <div className  = "brand_logo_container" >
+    <img src = "/image.jpg"
+    width = "400"
+    height = "400"
+    className  = "brand_logo"
+    alt = ""/>
+    </div>
+    </div>
+    <div className  = "d-flex justify-content-center form_container" >
+    <form   onSubmit={this.handleLogin}>
+    <div className  = "input-group mb-3" >
+    <div className  = "input-group-append" >
+    <span className  = "input-group-text" > < i className  = "bi bi-person-fill" > </i></span >
+    </div>
+    <input type = "text"
+    name = "username"
+    className  = "form-control input_user"
+    value = {this.state.username}
+    placeholder = "username"
+    onChange={this.handleInputChange}
+    />
 
-            </div>
-            <div className="errorMsg">{this.state.errors.username}</div>
-            <div className  = "input-group mb-2" >
-            < div className  = "input-group-append" >
-            <span className  = "input-group-text" > < i className  = "bi bi-key-fill" > </i> </span>
-            </div>
-            <input type = "password"
-            name = "password"
-            className  = "form-control input_pass"
-            value = {this.state.password}
-            placeholder = "password"
-            onChange={this.handleInputChange}
-            />
-            </div>
-            <div className="errorMsg">{this.state.errors.password}</div>
-            <div className  = "mt-4" >
-            <div className  = "d-flex justify-content-center links" >
-            <Link to = "#" > Forgot your password ? </Link>
-            </div>
-            </div>
-            <div className  = "d-flex justify-content-center mt-3 login_container" >
-            <button type = "button"
-            name = "button"
-            className  = "btn login_btn"  onClick={this.handleLogin}> Login </button>
-            </div>
-            <div className  = "mt-4 mb-2" >
-            <span id='login-error'/>
-            </div>
-            </form>
-            </div>
-            </div>
-            </div>
+    </div>
+    <div className="errorMsg">{this.state.errors.username}</div>
+    <div className  = "input-group mb-2" >
+    < div className  = "input-group-append" >
+    <span className  = "input-group-text" > < i className  = "bi bi-key-fill" > </i> </span>
+    </div>
+    <input type = "password"
+    name = "password"
+    className  = "form-control input_pass"
+    value = {this.state.password}
+    placeholder = "password"
+    onChange={this.handleInputChange}
+    />
+    </div>
+    <div className="errorMsg">{this.state.errors.password}</div>
+    <div className  = "mt-4" >
+    <div className  = "d-flex justify-content-center links" >
+    <Link to = "#" > Forgot your password ? </Link>
+    </div>
+    </div>
+    <div className  = "d-flex justify-content-center mt-3 login_container" >
+    <button type = "submit"
+    name = "button"
+    className  = "btn login_btn"> Login </button>
+    </div>
+    <div className  = "mt-4 mb-2" >
+    <span id='login-error'/>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+        );
  }
-    return (
-      <div className  = "container h-100 loginFix" >
-      {login}
-      </div>
-      );
+ else{
+  this.props.history.push('/program-catalog')
+  return null;
+ }  
 }
 }
 export default withRouter(Login);

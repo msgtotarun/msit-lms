@@ -9,7 +9,7 @@ import './program-catalog.css';
 var showList = [];
 var view = null;
 var layoutStyle = null;
-
+const {REACT_APP_APIBASE_URL}=process.env
 class ProgramCatalog extends Component {
 
   constructor(props) {
@@ -20,13 +20,20 @@ class ProgramCatalog extends Component {
     };
   }
 
-  componentWillMount() {
-    console.log('inside cdm')
-
+  async componentWillMount() {
     var token = localStorage.getItem('token');
+    console.log('inside cdm')
+    await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${token}`,{method:'get'})
+    .then(response => response.text())
+    .then(result => {
+      var id=JSON.parse(result)
+      localStorage.setItem('id',id.id)
+    }
+    ).catch(error => console.log('error', error));
+
     var userID = localStorage.getItem('id');
 
-    if(token === null){
+    if(token === undefined){
       return;
     }
 
