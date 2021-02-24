@@ -38,8 +38,19 @@ async handleLogin(event){
       )
       .catch(error =>{console.log('error',error)
         document.getElementById('login-error').innerHTML="Failed to fetch"})
+
       if(data!==undefined)
       if( data.token!==undefined){
+
+        await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,{method:'get'})
+        .then(response => response.text())
+        .then(result => {
+          var id=JSON.parse(result)
+          localStorage.setItem('id',id.id)
+        }
+        ).catch(error => console.log('error', error));
+
+
         localStorage.setItem('token',data.token)
         localStorage.setItem('username',this.state.username.split('@')[0])
         this.setState({

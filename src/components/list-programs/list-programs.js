@@ -9,13 +9,15 @@ class ListPrograms extends Component{
 
   handleListClick(ID){
     var layoutStyle = this.props.layout;
-    if(this.props.view==='programs')
+    console.log('list-programs ID after recieving = '+ID);
+    console.log(`list view prop = ${this.props.view}`);
+    if(this.props.view ==='programs')
     {
+      console.log(`list id inside if = ${ID}`);
+      localStorage.setItem('program',ID);
       this.props.history.push({
     pathname: '/courses-catalog',
-      state: { view: 'courses',layout:layoutStyle,
-      id: ID
-      }
+      state: { view: 'courses',layout:layoutStyle}
     })
     }else{
 
@@ -42,7 +44,7 @@ class ListPrograms extends Component{
             <div>
             <p className="flow2">{this.props.description}</p>
             </div>
-              <button type="button" className="btn btn-outline-primary" onClick={()=>{this.handleListClick(this.props.ID)}} style={{float: "right"}}>{this.props.button}</button>
+              <button type="button" className="btn btn-outline-primary" onClick={()=>{this.handleListClick(this.props.id)}} style={{float: "right"}}>{this.props.button}</button>
 
           </div>
 

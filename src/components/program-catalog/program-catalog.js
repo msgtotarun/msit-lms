@@ -20,18 +20,11 @@ class ProgramCatalog extends Component {
     };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     var token = localStorage.getItem('token');
-    console.log('inside cdm')
-    await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${token}`,{method:'get'})
-    .then(response => response.text())
-    .then(result => {
-      var id=JSON.parse(result)
-      localStorage.setItem('id',id.id)
-    }
-    ).catch(error => console.log('error', error));
-
     var userID = localStorage.getItem('id');
+
+    console.log('inside cdm')
 
     if(token === undefined){
       return;
@@ -81,15 +74,17 @@ class ProgramCatalog extends Component {
 
     token = localStorage.getItem('token');
     userID = localStorage.getItem('id');
-
+    programID = localStorage.getItem('program');
+    console.log(`course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${programID}/?token=${token}`);
     await fetch(process.env.REACT_APP_APIBASE_URL+'/api/course/get/courseinfo/' + userID + '/' + programID + '/?token=' + token)
    .then(response => response.text())
    .then(result => {
+     console.log(`course result = ${result}`);
      var json = JSON.parse(result);
      // json = json[0]['enrollments'];
      console.log('course data');
      console.log(json);
-     if(json['courses'].length()===0|json['courses'][0]['courseID'] !== null){
+     if(json['courses'][0]['courseID'] !== null){
        this.setState({ list:json['courses'],layout:layoutStyle},()=>{
          console.log('list state updated');
          console.log(this.state.list);
@@ -102,6 +97,7 @@ class ProgramCatalog extends Component {
   handleLayout(value){
     if (this.state.layout !== value)
     {
+      layoutStyle = value;
       this.setState({layout: !this.state.layout});
     }
   }
@@ -203,7 +199,7 @@ class ProgramCatalog extends Component {
     }else{
       console.log('inside set layout');
       console.log(this.state.list);
-      showList = this.state.layout?this.setCard(this.state.list):this.setList(this.state.list)
+      showList = layoutStyle?this.setCard(this.state.list):this.setList(this.state.list)
       console.log("showlist");
       console.log(showList);
     }
@@ -283,7 +279,7 @@ function Cols(props){
 
   console.log(props);
     return (
-    <LargeCard key={props.id} layout={layoutStyle} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}>
+    <LargeCard view={props.view} key={props.id} layout={layoutStyle} id={props.id} title={props.title} description={props.description} button={props.button} image={props.image}>
     </LargeCard>);
 
 }
