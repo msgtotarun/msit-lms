@@ -3,10 +3,10 @@
 }
 
 .flow{
-	margin-right: 8px;
-	width: 30%;
+	/* margin-right: 8px; */
+	width: 50%;
 	float: left;
-	height: 220px;
+	height: 180px;
 }
 
 #flow1{

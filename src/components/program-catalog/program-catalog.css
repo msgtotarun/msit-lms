@@ -1,4 +1,10 @@
 .marged {
-    margin-left: 98%;
-    margin-right: 5%;
+    margin: auto;
+    margin-top: auto;
 }
+.container1 {
+    margin-top: 1000px;
+}
+body, h1, h2, h3, h4, h5, h6  {
+    font-family: "Times New Roman", Times, serif;
+  }

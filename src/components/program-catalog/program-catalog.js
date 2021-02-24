@@ -141,7 +141,7 @@ class ProgramCatalog extends Component {
 
   setCard(List){
     console.log('state object print');
-    console.log(this.props.location.state);
+    // console.log(this.props.location.state);
     console.log('**********************');
     // var view = this.props.location.state.view;
     console.log('inside set card');
@@ -271,7 +271,7 @@ class ProgramCatalog extends Component {
 
 function Rows(props){
 
-  return (<div className="container">{props.children}</div>);
+  return (<div className="container1">{props.children}</div>);
 
 }
 

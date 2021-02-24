@@ -7,7 +7,7 @@ class NavBar extends Component {
 
   render() {
     var isLogined=localStorage.getItem('username')!==null
-    const userName='Hi! '+localStorage.getItem('username')   
+    const userName='Hi! '+localStorage.getItem('username')
     var home=isLogined?'/program-catalog':'/'
     return (
       <div className='nav-fix'>
@@ -18,16 +18,15 @@ class NavBar extends Component {
         <button className ="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-        </button>         
+        </button>
     {isLogined && (
       <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul className ="navbar-nav me-auto mb-lg-0">  
+                <ul className ="navbar-nav me-auto mb-lg-0">
                 <li className ="nav-item">
                  <Link className ="nav-link" to='#'>Credits</Link>
-                 </li>  
+                 </li>
                 </ul>
                 <ul className ="navbar-nav ms-auto">
-                   
                     <li className ="nav-item">
                         <Link  className ="nav-link " to="#">Course status</Link>
                     </li>
@@ -38,7 +37,7 @@ class NavBar extends Component {
                     <Link className ="nav-link " onClick={e=>{localStorage.clear()
                     window.location.replace('/')}}>Logout</Link>
                   </li>
-                </ul>    
+                </ul>
           </div>)}
       </div>
     </nav>
