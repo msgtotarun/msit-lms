@@ -1,21 +1,19 @@
-.button1{
-    float: right;
+.button1 {
+  float: right;
 }
 
-.flow{
-	margin-right: 8px;
-	width: 30%;
-	float: left;
-	height: 220px;
+.flow {
+  margin-right: 8px;
+  width: 30%;
+  float: left;
+  height: 220px;
 }
 
-#flow1{
-
-    padding-bottom: 8%;
-
+#flow1 {
+  padding-bottom: 8%;
 }
-.flow2{
-	text-align: justify;
-	margin-left: 32%;
-	padding-bottom: 15px;
+.flow2 {
+  text-align: justify;
+  margin-left: 32%;
+  padding-bottom: 15px;
 }

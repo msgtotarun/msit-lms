@@ -1,13 +1,7 @@
-.navbar-colour{
-    background-color: #563d7c;
-}
-.nav-fix{
-   padding-top: 250px;
+.navbar-colour {
+  background-color: #563d7c;
 }
 
-@media screen and (max-width:768px) {
-    .nav-fix{
-      padding-top: 45px;
-      
-    }
-  }
+.nav-link:hover {
+  opacity: 0.8;
+}

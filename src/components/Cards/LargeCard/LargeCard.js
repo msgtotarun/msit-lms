@@ -1,19 +1,21 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import "./LargeCard.css";
-class LargeCard extends Component {
-  constructor(props) {
-    super(props);
-  }
 
+class LargeCard extends Component {
   handleClick(ID) {
-    localStorage.setItem("program", ID);
     var layoutStyle = this.props.layout;
     console.log("ID after recieving = " + ID);
-    this.props.history.push({
-      pathname: "/courses-catalog",
-      state: { view: "courses", layout: layoutStyle },
-    });
+    console.log(`card view prop = ${this.props.view}`);
+    if (this.props.view === "programs") {
+      console.log(`card id inside if ${ID}`);
+      localStorage.setItem("program", ID);
+      this.props.history.push({
+        pathname: "/courses-catalog",
+        state: { view: "courses", layout: layoutStyle },
+      });
+    } else {
+    }
   }
 
   render() {
@@ -26,15 +28,14 @@ class LargeCard extends Component {
           <div class='col-md-8'>
             <div class='card-body'>
               <h5 class='card-title'>{this.props.title}</h5>
+              <hr></hr>
               <p class='card-text text-prop'>{this.props.description}</p>
-              <button
-                type='button'
-                class='btn btn-outline-primary pos'
+              <a
+                href='#'
                 onClick={() => {
                   this.handleClick(this.props.id);
-                }}>
-                {this.props.button}
-              </button>
+                }}
+                class='stretched-link'></a>
             </div>
           </div>
         </div>

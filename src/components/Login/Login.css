@@ -17,9 +17,8 @@
   border-radius: 15px;
 }
 .loginFix {
-  margin-top: -80px;
+  padding-top: 10vmax;
 }
-
 .brand_logo_container {
   position: absolute;
   height: 170px;

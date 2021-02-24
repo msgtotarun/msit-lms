@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import NavBar from "../NavBar/NavBar";
 import ListPrograms from "../list-programs/list-programs";
-import Card from "../Cards/Cards";
 import LargeCard from "../Cards/LargeCard/LargeCard";
 import { withRouter } from "react-router-dom";
 import "./program-catalog.css";
@@ -9,7 +8,6 @@ import "./program-catalog.css";
 var showList = [];
 var view = null;
 var layoutStyle = null;
-const { REACT_APP_APIBASE_URL } = process.env;
 class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
@@ -18,20 +16,9 @@ class ProgramCatalog extends Component {
       list: null,
     };
   }
-
-  async componentWillMount() {
+  componentWillMount() {
     var token = localStorage.getItem("token");
     console.log("inside cdm");
-    await fetch(`${REACT_APP_APIBASE_URL}/api/user/id/?token=${token}`, {
-      method: "get",
-    })
-      .then((response) => response.text())
-      .then((result) => {
-        var id = JSON.parse(result);
-        localStorage.setItem("id", id.id);
-      })
-      .catch((error) => console.log("error", error));
-
     var userID = localStorage.getItem("id");
 
     if (token === undefined) {
@@ -84,7 +71,10 @@ class ProgramCatalog extends Component {
   async getCourses(programID, userID, token) {
     token = localStorage.getItem("token");
     userID = localStorage.getItem("id");
-
+    programID = localStorage.getItem("program");
+    console.log(
+      `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${programID}/?token=${token}`
+    );
     await fetch(
       process.env.REACT_APP_APIBASE_URL +
         "/api/course/get/courseinfo/" +
@@ -96,14 +86,12 @@ class ProgramCatalog extends Component {
     )
       .then((response) => response.text())
       .then((result) => {
+        console.log(`course result = ${result}`);
         var json = JSON.parse(result);
         // json = json[0]['enrollments'];
         console.log("course data");
         console.log(json);
-        if (
-          (json["courses"].length() === 0) |
-          (json["courses"][0]["courseID"] !== null)
-        ) {
+        if (json["courses"][0]["courseID"] !== null) {
           this.setState({ list: json["courses"], layout: layoutStyle }, () => {
             console.log("list state updated");
             console.log(this.state.list);
@@ -115,6 +103,7 @@ class ProgramCatalog extends Component {
 
   handleLayout(value) {
     if (this.state.layout !== value) {
+      layoutStyle = value;
       this.setState({ layout: !this.state.layout });
     }
   }
@@ -232,7 +221,7 @@ class ProgramCatalog extends Component {
     } else {
       console.log("inside set layout");
       console.log(this.state.list);
-      showList = this.state.layout
+      showList = layoutStyle
         ? this.setCard(this.state.list)
         : this.setList(this.state.list);
       console.log("showlist");
@@ -266,9 +255,9 @@ class ProgramCatalog extends Component {
     if (this.state.layout === false) {
       console.log("changed to list layout");
       doc = (
-        <div className=' container'>
+        <div className='container list-card'>
           <NavBar />
-          <div class='btn-group w-25 p-3 marged'>
+          <div class='btn-group w-18 marged'>
             <button
               class='btn btn-light btn-sm dropdown-toggle'
               type='button'
@@ -291,16 +280,16 @@ class ProgramCatalog extends Component {
               </li>
             </ul>
           </div>
-          <div class='accordion' id='accordionExample'>
+          <div className='accordion ' id='accordionExample'>
             {showList}
           </div>
         </div>
       );
     } else {
       doc = (
-        <div className='container'>
+        <div className='container grid-card'>
           <NavBar />
-          <div class='btn-group w-25 p-3 marged'>
+          <div class='btn-group w-18 marged'>
             <button
               class='btn btn-light btn-sm dropdown-toggle'
               type='button'
@@ -342,14 +331,17 @@ function Rows(props) {
 function Cols(props) {
   console.log(props);
   return (
-    <LargeCard
-      key={props.id}
-      layout={layoutStyle}
-      id={props.id}
-      title={props.title}
-      description={props.description}
-      button={props.button}
-      image={props.image}></LargeCard>
+    <>
+      <LargeCard
+        view={props.view}
+        key={props.id}
+        layout={layoutStyle}
+        id={props.id}
+        title={props.title}
+        description={props.description}
+        button={props.button}
+        image={props.image}></LargeCard>
+    </>
   );
 }
 
