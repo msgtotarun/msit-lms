@@ -213,9 +213,14 @@ class ProgramCatalog extends Component {
       console.log(`render list =`);
       console.log(this.state.list);
       if(user===null){
-        return (<div class="alert alert-warning" role="alert">
-            You are not authorized to acces this page!
-            </div>);
+
+        this.props.history.push({
+      pathname: '/'
+      })
+
+        // return (<div class="alert alert-warning" role="alert">
+        //     You are not authorized to acces this page!
+        //     </div>);
       }
 
       var value = this.setLayout();
