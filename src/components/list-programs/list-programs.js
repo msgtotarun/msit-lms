@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "./list-programs.css";
-
+var id = 0;
 class ListPrograms extends Component {
   handleListClick(ID) {
     var layoutStyle = this.props.layout;
@@ -17,27 +17,26 @@ class ListPrograms extends Component {
     } else {
     }
   }
+
   render() {
-    // console.log('inside list programs component');
-    // console.log('props in list-programs is as follows');
-    // console.log(this.props);
+    id++;
     return (
       <div className='accordion-item'>
-        <h2 className='accordion-header' id='headingOne'>
+        <h2 className='accordion-header' id={"head" + id}>
           <button
             className='accordion-button'
             type='button'
             data-bs-toggle='collapse'
-            data-bs-target='#collapseOne'
+            data-bs-target={`#colapse${id}`}
             aria-expanded='false'
-            aria-controls='collapseOne'>
+            aria-controls={"colapse" + id}>
             {this.props.title}
           </button>
         </h2>
         <div
-          id='collapseOne'
-          className='accordion-collapse collapse show'
-          aria-labelledby='headingOne'
+          id={"colapse" + id}
+          className='accordion-collapse collapse'
+          aria-labelledby={"head" + id}
           data-bs-parent='#accordionExample'>
           <div className='accordion-body' id='flow1'>
             <div>

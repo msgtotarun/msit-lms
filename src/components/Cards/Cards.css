@@ -1,15 +1,15 @@
 .h-adjust {
-    height: fit-content;
-    max-height: fit-content;
-    max-width: fit-content;
-    width: 350px;
+  height: fit-content;
+  max-height: fit-content;
+  max-width: fit-content;
+  width: 350px;
 }
 
-.img-height{
-    height: 280px;
+.img-height {
+  height: 280px;
 }
 
-.bigblue{
-    color: "red";
-    background-color:"DodgerBlue";
- }
+.bigblue {
+  color: "red";
+  background-color: "DodgerBlue";
+}
