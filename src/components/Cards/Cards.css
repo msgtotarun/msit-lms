@@ -5,18 +5,6 @@
   width: 350px;
 }
 
-/* .card {
-    position: relative;
-    display: inherit;
-    flex-direction: column;
-    min-width: 0;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 2px solid rgba(14, 13, 13, 0.493);
-    border-radius: .25rem;
-    margin-bottom: 20px;
-} */
-
 .img-height {
   height: 280px;
 }
@@ -25,16 +13,3 @@
   color: "red";
   background-color: "DodgerBlue";
 }
-/* .btn-outline-primary {
-    color: #563d7c;
-    border-color: #563d7c;
-    float: right;
-    margin-bottom: 10px;
-}
-.card-img-top {
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-} */

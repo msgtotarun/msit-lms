@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./Cards.css";
 import { Link, withRouter } from "react-router-dom";
-
 class Cards extends Component {
   handleClick(ID) {
     var layoutStyle = this.props.layout;
@@ -11,7 +10,6 @@ class Cards extends Component {
       state: { view: "courses", layout: layoutStyle, id: ID },
     });
   }
-
   render() {
     var id = this.props.id;
     console.log(`id = ${id}`);

@@ -8,6 +8,7 @@ import "./program-catalog.css";
 var showList = [];
 var view = null;
 var layoutStyle = null;
+const { REACT_APP_APIBASE_URL } = process.env;
 class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
@@ -216,7 +217,6 @@ class ProgramCatalog extends Component {
       Desc = program["courseID"]["courseDescription"];
       Img = program["courseID"]["image"];
     }
-
     return [ID, Title, Desc, Img];
   }
 
