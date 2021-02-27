@@ -2,9 +2,14 @@
   position: fixed;
   top: 75px;
   right: 80px;
-  border: 2px solid lightslategray;
-  border-radius: 5%;
   z-index: 2;
+}
+.btn {
+  border: 0px;
+  border-radius: 15px;
+}
+.btn:hover {
+  border: 2px solid #563d7c;
 }
 .list-card {
   padding-top: 100px;
@@ -24,4 +29,9 @@
     right: 50%;
     border: 0;
   }
+}
+.nodata {
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }

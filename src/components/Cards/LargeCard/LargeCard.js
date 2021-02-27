@@ -4,7 +4,7 @@ import "./LargeCard.css";
 
 class LargeCard extends Component {
   handleClick(ID) {
-    var layoutStyle = this.props.layout;
+    var layoutStyle = true;
     console.log("ID after recieving = " + ID);
     console.log(`card view prop = ${this.props.view}`);
     if (this.props.view === "programs") {
@@ -20,7 +20,7 @@ class LargeCard extends Component {
 
   render() {
     return (
-      <div class='card mb-3 pad' style={{ maxWidth: "540px" }}>
+      <div class='card mb-3 pad'>
         <div class='row g-0'>
           <div class='col-md-4'>
             <img class='image' src={this.props.image} alt='...'></img>

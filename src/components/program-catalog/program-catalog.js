@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import NavBar from "../NavBar/NavBar";
 import ListPrograms from "../list-programs/list-programs";
@@ -13,8 +12,9 @@ class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      layout: true,
+      layout: false,
       list: null,
+      loading: false,
     };
   }
   componentWillMount() {
@@ -60,13 +60,16 @@ class ProgramCatalog extends Component {
         var json = JSON.parse(result);
         // json = json[0]['enrollments'];
         console.log("get programs api fetched");
-        console.log(json[0]["enrollments"]);
 
         if (json[0]["enrollments"][0]["programID"] !== null) {
+          console.log(json[0]["enrollments"]);
           this.setState({ list: json[0]["enrollments"], layout: layoutStyle });
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+        this.setState({ loading: true });
+      });
   }
 
   async getCourses(programID, userID, token) {
@@ -76,7 +79,7 @@ class ProgramCatalog extends Component {
     console.log(
       `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${programID}/?token=${token}`
     );
-    await fetch(
+    fetch(
       process.env.REACT_APP_APIBASE_URL +
         "/api/course/get/courseinfo/" +
         userID +
@@ -97,6 +100,8 @@ class ProgramCatalog extends Component {
             console.log("list state updated");
             console.log(this.state.list);
           });
+        } else {
+          this.setState({ loading: true });
         }
       })
       .catch((error) => console.log("error", error));
@@ -107,6 +112,21 @@ class ProgramCatalog extends Component {
       layoutStyle = value;
       this.setState({ layout: !this.state.layout });
     }
+  }
+  nodata() {
+    return (
+      <div className='nodata container mt-5'>
+        <NavBar />
+        <div class='alert alert-dark' role='alert'>
+          <h4 class='alert-heading'>No {view} to display</h4>
+          <p>You are not enrolled in any programs</p>
+          <hr></hr>
+          <p class='mb-0'>
+            Kindly, contact your mentor to enroll into programs.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   getRenderList(userID, token) {
@@ -205,20 +225,10 @@ class ProgramCatalog extends Component {
     console.log("set layout list = ");
     console.log(this.state.list);
     console.log(`setlist if check = ${this.state.list === null}`);
-    if ((this.state.list === null) | (this.state.list === undefined)) {
-      ret = (
-        <div className=' container'>
-          <NavBar />
-          <div class='alert alert-dark' role='alert'>
-            <h4 class='alert-heading'>No {view} to display</h4>
-            <p>You are not enrolled in any programs</p>
-            <hr></hr>
-            <p class='mb-0'>
-              Kindly, contact your mentor to enroll into programs.
-            </p>
-          </div>
-        </div>
-      );
+    if (!this.state.list) {
+      if (this.state.loading) {
+        ret = this.nodata();
+      }
     } else {
       console.log("inside set layout");
       console.log(this.state.list);
@@ -236,13 +246,10 @@ class ProgramCatalog extends Component {
     var user = localStorage.getItem("token");
     console.log(`render list =`);
     console.log(this.state.list);
-    if (user === null) {
-      return (
-        <div class='alert alert-warning' role='alert'>
-          You are not authorized to acces this page!
-        </div>
-      );
-    }
+    user ??
+      this.props.history.push({
+        pathname: "/",
+      });
 
     var value = this.setLayout();
     console.log(`value =`);
@@ -317,7 +324,6 @@ class ProgramCatalog extends Component {
         </div>
       );
     }
-
     console.log("doc is as follows");
     console.log(doc);
 
@@ -347,4 +353,3 @@ function Cols(props) {
 }
 
 export default withRouter(ProgramCatalog);
-

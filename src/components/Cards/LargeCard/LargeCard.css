@@ -1,23 +1,15 @@
-.image {
-  max-height: inherit;
-  max-width: inherit;
-}
-
-.text-prop {
-  text-align: justify;
-  position: inherit;
-}
-
-.pad {
-  padding-left: inherit;
-  padding-right: inherit;
+.card-body {
+  text-align: left;
+  flex: 1 1 auto;
+  padding: 1rem 1rem;
 }
 
 .pos {
   margin-left: 65%;
-  position: inherit;
 }
 .card:hover {
   /* background: url(https://www.udemy.com/staticx/udemy/js/webpack/icon-play.ac3f32ecb72a0c3f674fa5a3f3062a56.svg); */
-  background-color: aliceblue;
+  background-color: whitesmoke;
+  transform: scale(1);
+  box-shadow: 1px 1px 20px 5px #563d7c;
 }
