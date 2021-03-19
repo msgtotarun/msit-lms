@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import ProgramCatalog from './components/program-catalog/program-catalog'
+import moduleCatalog from './components/moduleCatalog/moduleCatalog'
 import Home from './Pages/Home'
 import pageNotFound from './Pages/pageNotFound'
 import test from './Pages/t'
@@ -11,6 +12,7 @@ const Routes = () => {
       <Route exact path='/' component={Home}></Route>
       <Route key="prorams" exact path='/program-catalog' render={() => <ProgramCatalog layout={true} view="programs"/>}></Route>
       <Route key="courses" exact path='/courses-catalog' render={() => <ProgramCatalog layout={true} view="coursess"/>}></Route>
+      <Route key="modules" exact path='/module-catalog' render={() => <moduleCatalog layout={true}/>}></Route>
       <Route exact path='/test' component={test}></Route>
       <Route path='*' exact={true} component={pageNotFound} />
     </Switch>
