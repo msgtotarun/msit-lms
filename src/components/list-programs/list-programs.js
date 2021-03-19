@@ -2,6 +2,7 @@ import React, { Component} from 'react'
 import {Link,withRouter} from "react-router-dom";
 import './list-programs.css';
 
+var content = null
 class ListPrograms extends Component{
   constructor(props){
     super(props);
@@ -19,15 +20,27 @@ class ListPrograms extends Component{
     pathname: '/courses-catalog',
       state: { view: 'courses',layout:layoutStyle}
     })
-    }else{
+  }else if(this.props.view ==='modules'){
 
-    }
+  }else{
+    localStorage.setItem('course',ID);
+      this.props.history.push({
+    pathname: '/module-catalog',
+      state: {layout:layoutStyle}
+    })
+  }
   }
 
   render(){
     // console.log('inside list programs component');
     // console.log('props in list-programs is as follows');
     // console.log(this.props);
+
+    if(this.props.view === "modules")
+    {
+      // return ();
+    }
+
     return (
         <div className="accordion-item">
         <h2 className="accordion-header" id="headingOne">
