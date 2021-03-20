@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import NavBar from '../NavBar/NavBar';
 import ListPrograms from '../list-programs/list-programs';
-import Card from '../Cards/Cards';
 import LargeCard from '../Cards/LargeCard/LargeCard';
 import {Link,withRouter} from "react-router-dom";
 import './program-catalog.css';

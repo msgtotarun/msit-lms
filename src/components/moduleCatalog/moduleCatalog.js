@@ -8,7 +8,7 @@ import './moduleCatalog.css';
 var showList = [];
 var layoutStyle = null;
 const {REACT_APP_APIBASE_URL}=process.env
-class ProgramCatalog extends Component {
+class moduleCatalog extends Component {
 
   constructor(props) {
     super(props);
@@ -134,10 +134,10 @@ class ProgramCatalog extends Component {
       ret = (<div className=" container">
             <NavBar/>
             <div class="alert alert-dark" role="alert">
-            <h4 class="alert-heading">No {view} to display</h4>
-            <p>You are not enrolled in any programs</p>
+            <h4 class="alert-heading">No modules to display</h4>
+            <p>This course does not have any modules</p>
             <hr></hr>
-            <p class="mb-0">Kindly, contact your mentor to enroll into programs.</p>
+            <p class="mb-0">Kindly, contact your mentor</p>
           </div>
         </div>);
 
@@ -218,3 +218,5 @@ class ProgramCatalog extends Component {
   }
 
 }
+
+export default withRouter(moduleCatalog);
