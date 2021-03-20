@@ -11,5 +11,8 @@
   /* background: url(https://www.udemy.com/staticx/udemy/js/webpack/icon-play.ac3f32ecb72a0c3f674fa5a3f3062a56.svg); */
   background-color: whitesmoke;
   transform: scale(1);
-  box-shadow: 1px 1px 20px 5px #563d7c;
+  box-shadow: 1px 1px 1px 1px black;
+}
+.image {
+  border-style: groove;
 }

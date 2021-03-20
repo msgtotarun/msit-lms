@@ -15,6 +15,9 @@ class LargeCard extends Component {
         state: { view: "courses", layout: layoutStyle },
       });
     } else {
+      this.props.history.push({
+        pathname: "/modules-catalog/" + ID,
+      });
     }
   }
 
