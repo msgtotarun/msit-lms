@@ -20,6 +20,8 @@ class LargeCard extends Component {
         pathname: '/courses-catalog',
           state: { view: 'courses',layout:layoutStyle}
         })
+      }else if(this.props.view ==='modules'){
+
       }else{
         localStorage.setItem('course',ID);
           this.props.history.push({
@@ -30,6 +32,19 @@ class LargeCard extends Component {
   }
 
   render() {
+
+    if (this.props.view === "modules"){
+      return (<div class="card text-center">
+  <div class="card-header">
+    {this.props.title}
+  </div>
+  <div class="card-body">
+    {this.props.description}
+    <button type="button" class="btn btn-outline-primary" onClick={()=>{this.handleClick(this.props.id)}}>{this.props.button}</button>
+  </div>
+</div>);
+    }
+
     return (
     <div class="card mb-3">
   <div class="row">
