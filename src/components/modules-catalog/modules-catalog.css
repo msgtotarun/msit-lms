@@ -1,0 +1,21 @@
+aside {
+  position: fixed;
+}
+.sidebar {
+  display: block;
+  width: 45vh;
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+a {
+  text-decoration: none;
+}
+ul {
+  padding: 2px 0px;
+}
+.sidebar_li {
+  list-style: none;
+  margin: 0;
+  float: left;
+  padding: 10px 2px;
+}
