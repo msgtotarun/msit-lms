@@ -4,6 +4,7 @@ import "./NavBar.css";
 
 class NavBar extends Component {
   render() {
+    
     var isLogined = localStorage.getItem("username") !== null;
     const userName = "Hi! " + localStorage.getItem("username");
     var home = isLogined ? "/program-catalog" : "/";

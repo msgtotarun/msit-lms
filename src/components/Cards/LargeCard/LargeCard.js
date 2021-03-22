@@ -3,7 +3,6 @@ import { withRouter } from "react-router-dom";
 import "./LargeCard.css";
 
 class LargeCard extends Component {
-
   constructor(props){
     super(props);
   }

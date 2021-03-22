@@ -18,14 +18,11 @@ class ProgramCatalog extends Component {
       loading: false,
     };
   }
+  
   componentWillMount() {
     var token = localStorage.getItem("token");
     console.log("inside cdm");
     var userID = localStorage.getItem("id");
-
-  componentWillMount() {
-    var token = localStorage.getItem('token');
-    var userID = localStorage.getItem('id');
 
     console.log('inside cdm')
 

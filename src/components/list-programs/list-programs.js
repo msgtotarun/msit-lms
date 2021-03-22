@@ -1,8 +1,9 @@
-import React, { Component} from 'react'
+import React, { Component} from 'react';
 import {Link,withRouter} from "react-router-dom";
 import './list-programs.css';
 
-var content = null
+var content = null;
+var id = 0;
 class ListPrograms extends Component{
   constructor(props){
     super(props);
@@ -59,6 +60,10 @@ class ListPrograms extends Component{
         </div>
       );
     }
+
+    ++id;
+    let colapse = "colapse" + id;
+    let head = "head" + id;
 
     return (
       <div className='accordion-item'>
