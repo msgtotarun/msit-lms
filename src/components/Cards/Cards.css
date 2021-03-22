@@ -1,49 +1,15 @@
 .h-adjust {
-    height: auto;
-    max-height: fit-content;
-    /* max-width: fit-content; */
-    width: auto;
+  height: fit-content;
+  max-height: fit-content;
+  max-width: fit-content;
+  width: 350px;
 }
 
-
-.card {
-    position: relative;
-    /* display: inherit; */
-    flex-direction: column;
-    min-width: 0;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 2px solid #563d7c;
-    border-radius: .25rem;
-    margin-bottom: 20px;
+.img-height {
+  height: 280px;
 }
 
-.img-height{
-    height: 280px;
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+.bigblue {
+  color: "red";
+  background-color: "DodgerBlue";
 }
-
-.bigblue{
-    color: "red";
-    backgroundColor:"DodgerBlue";
- }
- .btn-outline-primary {
-    color: #563d7c;
-    border-color: #563d7c;
-    float: right;
-    margin-bottom: 10px;
-}
-.card-img-top {
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
-body, h1, h2, h3, h4, h5, h6  {
-    font-family: "Times New Roman", Times, serif;
-  }

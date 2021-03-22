@@ -1,17 +1,15 @@
-.btn-outline-primary {
-    color: #563d7c;
-    border-color: #563d7c;
-    margin-bottom: 10px;
-}
-.button-fix{
-    float: right;
-}
 .card-body {
-    text-align: left;
-    flex: 1 1 auto;
-    padding: 1rem 1rem;
+  text-align: left;
+  flex: 1 1 auto;
+  padding: 1rem 1rem;
 }
 
-body, h1, h2, h3, h4, h5, h6  {
-    font-family: "Times New Roman", Times, serif;
-  }
+.pos {
+  margin-left: 65%;
+}
+.card:hover {
+  /* background: url(https://www.udemy.com/staticx/udemy/js/webpack/icon-play.ac3f32ecb72a0c3f674fa5a3f3062a56.svg); */
+  background-color: whitesmoke;
+  transform: scale(1);
+  box-shadow: 1px 1px 20px 5px #563d7c;
+}

@@ -1,6 +1,39 @@
 .marged {
-    margin: auto;
-    margin-top: auto;
+  position: fixed;
+  top: 75px;
+  right: 80px;
+  z-index: 2;
+}
+.btn {
+  border: 0px;
+  border-radius: 15px;
+}
+.btn:hover {
+  border: 2px solid #563d7c;
+}
+.list-card {
+  padding-top: 100px;
+}
+.grid-card {
+  padding-top: 100px;
+}
+.dropdown-menu {
+  left: 50% !important;
+  right: auto !important;
+  text-align: center !important;
+  transform: translate(-50%, 50%) !important;
+}
+@media only screen and (max-width: 768px) {
+  .marged {
+    left: 40%;
+    right: 50%;
+    border: 0;
+  }
+}
+.nodata {
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 .container1 {
     margin-top: 1000px;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import {Link,withRouter} from "react-router-dom";
-import './LargeCard.css'
+import { withRouter } from "react-router-dom";
+import "./LargeCard.css";
 
 class LargeCard extends Component {
 
@@ -46,27 +46,27 @@ class LargeCard extends Component {
     }
 
     return (
-    <div class="card mb-3">
-  <div class="row">
-    <div class="col-sm-4 col-md-4 col-sm-6">
-      <img src={this.props.image} alt="..." class="image-fluid"></img>
-    </div>
-    <div class="col-sm-8 col-md-8 col-xs-12">
-      <div class="card-body">
-      <div><h3 class="card-title">{this.props.title}</h3></div>
-        <div>
-        <p class="card-text">{this.props.description}</p>
+      <div class='card mb-3 pad'>
+        <div class='row g-0'>
+          <div class='col-md-4'>
+            <img class='image' src={this.props.image} alt='...'></img>
+          </div>
+          <div class='col-md-8'>
+            <div class='card-body'>
+              <h5 class='card-title'>{this.props.title}</h5>
+              <hr></hr>
+              <p class='card-text text-prop'>{this.props.description}</p>
+              <a
+                href='#'
+                onClick={() => {
+                  this.handleClick(this.props.id);
+                }}
+                class='stretched-link'></a>
+            </div>
+          </div>
         </div>
-        </div>
-        <div className="button-fix">
-        <button type="button" class="btn btn-outline-primary" onClick={()=>{this.handleClick(this.props.id)}}>{this.props.button}</button>
-        </div>
-
-
-    </div>
-  </div>
-</div>
-);
+      </div>
+    );
   }
 }
 
