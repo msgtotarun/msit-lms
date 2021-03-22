@@ -54,7 +54,7 @@ class moduleCatalog extends Component {
     token = localStorage.getItem('token');
     userID = localStorage.getItem('id');
    console.log(process.env.REACT_APP_APIBASE_URL)
-   await fetch(process.env.REACT_APP_APIBASE_URL+'/api/content/get/content-json/'+id+'/?token='+token)
+   await fetch(process.env.REACT_APP_APIBASE_URL+'/api/content/get/content-json/'+userID+'/?token='+token)
   .then(response => response.text())
   .then(result => {
     var json = JSON.parse(result);
@@ -82,11 +82,11 @@ class moduleCatalog extends Component {
   setList(List){
     console.log('inside set list function');
     // view = this.props.location.state.view;
-    console.log(`view = ${view}`);
+    // console.log(`view = ${view}`);
     List = List.map(modules => {
       var [ID,Title,Desc,Con] = this.getData(modules);
-      console.log(`List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
-      return <ListPrograms id={ID} key={ID} view={view} title={Title} description={Desc} content={Con} button="Enter"></ListPrograms>
+      console.log(`List ID = ${ID},Title = ${Title}, Desc = ${Desc}`);
+      return <ListPrograms id={ID} key={ID} title={Title} description={Desc} content={Con} button="Enter"></ListPrograms>
     });
     console.log('list in html dom format is as shown below');
     console.log(List);
@@ -101,8 +101,8 @@ class moduleCatalog extends Component {
     console.log('inside set card');
       List = List.map((modules) =>{
         var [ID,Title,Desc,Con] = this.getData(modules);
-        console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
-        return <LargeCard id={ID} key={ID} view={view} title={Title} description={Desc} content={Con} button="Enter"></LargeCard>
+        console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}`);
+        return <LargeCard id={ID} key={ID} title={Title} description={Desc} content={Con} button="Enter"></LargeCard>
       }
     )
 
@@ -207,7 +207,7 @@ class moduleCatalog extends Component {
   <li onClick={()=>{this.handleLayout(false)}}><i class="bi bi-list-task"></i> List</li>
   </ul>
   </div>
-      <Rows view={view}>{showList}</Rows>
+      <div className="container1">{showList}</div>
   </div>);
       }
 
