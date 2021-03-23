@@ -3,12 +3,12 @@ import NavBar from '../NavBar/NavBar';
 import ListPrograms from '../list-programs/list-programs';
 import LargeCard from '../Cards/LargeCard/LargeCard';
 import {Link,withRouter} from "react-router-dom";
-import './moduleCatalog.css';
+import './repos.css';
 
 var showList = [];
 var layoutStyle = null;
 var client = null
-response_status = 0
+var response_status = 0
 const {REACT_APP_APIBASE_URL}=process.env
 class repos extends Component {
 
@@ -57,24 +57,24 @@ fetch("https://api.github.com/user/repos", requestOptions)
   .then(result => {
     result = JSON.parse(result);
     result.map(repo => {
-      title = repo['name']
-      sub = repo['full_name']
-      rlink = repo["html_url"]
-      desc = repo["description"]
+      var title = repo['name'];
+      var sub = repo['full_name'];
+      var rlink = repo["html_url"];
+      var desc = repo["description"];
       return <repoCard key={rlink} title={title} rlink={rlink} desc={desc} sub={sub}></repoCard>
     })
     showList = result
     console.log(result)})
   .catch(error => console.log('error', error));
 }else{
-  showList = null
+  showList = null;
 }
   }
 
   updateToken(){
-    token = document.getElementById('token').value
-    user = localStorage.getItem('id')
-    fetch(process.env.REACT_APP_API_URL2+"/github/"+userID+"/"+token)
+    var token = document.getElementById('token').value;
+    var user = localStorage.getItem('id');
+    fetch(process.env.REACT_APP_API_URL2+"/github/"+user+"/"+token)
     .then(response => response.text())
     .then(result => console.log(result))
 
@@ -91,9 +91,9 @@ fetch("https://api.github.com/user/repos", requestOptions)
       <div class="card-body">
         <div class="input-group mb-3">
         <div class="alert alert-warning" role="alert">
-          Invalid token re enter the correct token value
+          Invalid personal access token re enter the correct token value
         </div>
-          <input id="token" type="text" class="form-control" placeholder="Github Token" aria-label="Github Token" aria-describedby="button-addon2">
+          <input id="token" type="text" class="form-control" placeholder="Github Token" aria-label="Github Token" aria-describedby="button-addon2"></input>
           <button onClick={this.updateToken} class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
           <br></br>
           <a class="link-primary" onClick={window.open('https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token',"_blank")}>Generate Token</a>
@@ -102,12 +102,13 @@ fetch("https://api.github.com/user/repos", requestOptions)
     </div>
 </div>);
     }
-    else if(showList === null){
+    else if(showList === null)
+    {
       return (<div class="card mb-3" style="max-width: 540px;">
     <div class="col-md-8">
       <div class="card-body">
         <div class="input-group mb-3">
-          <input id="token" type="text" class="form-control" placeholder="Github Token" aria-label="Github Token" aria-describedby="button-addon2">
+          <input id="token" type="text" class="form-control" placeholder="Github Personal Access Token" aria-label="Github Personal Access Token" aria-describedby="button-addon2"></input>
           <button onClick={this.updateToken} class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
           <br></br>
           <a class="link-primary" onClick={window.open('https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token',"_blank")}>Generate Token</a>
@@ -116,7 +117,8 @@ fetch("https://api.github.com/user/repos", requestOptions)
     </div>
 </div>);
     }
-    else if (showList===[]){
+    else if (Array.isArray(showList) && showList.length === 0)
+    {
       return (<div class="card mb-3" style="max-width: 540px;">
     <div class="col-md-8">
       <div class="card-body">
