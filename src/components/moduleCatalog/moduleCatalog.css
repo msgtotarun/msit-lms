@@ -1,11 +1,13 @@
 aside {
   position: fixed;
+  height: -webkit-fill-available;
 }
 .sidebar {
   display: block;
   width: 45vh;
   max-height: 90vh;
   overflow-y: scroll;
+  height: -webkit-fill-available;
 }
 a {
   text-decoration: none;
@@ -18,4 +20,9 @@ ul {
   margin: 0;
   float: left;
   padding: 10px 2px;
+}
+
+.contentarea {
+    width: -webkit-fill-available;
+    margin-left: 34%;
 }

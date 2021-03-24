@@ -50,18 +50,26 @@ class moduleCatalog extends Component {
         })
       }
 
-      list.map((module) => {
-        return (<li><a class="dropdown-item" onClick={()=>{this.setModule(module)}}>{module['name']}</a></li>);
-      });
+      let DropItem = (props) => {
+         return (<li><a class="dropdown-item" onClick={() => {this.setModule(props.module)} }>{props.name}</a></li>);
+       }
 
-      dropDownItems = list
+      dropDownItems = list.map((module) => {
+        // console.log('each module in drop item');
+        // console.log(module);
+        // console.log('after stringify');
+        // console.log(JSON.stringify(module));
+        return (<DropItem key={module['name']} name={module['name']} module={JSON.stringify(module)}></DropItem>);
+      });
 
     }
 
     setDescription(descript){
-      var html = "<h1>"
+      descript = JSON.parse(descript);
+      descript = descript['activity_json'];
+      var html = ""
       descript.forEach((desc)=>{
-        html = html + desc['title']+"</h1><br></br>";
+        html = "<h1>"+html + desc['title']+"</h1><br></br>";
         html = html + desc['text']+"<br></br>"
       })
 
@@ -69,14 +77,22 @@ class moduleCatalog extends Component {
     }
 
     setListModules(contents){
+      let ModuleItem = (props) =>{
+        return (<li className='sidebar_li'>
+                <a onClick={()=>this.setDescription(props.content)}>{props.activity}</a>
+                </li>);
+      }
+      console.log('set list modules contents');
+      console.log(contents);
       moduleToDisplay = contents.map(content =>{
-      return (<li className='sidebar_li'>
-              <a onClick={()=>{this.setDescription(content['activity_json'])}}>{content.activity_name}</a>
-              </li>);
+        return (<ModuleItem content={JSON.stringify(content)} key={content.activity_name} activity={content.activity_name}></ModuleItem>)
       })
     }
 
     setModule(mod){
+      console.log('set module log');
+      console.log(mod);
+      mod = JSON.parse(mod)
       selected = mod['name'];
       this.setListModules(mod['content']);
       this.setState({desc: mod['desc']});
@@ -93,20 +109,20 @@ class moduleCatalog extends Component {
           <NavBar></NavBar>
 
           <aside>
-            <div className='sidebar'>
-            <div class="btn-group">
-  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    {selected}
-  </button>
-  <ul class="dropdown-menu">
-    {dropDownItems}
-  </ul>
+          <div class="btn-group">
+<button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+  {selected}
+</button>
+<ul class="dropdown-menu">
+  {dropDownItems}
+</ul>
 </div>
+            <div className='sidebar'>
             {moduleToDisplay}
             </div>
           </aside>
           <main>
-          <div dangerouslySetInnerHTML={{__html: this.state.desc}} />
+          <div className="contentarea" dangerouslySetInnerHTML={{__html: this.state.desc}} />
           </main>
         </div>
       );

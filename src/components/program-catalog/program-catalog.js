@@ -8,6 +8,7 @@ import "./program-catalog.css";
 var showList = [];
 var view = null;
 var layoutStyle = null;
+const { REACT_APP_APIBASE_URL } = process.env;
 class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
@@ -17,15 +18,12 @@ class ProgramCatalog extends Component {
       loading: false,
     };
   }
-
   componentWillMount() {
     var token = localStorage.getItem("token");
     console.log("inside cdm");
     var userID = localStorage.getItem("id");
 
-    console.log('inside cdm')
-
-    if(token === undefined){
+    if (token === undefined) {
       return;
     }
 
@@ -40,6 +38,7 @@ class ProgramCatalog extends Component {
     this.getRenderList(userID, token);
     // this.setLayout();
   }
+
   async getPrograms(userID, token) {
     // example code
     token = localStorage.getItem("token");
@@ -59,7 +58,7 @@ class ProgramCatalog extends Component {
         console.log("get programs api fetched");
 
         if (json[0]["enrollments"][0]["programID"] !== null) {
-          // console.log(json[0]["enrollments"]);
+          console.log(json[0]["enrollments"]);
           this.setState({ list: json[0]["enrollments"], layout: layoutStyle });
         }
       })
@@ -84,21 +83,21 @@ class ProgramCatalog extends Component {
         programID +
         "/?token=" +
         token
-    )
-      .then((response) => response.text())
-      .then((result) => {
+    ).then((response) => response.text())
+    .then((result) => {
         console.log(`course result = ${result}`);
         var json = JSON.parse(result);
+        // json = json[0]['enrollments'];
         console.log("course data");
         console.log(json);
-        // filtering isLive objects
+
         if (json["courses"][0]["courseID"] !== null) {
-          json["courses"] = json["courses"].filter((obj) => {
-            return obj["courseInstances"][0]["isLive"] === true;
-          });
+            json["courses"] = json["courses"].filter((obj) => {
+              return obj["courseInstances"][0]["isLive"] === true;
+            });
           this.setState({ list: json["courses"], layout: layoutStyle }, () => {
-            // console.log("list state updated");
-            // console.log(this.state.list);
+            console.log("list state updated");
+            console.log(this.state.list);
           });
         } else {
           this.setState({ loading: true });
@@ -154,24 +153,23 @@ class ProgramCatalog extends Component {
     // view = this.props.location.state.view;
     console.log(`view = ${view}`);
     List = List.map((program) => {
-      var [ID, Title, Desc, Img, isLive] = this.getData(program);
+      var [ID, Title, Desc, Img] = this.getData(program);
       console.log(
         `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
       );
-      if (isLive === true)
-        return (
-          <ListPrograms
-            id={ID}
-            key={ID}
-            view={view}
-            title={Title}
-            description={Desc}
-            image={Img}
-            button='Enter'></ListPrograms>
-        );
+      return (
+        <ListPrograms
+          id={ID}
+          key={ID}
+          view={view}
+          title={Title}
+          description={Desc}
+          image={Img}
+          button='Enter'></ListPrograms>
+      );
     });
     console.log("list in html dom format is as shown below");
-    // console.log(List);
+    console.log(List);
     return List;
   }
 
@@ -183,7 +181,7 @@ class ProgramCatalog extends Component {
     console.log("inside set card");
     List = List.map((program) => {
       var [ID, Title, Desc, Img] = this.getData(program);
-      // console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
+      console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
       return (
         <Cols
           id={ID}
@@ -203,8 +201,8 @@ class ProgramCatalog extends Component {
   }
 
   getData(program) {
-    // console.log("fetched data from api");
-    // console.log(program);
+    console.log("fetched data from api");
+    console.log(program);
     var [ID, Title, Desc, Img] = [null, null, null, null];
     if (view === "programs") {
       ID = program["programID"]["_id"];
@@ -222,16 +220,16 @@ class ProgramCatalog extends Component {
 
   setLayout() {
     var ret = null;
-    // console.log("set layout list = ");
-    // console.log(this.state.list);
-    // console.log(`setlist if check = ${this.state.list === null}`);
+    console.log("set layout list = ");
+    console.log(this.state.list);
+    console.log(`setlist if check = ${this.state.list === null}`);
     if (!this.state.list) {
       if (this.state.loading) {
         ret = this.nodata();
       }
     } else {
-      // console.log("inside set layout");
-      // console.log(this.state.list);
+      console.log("inside set layout");
+      console.log(this.state.list);
       showList = layoutStyle
         ? this.setCard(this.state.list)
         : this.setList(this.state.list);
@@ -244,16 +242,16 @@ class ProgramCatalog extends Component {
 
   render() {
     var user = localStorage.getItem("token");
-    // console.log(`render list =`);
-    // console.log(this.state.list);
+    console.log(`render list =`);
+    console.log(this.state.list);
     user ??
       this.props.history.push({
         pathname: "/",
       });
 
     var value = this.setLayout();
-    // console.log(`value =`);
-    // console.log(value);
+    console.log(`value =`);
+    console.log(value);
     if (value !== null) {
       return value;
     }
