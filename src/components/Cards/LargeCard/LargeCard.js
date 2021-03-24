@@ -19,15 +19,11 @@ class LargeCard extends Component {
         pathname: '/courses-catalog',
           state: { view: 'courses',layout:layoutStyle}
         })
-      }else if(this.props.view ==='modules'){
-
-      }else{
-        localStorage.setItem('course',ID);
-          this.props.history.push({
-        pathname: '/module-catalog',
-          state: {layout:layoutStyle}
-        })
-      }
+      }else {
+      this.props.history.push({
+        pathname: "/module-catalog/" + ID,
+      });
+    }
   }
 
   render() {

@@ -21,15 +21,11 @@ class ListPrograms extends Component{
     pathname: '/courses-catalog',
       state: { view: 'courses',layout:layoutStyle}
     })
-  }else if(this.props.view ==='modules'){
-
-  }else{
-    localStorage.setItem('course',ID);
+    }else {
       this.props.history.push({
-    pathname: '/module-catalog',
-      state: {layout:layoutStyle}
-    })
-  }
+        pathname: "/module-catalog/" + ID,
+      });
+    }
   }
 
   render(){

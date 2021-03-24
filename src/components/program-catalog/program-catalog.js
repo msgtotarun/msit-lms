@@ -18,7 +18,7 @@ class ProgramCatalog extends Component {
       loading: false,
     };
   }
-  
+
   componentWillMount() {
     var token = localStorage.getItem("token");
     console.log("inside cdm");
@@ -215,7 +215,7 @@ class ProgramCatalog extends Component {
       Desc = program["programID"]["programDescription"];
       Img = program["programID"]["programImage"];
     } else {
-      ID = program["courseID"]["courseID"];
+      ID = program["courseInstances"][0]["_id"];
       Title = program["courseID"]["courseName"];
       Desc = program["courseID"]["courseDescription"];
       Img = program["courseID"]["image"];

@@ -79,7 +79,7 @@ fetch("https://api.github.com/user/repos", requestOptions)
     .then(result => console.log(result))
 
       this.props.history.push({
-    pathname: '/'
+    pathname: '/profilePage'
     })
 
   }
