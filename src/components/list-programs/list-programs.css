@@ -36,7 +36,9 @@
   background-color: #563d7c;
 }
 .accordion-button:focus {
-  border-color: white;
+  border: 3px solid pink;
+  outline: 0 !important;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
 }
 .accordion-button:not(.collapsed) {
   color: white;

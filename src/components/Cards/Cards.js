@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Cards.css";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 class Cards extends Component {
   handleClick(ID) {
     var layoutStyle = this.props.layout;
@@ -15,10 +15,8 @@ class Cards extends Component {
     console.log(`id = ${id}`);
     return (
       <div class='card h-adjust'>
-        <img src={this.props.image} class='card-img-top img-height' alt='...' />
         <div class='card-body text-wrap'>
           <h5 class='card-title'>{this.props.title}</h5>
-          <p class='card-text'>{this.props.description}</p>
           <div
             class='d-grid gap-2 col-6 mx-auto'
             style={{
@@ -31,9 +29,7 @@ class Cards extends Component {
               class='btn btn-primary '
               onClick={() => {
                 this.handleClick(this.props.id);
-              }}>
-              {this.props.button}
-            </a>
+              }}></a>
           </div>
         </div>
       </div>
