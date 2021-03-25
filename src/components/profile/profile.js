@@ -10,8 +10,6 @@ class Profile extends Component {
         };
     }
     getUser() {
-
-
         var urlencoded = new URLSearchParams();
         urlencoded.append("token", localStorage.getItem('token'));
         var requestOptions = {
@@ -19,13 +17,8 @@ class Profile extends Component {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-
-
-
             redirect: 'follow'
         };
-        console.log('link =');
-        console.log(process.env.REACT_APP_APIBASE_URL + "/api/user/details/?id=" + localStorage.getItem('id') + "&token=" + localStorage.getItem('token'));
         fetch(process.env.REACT_APP_APIBASE_URL + "/api/user/details/?id=" + localStorage.getItem('id') + "&token=" + localStorage.getItem('token'), requestOptions)
             .then(response => response.text())
             .then(result => {
