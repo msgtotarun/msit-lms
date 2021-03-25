@@ -51,7 +51,7 @@ class moduleCatalog extends Component {
       }
 
       let DropItem = (props) => {
-         return (<li><a class="dropdown-item" onClick={() => {this.setModule(props.module)} }>{props.name}</a></li>);
+         return (<li><a className="dropdown-item text-truncate" onClick={() => {this.setModule(props.module)} }>{props.name}</a></li>);
        }
 
       dropDownItems = list.map((module) => {
@@ -66,12 +66,15 @@ class moduleCatalog extends Component {
 
     setDescription(descript){
       descript = JSON.parse(descript);
-      descript = descript['activity_json'];
-      var html = ""
-      descript.forEach((desc)=>{
+      var description = descript['activity_json'];
+      var html = "<div>"
+      description.forEach((desc)=>{
+        console.log(desc);
+        html = html + "<p className='fs-2 text-start'> Activity ID:"+descript["activity_id"]+"</p>";
         html = "<h1>"+html + desc['title']+"</h1><br></br>";
         html = html + desc['text']+"<br></br>"
       })
+      html = html+"</div>"
 
       this.setState({desc:html})
     }
@@ -79,19 +82,19 @@ class moduleCatalog extends Component {
     setListModules(contents){
       let ModuleItem = (props) =>{
         return (<li className='sidebar_li'>
-                <a onClick={()=>this.setDescription(props.content)}>{props.activity}</a>
+                <a className="text-truncate" onClick={()=>this.setDescription(props.content)}>{props.activity}</a>
                 </li>);
       }
-      console.log('set list modules contents');
-      console.log(contents);
+      // console.log('set list modules contents');
+      // console.log(contents);
       moduleToDisplay = contents.map(content =>{
         return (<ModuleItem content={JSON.stringify(content)} key={content.activity_name} activity={content.activity_name}></ModuleItem>)
       })
     }
 
     setModule(mod){
-      console.log('set module log');
-      console.log(mod);
+      // console.log('set module log');
+      // console.log(mod);
       mod = JSON.parse(mod)
       selected = mod['name'];
       this.setListModules(mod['content']);
