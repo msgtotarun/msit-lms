@@ -10,7 +10,7 @@
 .accordion-body {
   padding: 1rem 1.25rem;
   width: inherit;
-  height: 200px;
+  min-height: 200px;
 }
 .accordion {
   cursor: pointer;

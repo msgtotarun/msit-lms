@@ -1,0 +1,23 @@
+aside {
+  position: absolute;
+  width: 45vh;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 45vh;
+  height: 80vh;
+}
+a {
+  text-decoration: none;
+}
+.sidebar_li {
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+}
+main {
+  width: 100vh;
+  margin-left: 65vh;
+}

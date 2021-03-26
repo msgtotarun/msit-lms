@@ -151,21 +151,20 @@ class ProgramCatalog extends Component {
     // view = this.props.location.state.view;
     console.log(`view = ${view}`);
     List = List.map((program) => {
-      var [ID, Title, Desc, Img, isLive] = this.getData(program);
+      var [ID, Title, Desc, Img] = this.getData(program);
       console.log(
         `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
       );
-      if (isLive === true)
-        return (
-          <ListPrograms
-            id={ID}
-            key={ID}
-            view={view}
-            title={Title}
-            description={Desc}
-            image={Img}
-            button='Enter'></ListPrograms>
-        );
+      return (
+        <ListPrograms
+          id={ID}
+          key={ID}
+          view={view}
+          title={Title}
+          description={Desc}
+          image={Img}
+          button='Enter'></ListPrograms>
+      );
     });
     console.log("list in html dom format is as shown below");
     // console.log(List);

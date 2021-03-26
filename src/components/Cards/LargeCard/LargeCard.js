@@ -16,7 +16,7 @@ class LargeCard extends Component {
       });
     } else {
       this.props.history.push({
-        pathname: "/modules-catalog/" + ID,
+        pathname: "/moduleCatalog/" + ID,
       });
     }
   }
