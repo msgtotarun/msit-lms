@@ -58,48 +58,48 @@ class Profile extends Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-4">
+                    <div className="col-4 style1">
                         <div className="m-b-25">
                             <img className="img-radius" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" />
                         </div>
-                        <h6 className="f-w-600">{name}</h6>
+                        <h6 className="f-w-600 fonts">{name}</h6>
                     </div>
-                    <div className="col-8">
+                    <div className="col-8 style2">
                         <div className="card-block">
-                            <h6 className="m-b-20 p-b-5 f-w-600 text-style text-style1">Information</h6>
+                            <h6 className="m-b-20 p-b-5 f-w-600 text-style text-style1 fonts">Information</h6>
                             <div className="row">
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start">First Name</p>
-                                    <h6 className="text-muted f-w-400 text-start">{firstName}</h6>
+                                    <p className="m-b-10 f-w-600 text-start fonts">First Name</p>
+                                    <h6 className="text-muted f-w-400 text-start fonts">{firstName}</h6>
                                 </div>
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start">Last Name</p>
-                                    <h6 className="text-muted f-w-400 text-start">{lastName}</h6>
+                                    <p className="m-b-10 f-w-600 text-start fonts">Last Name</p>
+                                    <h6 className="text-muted f-w-400 text-start fonts">{lastName}</h6>
                                 </div>
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start">Email</p>
-                                    <h6 className="text-muted f-w-400 text-start">{email}</h6>
+                                    <p className="m-b-10 f-w-600 text-start fonts">Email</p>
+                                    <h6 className="text-muted f-w-400 text-start fonts">{email}</h6>
                                 </div>
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start">Phone</p>
-                                    <h6 className="text-muted f-w-400 text-start">{mobile}</h6>
+                                    <p className="m-b-10 f-w-600 text-start fonts">Phone</p>
+                                    <h6 className="text-muted f-w-400 text-start fonts">{mobile}</h6>
                                 </div>
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start">Date of Birth</p>
-                                    <h6 className="text-muted f-w-400 text-start">{dateOfBirth}</h6>
+                                    <p className="m-b-10 f-w-600 text-start fonts">Date of Birth</p>
+                                    <h6 className="text-muted f-w-400 text-start fonts">{dateOfBirth}</h6>
                                 </div>
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start">Gender</p>
-                                    <h6 className="text-muted f-w-400 text-start">{gender}</h6>
+                                    <p className="m-b-10 f-w-600 text-start fonts">Gender</p>
+                                    <h6 className="text-muted f-w-400 text-start fonts">{gender}</h6>
                                 </div>
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start">Role</p>
-                                    <h6 className="text-muted f-w-400 text-start">{role}</h6>
+                                    <p className="m-b-10 f-w-600 text-start fonts">Role</p>
+                                    <h6 className="text-muted f-w-400 text-start fonts">{role}</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <h6 className="m-b-20 p-b-5 f-w-600 text-style text-style2">GitHub Repositories</h6>
+                    <h6 className="m-b-20 p-b-5 f-w-600 text-style text-style2 fonts">GitHub Repositories</h6>
                     <div className="row">
 
                     </div>
