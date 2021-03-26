@@ -1,15 +1,11 @@
-import './App.css';
-import Routes from './Routes';
-import Cards from './components/Cards';
+import "./App.css";
+import Routes from "./Routes";
 
 function App() {
-
   return (
-    <div className="App">
-    <Routes/> 
-  </div>
-  
+    <div className='App'>
+      <Routes />
+    </div>
   );
 }
 export default App;
-

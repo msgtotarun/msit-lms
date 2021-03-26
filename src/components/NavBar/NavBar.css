@@ -1,6 +1,8 @@
-.navbar-colour{
-    background-color: #563d7c;
+.navbar-colour {
+  background-color: #563d7c;
 }
-.navFix{
-    margin-bottom: 80px;
+
+.nav-link:hover {
+  border: 2px solid white;
+  border-radius: 20px;
 }
