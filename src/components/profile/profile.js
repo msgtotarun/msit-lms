@@ -45,7 +45,9 @@ class Profile extends Component {
         var dateOfBirth = '01 - 01 - 1900';
         var gender = 'Null';
         var role = 'Null';
+        var img1 = 'Null';
         if (this.state.user != null) {
+            img1 = this.state.user['image']
             name = this.state.user['firstName'] + ' ' + this.state.user['lastName'];
             firstName = this.state.user['firstName'];
             lastName = this.state.user['lastName'];
@@ -60,17 +62,17 @@ class Profile extends Component {
                 <div className="row">
                     <div className="col-4 style1">
                         <div className="m-b-25">
-                            <img className="img-radius" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" />
+                            <img className="img-radius" src={img1} alt={name} />
                         </div>
                         <h6 className="f-w-600 fonts">{name}</h6>
                     </div>
                     <div className="col-8 style2">
                         <div className="card-block">
-                            <h6 className="m-b-20 p-b-5 f-w-600 text-style text-style1 fonts">Information</h6>
+                            <h6 className="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">Information</h6>
                             <div className="row">
                                 <div className="col-sm-6">
-                                    <p className="m-b-10 f-w-600 text-start fonts">First Name</p>
-                                    <h6 className="text-muted f-w-400 text-start fonts">{firstName}</h6>
+                                    <p className="m-b-10 f-w-600 fs-6 text-start fonts">First Name</p>
+                                    <h6 className="text-muted f-w-400 fs-6 text-start fonts">{firstName}</h6>
                                 </div>
                                 <div className="col-sm-6">
                                     <p className="m-b-10 f-w-600 text-start fonts">Last Name</p>
@@ -97,11 +99,8 @@ class Profile extends Component {
                                     <h6 className="text-muted f-w-400 text-start fonts">{role}</h6>
                                 </div>
                             </div>
+                            <h6 class="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">GitHub Repositories</h6>
                         </div>
-                    </div>
-                    <h6 className="m-b-20 p-b-5 f-w-600 text-style text-style2 fonts">GitHub Repositories</h6>
-                    <div className="row">
-
                     </div>
                 </div>
             </div>
