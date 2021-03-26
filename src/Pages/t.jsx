@@ -1,11 +1,11 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
-import repos from '../components/repos/repos'
+import Repos from '../components/Repos/Repos'
 const test = ()=>{
     return(
         <div>
     <NavBar></NavBar>
-    <repos></repos>
+    <Repos></Repos>
     </div>
         );
 }
