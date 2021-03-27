@@ -43,17 +43,20 @@ class Repos extends Component {
       console.log(result);
       console.log('after getting client');
       client = result['client']
-      console.log(result)})
+      console.log(client)})
     .catch(error => console.log('error', error));
 
 
-if(client !== ""){
+if(client !== null | client !== ""){
 
-  var requestOptions = {
-    method: 'GET',
-    headers: {"Authorization": "Bearer "+client},
-    redirect: 'follow'
-  };
+  var myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer "+client);
+myHeaders.append("withCredentials", true)
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
 
 fetch("https://api.github.com/user/repos", requestOptions)
   .then(response => {return response.text()})
@@ -90,7 +93,7 @@ fetch("https://api.github.com/user/repos", requestOptions)
     .then(result => console.log(result))
 
       this.props.history.push({
-    pathname: '/profilePage'
+    pathname: '/Profile'
     })
 
   }

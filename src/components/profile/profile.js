@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from "react-router-dom";
+import Repos from '../Repos/Repos'
+import NavBar from '../NavBar/NavBar'
 import './profile.css';
 
 class Profile extends Component {
@@ -57,8 +59,10 @@ class Profile extends Component {
             gender = this.state.user['gender'];
             role = this.state.user['role'];
         }
-        return (
+
+        var doc = (
             <div className="container">
+            <NavBar></NavBar>
                 <div className="row">
                     <div className="col-4 style1">
                         <div className="m-b-25">
@@ -100,6 +104,7 @@ class Profile extends Component {
                                 </div>
                             </div>
                             <h6 class="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">GitHub Repositories</h6>
+                            <Repos code={code}></Repos>
                         </div>
                     </div>
                 </div>
@@ -107,6 +112,63 @@ class Profile extends Component {
 
 
         );
+        var code = this.props.match.params.code;
+        if(code !== null){
+          doc = (
+              <div className="container">
+              <NavBar></NavBar>
+                  <div className="row">
+                      <div className="col-4 style1">
+                          <div className="m-b-25">
+                              <img className="img-radius" src={img1} alt={name} />
+                          </div>
+                          <h6 className="f-w-600 fonts">{name}</h6>
+                      </div>
+                      <div className="col-8 style2">
+                          <div className="card-block">
+                              <h6 className="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">Information</h6>
+                              <div className="row">
+                                  <div className="col-sm-6">
+                                      <p className="m-b-10 f-w-600 fs-6 text-start fonts">First Name</p>
+                                      <h6 className="text-muted f-w-400 fs-6 text-start fonts">{firstName}</h6>
+                                  </div>
+                                  <div className="col-sm-6">
+                                      <p className="m-b-10 f-w-600 text-start fonts">Last Name</p>
+                                      <h6 className="text-muted f-w-400 text-start fonts">{lastName}</h6>
+                                  </div>
+                                  <div className="col-sm-6">
+                                      <p className="m-b-10 f-w-600 text-start fonts">Email</p>
+                                      <h6 className="text-muted f-w-400 text-start fonts">{email}</h6>
+                                  </div>
+                                  <div className="col-sm-6">
+                                      <p className="m-b-10 f-w-600 text-start fonts">Phone</p>
+                                      <h6 className="text-muted f-w-400 text-start fonts">{mobile}</h6>
+                                  </div>
+                                  <div className="col-sm-6">
+                                      <p className="m-b-10 f-w-600 text-start fonts">Date of Birth</p>
+                                      <h6 className="text-muted f-w-400 text-start fonts">{dateOfBirth}</h6>
+                                  </div>
+                                  <div className="col-sm-6">
+                                      <p className="m-b-10 f-w-600 text-start fonts">Gender</p>
+                                      <h6 className="text-muted f-w-400 text-start fonts">{gender}</h6>
+                                  </div>
+                                  <div className="col-sm-6">
+                                      <p className="m-b-10 f-w-600 text-start fonts">Role</p>
+                                      <h6 className="text-muted f-w-400 text-start fonts">{role}</h6>
+                                  </div>
+                              </div>
+                              <h6 class="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">GitHub Repositories</h6>
+                              <Repos></Repos>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+
+          );
+        }
+
+        return doc
     }
 }
 
