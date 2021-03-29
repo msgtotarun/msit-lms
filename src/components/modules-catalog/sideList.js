@@ -1,12 +1,42 @@
 import React, { Component } from "react";
-import ModuleCatalog from "./moduleCatalog";
-let sid = 0;
+let sid = 1;
+let id = "";
 export default class sideList extends Component {
-  componentDidUpdate() {
-    sid = 0;
+  getactive(active) {
+    if (active === id) {
+      return "active";
+    }
+    return "";
+  }
+  setSubModule(contents) {
+    let ModuleItem = (props) => {
+      return (
+        <li className='sidebar_li'>
+          <button
+            className={this.getactive(props.activity)}
+            onClick={() => {
+              id = props.activity;
+              this.props.subModuledesc(props.content);
+            }}>
+            {props.activity}
+          </button>
+        </li>
+      );
+    };
+    // console.log('set list modules contents');
+    // console.log(contents);
+    let moduleToDisplay = contents.map((content) => {
+      return (
+        <ModuleItem
+          content={JSON.stringify(content)}
+          key={content.activity_name}
+          activity={content.activity_name}></ModuleItem>
+      );
+    });
+    return moduleToDisplay;
   }
   render() {
-    ++sid;
+    sid++;
     let colapse = "colapse-" + sid;
     let head = "head-" + sid;
 
@@ -20,7 +50,7 @@ export default class sideList extends Component {
             data-bs-target={`#${colapse}`}
             aria-expanded='false'
             aria-controls={colapse}>
-            {sid}. {this.props.name}
+            {this.props.sid}. {this.props.name}
           </button>
         </h2>
         <div
@@ -31,13 +61,18 @@ export default class sideList extends Component {
           <div className='accordion-body' id='flow1'>
             <div>
               <li className='sidebar_li'>
-                <a
-                  className='text-truncate'
-                  onClick={() => this.props.desc(this.props.module)}>
+                <button
+                  key={this.props.key}
+                  className={this.getactive(this.props.name)}
+                  onClick={() => {
+                    id = this.props.name;
+                    this.setState({ active: this.props.name });
+                    this.props.desc(JSON.stringify(this.props.module));
+                  }}>
                   {"OverView"}
-                </a>
+                </button>
               </li>
-              {this.props.ModuleList}
+              {this.setSubModule(this.props.moduleContent)}
             </div>
           </div>
         </div>
