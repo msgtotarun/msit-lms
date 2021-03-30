@@ -59,6 +59,7 @@ class Repo extends Component {
   }
 
   repolistmapper(result){
+<<<<<<< HEAD:src/components/Repo/repo.js
 
     var repoCard = (props) => {
       return (<div class="col"><div class="card repocard">
@@ -74,6 +75,25 @@ class Repo extends Component {
     }
 
     showList = result.map((repo) => {
+||||||| 55863e4:src/components/repos/repos.js
+    showList = result.map(repo => {
+=======
+
+    let repoCard = (props) => {
+      return (<div class="col"><div class="card repocard">
+    <div class="card-body">
+      <h5 class="card-title">{props.title}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+      {props.sub}
+      </h6>
+      <p class="card-text">{props.desc}</p>
+      <a href="#" class="card-link">{props.rlink}</a>
+    </div>
+    </div></div>);
+    }
+
+    showList = result.map(repo => {
+>>>>>>> f9d9c1c192cf2458d8204456a22681b650775158:src/components/repos/repos.js
       // console.log('in repo mapper');
       var title = repo['name'];
       var sub = repo['full_name'];
