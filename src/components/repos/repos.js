@@ -169,7 +169,7 @@ class Repos extends Component {
 }
 
 function repoCard(props){
-  return(<div class="col"><div class="card repocard">
+  return (<div class="col"><div class="card repocard">
 <div class="card-body">
   <h5 class="card-title">{props.title}</h5>
   <h6 class="card-subtitle mb-2 text-muted">
