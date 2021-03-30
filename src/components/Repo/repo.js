@@ -3,7 +3,7 @@ import NavBar from '../NavBar/NavBar';
 import ListPrograms from '../list-programs/list-programs';
 import LargeCard from '../Cards/LargeCard/LargeCard';
 import {Link,withRouter} from "react-router-dom";
-import './Repos.css';
+import './repo.css';
 
 var showList = [];
 var layoutStyle = null;
@@ -11,7 +11,7 @@ var layoutStyle = null;
 const clientID = process.env.REACT_APP_GITHUB_CLIENT
 const clientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET
 const {REACT_APP_APIBASE_URL}=process.env
-class Repos extends Component {
+class Repo extends Component {
 
   constructor(props) {
     super(props);
@@ -59,6 +59,20 @@ class Repos extends Component {
   }
 
   repolistmapper(result){
+
+    let repoCard = (props) => {
+      return (<div class="col"><div class="card repocard">
+    <div class="card-body">
+      <h5 class="card-title">{props.title}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+      {props.sub}
+      </h6>
+      <p class="card-text">{props.desc}</p>
+      <a href="#" class="card-link">{props.rlink}</a>
+    </div>
+    </div></div>);
+    }
+
     showList = result.map(repo => {
       // console.log('in repo mapper');
       var title = repo['name'];
@@ -168,17 +182,4 @@ class Repos extends Component {
 
 }
 
-function repoCard(props){
-  return (<div class="col"><div class="card repocard">
-<div class="card-body">
-  <h5 class="card-title">{props.title}</h5>
-  <h6 class="card-subtitle mb-2 text-muted">
-  {props.sub}
-  </h6>
-  <p class="card-text">{props.desc}</p>
-  <a href="#" class="card-link">{props.rlink}</a>
-</div>
-</div></div>);
-}
-
-export default withRouter(Repos);
+export default withRouter(Repo);

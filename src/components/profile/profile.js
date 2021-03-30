@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from "react-router-dom";
-import Repos from '../Repos/repos'
-import NavBar from '../NavBar/NavBar'
+import Repo from '../Repo/repo';
+import NavBar from '../NavBar/NavBar';
 import './profile.css';
 
 class Profile extends Component {
@@ -147,7 +147,7 @@ fetch("https://github.com/login/oauth/access_token?code="+code+"&client_id="+cli
                                 </div>
                             </div>
                             <h6 class="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">GitHub Repositories</h6>
-                            <Repos></Repos>
+                            <Repo></Repo>
                         </div>
                     </div>
                 </div>
