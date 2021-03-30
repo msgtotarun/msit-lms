@@ -7,7 +7,9 @@ import './Repos.css';
 
 var showList = [];
 var layoutStyle = null;
-var response_status = 0
+// var client = null
+const clientID = process.env.REACT_APP_GITHUB_CLIENT
+const clientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET
 const {REACT_APP_APIBASE_URL}=process.env
 class Repos extends Component {
 
@@ -23,7 +25,6 @@ class Repos extends Component {
   componentWillMount() {
     var userID = localStorage.getItem('id');
     this.getClient(userID);
-
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -35,7 +36,7 @@ class Repos extends Component {
     userID = localStorage.getItem('id')
     console.log("link to check if token exists");
     console.log(process.env.REACT_APP_API_URL2+"/clientcheck/"+userID);
-    fetch(process.env.REACT_APP_API_URL2+"/clientcheck/"+userID)
+    fetch(process.env.REACT_APP_API_URL2+"clientcheck/"+userID)
     .then(response => response.text())
     .then(result =>{
       console.log("user github token check =");
@@ -43,9 +44,10 @@ class Repos extends Component {
       console.log('befor getting client');
       console.log(result);
       console.log('after getting client');
-      this.setState({client: result['client']});
-      console.log(this.state.client)
-    })
+      var client = result['client']
+      console.log(client)
+    this.setState({client: client})
+  })
     .catch(error => console.log('error', error));
   }
 
@@ -63,12 +65,8 @@ class Repos extends Component {
     console.log(showList)
   }
 
-  authorize(){
-  var link = "https://github.com/login/oauth/authorize?client_id="+process.env.REACT_APP_GITHUB_CLIENT;
-  window.location = link
-  }
-
   setRender(){
+
     var html = null;
     var response = ""
     if(showList === null)
@@ -77,9 +75,9 @@ class Repos extends Component {
     <div class="col-md-8">
       <div class="card-body">
         <div class="input-group mb-3">
-          <p class="text-center">Authorize this account to access your github account</p>
+          <h3 className="text-center ">Authorize this acccount to access your github account</h3>
           <br></br>
-          <a class="link-primary" onClick={()=>this.authorize()}>Authorize</a>
+          <a class="link-primary" onClick={() => {window.location = "https://github.com/login/oauth/authorize?client_id="+clientID;}}>Authorize</a>
         </div>
       </div>
     </div>
@@ -98,7 +96,7 @@ class Repos extends Component {
     response = "No repositories to diplay"
   }else{
     html = (<div class="container">
-    <div class="row row-cols-3">
+    <div className="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
     {showList}
     </div>
     </div>);
@@ -112,9 +110,8 @@ class Repos extends Component {
   }
 
   getRepos(token){
-    console.log('client in get repos = ', token);
     var myHeaders = new Headers();
-  myHeaders.append("Authorization", token);
+  myHeaders.append("Authorization", "Bearer "+token);
   // myHeaders.append("withCredentials", true)
   var requestOptions = {
     method: 'GET',
@@ -126,7 +123,7 @@ class Repos extends Component {
     .then(response => {return response.text()})
     .then(result => {
       result = JSON.parse(result);
-      response_status = result['message']
+      // response_status = result['message']
       console.log('repos fetched');
       console.log(result);
       console.log('check if message exists');
@@ -134,21 +131,24 @@ class Repos extends Component {
       if(result['message'] == undefined){
         this.repolistmapper(result);
         this.setState({list: result, loading:false});
-      }else{
+      }
+      else{
         console.log('Bad credentials recived in github api');
         showList = null;
         this.setState({loading: false})
       }
-    })
+        })
     .catch(error => console.log('error', error));
   }
 
   render() {
+
     if(this.state.client !== null & this.state.client !== "" & this.state.client !== undefined){
       this.getRepos(this.state.client);
       this.setState({client: null});
     }
 
+    // console.log('response status = ',response_status);
     console.log('loading = ',this.state.loading);
     if(this.state.loading){
       return (<div class="spinner-border" role="status">
