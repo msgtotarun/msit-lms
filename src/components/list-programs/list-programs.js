@@ -15,9 +15,9 @@ class ListPrograms extends Component {
     console.log(`list view prop = ${this.props.view}`);
     if (this.props.view === 'programs') {
       console.log(`list id inside if = ${ID}`);
-      localStorage.setItem('program', ID);
+      // localStorage.setItem('program', ID);
       this.props.history.push({
-        pathname: '/courses-catalog',
+        pathname: '/courses-catalog/'+ID,
         state: { view: 'courses', layout: layoutStyle }
       })
     } else {
@@ -79,7 +79,7 @@ class ListPrograms extends Component {
           data-bs-parent='#accordionExample'>
           <div className='accordion-body' id='flow1'>
             <div>
-              <img className='flow' src={this.props.image} alt='' />
+              <img className='flow-image' src={this.props.image} alt='' />
             </div>
             <div>
               <p className='flow2'>{this.props.description}</p>

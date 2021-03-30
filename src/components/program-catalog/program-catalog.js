@@ -71,7 +71,8 @@ class ProgramCatalog extends Component {
   async getCourses(programID, userID, token) {
     token = localStorage.getItem("token");
     userID = localStorage.getItem("id");
-    programID = localStorage.getItem("program");
+    // programID = localStorage.getItem("program");
+    programID = this.props.match.params.programId
     console.log(
       `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${programID}/?token=${token}`
     );
@@ -143,7 +144,8 @@ class ProgramCatalog extends Component {
     if ("programs" === view) {
       this.getPrograms(userID, token);
     } else {
-      var id = localStorage.getItem("program");
+      // var id = localStorage.getItem("program");
+      var id = this.props.match.params.programId
       this.getCourses(id, userID, token);
     }
   }
@@ -258,7 +260,7 @@ class ProgramCatalog extends Component {
 
     // console.log(this.props.location.state.view)
     var doc = null;
-    if (this.state.layout === false) {
+    if (layoutStyle === false) {
       console.log("changed to list layout");
       doc = (
         <div className='container list-card'>

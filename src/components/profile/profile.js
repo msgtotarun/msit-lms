@@ -26,18 +26,61 @@ class Profile extends Component {
             .then(result => {
                 var json = JSON.parse(result);
                 // json = json[0]['enrollments'];
-                console.log('user data');
-                console.log(json);
+                // console.log('user data');
+                // console.log(json);
                 this.setState({ user: json }, () => {
-                    console.log('user state updated');
-                    console.log(this.state.user);
+                    // console.log('user state updated');
+                    // console.log(this.state.user);
                 });
             }).catch(error => console.log('error', error));
     }
     componentDidMount() {
+      var loc = this.props.location.search
+      console.log("location = ",loc);
+
+        if(loc.search('=') !== -1){
+          var code = loc.split("=")[1]
+          console.log("code =",code);
+          this.authorize(code);
+        }
         this.getUser();
 
     }
+
+    updateToken(token){
+      var user = localStorage.getItem('id');
+      fetch(process.env.REACT_APP_API_URL2+"/github/"+user+"/"+token)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+        this.props.history.push({
+      pathname: '/Profile'
+      })
+
+    }
+
+    authorize(code){
+const client_id = process.env.REACT_APP_GITHUB_CLIENT
+const client_secret = process.env.REACT_APP_GITHUB_CLIENT_SECRET
+var myHeaders = new Headers();
+
+myHeaders.append("Accept", "application/json");
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://github.com/login/oauth/access_token?code="+code+"&client_id="+client_id+"&client_secret="+client_secret, requestOptions)
+  .then(response => response.text())
+  .then(result => {
+    result = JSON.parse(result);
+    this.updateToken(result["access_token"])
+    console.log(result)})
+  .catch(error => console.log('error', error));
+    }
+
     render() {
         var name = 'Null';
         var firstName = 'Null';
@@ -104,7 +147,7 @@ class Profile extends Component {
                                 </div>
                             </div>
                             <h6 class="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">GitHub Repositories</h6>
-                            <Repos code={code}></Repos>
+                            <Repos></Repos>
                         </div>
                     </div>
                 </div>
@@ -112,61 +155,6 @@ class Profile extends Component {
 
 
         );
-        var code = this.props.match.params.code;
-        if(code !== null){
-          doc = (
-              <div className="container">
-              <NavBar></NavBar>
-                  <div className="row">
-                      <div className="col-4 style1">
-                          <div className="m-b-25">
-                              <img className="img-radius" src={img1} alt={name} />
-                          </div>
-                          <h6 className="f-w-600 fonts">{name}</h6>
-                      </div>
-                      <div className="col-8 style2">
-                          <div className="card-block">
-                              <h6 className="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">Information</h6>
-                              <div className="row">
-                                  <div className="col-sm-6">
-                                      <p className="m-b-10 f-w-600 fs-6 text-start fonts">First Name</p>
-                                      <h6 className="text-muted f-w-400 fs-6 text-start fonts">{firstName}</h6>
-                                  </div>
-                                  <div className="col-sm-6">
-                                      <p className="m-b-10 f-w-600 text-start fonts">Last Name</p>
-                                      <h6 className="text-muted f-w-400 text-start fonts">{lastName}</h6>
-                                  </div>
-                                  <div className="col-sm-6">
-                                      <p className="m-b-10 f-w-600 text-start fonts">Email</p>
-                                      <h6 className="text-muted f-w-400 text-start fonts">{email}</h6>
-                                  </div>
-                                  <div className="col-sm-6">
-                                      <p className="m-b-10 f-w-600 text-start fonts">Phone</p>
-                                      <h6 className="text-muted f-w-400 text-start fonts">{mobile}</h6>
-                                  </div>
-                                  <div className="col-sm-6">
-                                      <p className="m-b-10 f-w-600 text-start fonts">Date of Birth</p>
-                                      <h6 className="text-muted f-w-400 text-start fonts">{dateOfBirth}</h6>
-                                  </div>
-                                  <div className="col-sm-6">
-                                      <p className="m-b-10 f-w-600 text-start fonts">Gender</p>
-                                      <h6 className="text-muted f-w-400 text-start fonts">{gender}</h6>
-                                  </div>
-                                  <div className="col-sm-6">
-                                      <p className="m-b-10 f-w-600 text-start fonts">Role</p>
-                                      <h6 className="text-muted f-w-400 text-start fonts">{role}</h6>
-                                  </div>
-                              </div>
-                              <h6 class="m-b-20 p-b-5 f-w-600 fs-3 text-style fonts">GitHub Repositories</h6>
-                              <Repos></Repos>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-
-          );
-        }
 
         return doc
     }

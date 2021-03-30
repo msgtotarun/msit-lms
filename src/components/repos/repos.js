@@ -7,7 +7,6 @@ import './Repos.css';
 
 var showList = [];
 var layoutStyle = null;
-var client = null
 var response_status = 0
 const {REACT_APP_APIBASE_URL}=process.env
 class Repos extends Component {
@@ -15,6 +14,7 @@ class Repos extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      client: null,
       list: null,
       loading: true
     };
@@ -23,6 +23,7 @@ class Repos extends Component {
   componentWillMount() {
     var userID = localStorage.getItem('id');
     this.getClient(userID);
+
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -34,7 +35,7 @@ class Repos extends Component {
     userID = localStorage.getItem('id')
     console.log("link to check if token exists");
     console.log(process.env.REACT_APP_API_URL2+"/clientcheck/"+userID);
-    fetch(process.env.REACT_APP_API_URL2+"clientcheck/"+userID)
+    fetch(process.env.REACT_APP_API_URL2+"/clientcheck/"+userID)
     .then(response => response.text())
     .then(result =>{
       console.log("user github token check =");
@@ -42,60 +43,10 @@ class Repos extends Component {
       console.log('befor getting client');
       console.log(result);
       console.log('after getting client');
-      client = result['client']
-      console.log(client)})
-    .catch(error => console.log('error', error));
-
-
-if(client !== null | client !== ""){
-
-  var myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer "+client);
-myHeaders.append("withCredentials", true)
-var requestOptions = {
-  method: 'GET',
-  headers: myHeaders,
-  redirect: 'follow'
-};
-
-fetch("https://api.github.com/user/repos", requestOptions)
-  .then(response => {return response.text()})
-  .then(result => {
-    result = JSON.parse(result);
-    response_status = result['message']
-    console.log('repos fetched');
-    console.log(result);
-    console.log('check if message exists');
-    console.log(result['message']);
-    if(result['message'] == undefined){
-      this.repolistmapper(result);
-      this.setState({list: result, loading:false});
-    }
-    else{
-      console.log('Bad credentials recived in github api');
-      showList = null;
-      this.setState({loading: false})
-    }
-      })
-  .catch(error => console.log('error', error));
-}else{
-  console.log('Bad credentials recived in github api');
-  showList = null;
-  this.setState({loading: false})
-}
-  }
-
-  updateToken(){
-    var token = document.getElementById('token').value;
-    var user = localStorage.getItem('id');
-    fetch(process.env.REACT_APP_API_URL2+"/github/"+user+"/"+token)
-    .then(response => response.text())
-    .then(result => console.log(result))
-
-      this.props.history.push({
-    pathname: '/Profile'
+      this.setState({client: result['client']});
+      console.log(this.state.client)
     })
-
+    .catch(error => console.log('error', error));
   }
 
   repolistmapper(result){
@@ -112,37 +63,23 @@ fetch("https://api.github.com/user/repos", requestOptions)
     console.log(showList)
   }
 
+  authorize(){
+  var link = "https://github.com/login/oauth/authorize?client_id="+process.env.REACT_APP_GITHUB_CLIENT;
+  window.location = link
+  }
+
   setRender(){
     var html = null;
     var response = ""
-    if (response_status === "Bad credentials"){
-      html =  (<div class="card mb-3 customcard">
-    <div class="col-md-8">
-      <div class="card-body">
-        <div class="input-group mb-3">
-        <div class="alert alert-warning" role="alert">
-          Invalid personal access token re enter the correct token value
-        </div>
-          <input id="token" type="text" class="form-control" placeholder="Github Token" aria-label="Github Token" aria-describedby="button-addon2"></input>
-          <button onClick={this.updateToken} class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
-          <br></br>
-          <a class="link-primary" onClick={window.open('https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token',"_blank")}>Generate Token</a>
-        </div>
-      </div>
-    </div>
-</div>);
-    response = "Bad credentials"
-    }
-    else if(showList === null)
+    if(showList === null)
     {
       html = (<div class="card mb-3 customcard">
     <div class="col-md-8">
       <div class="card-body">
         <div class="input-group mb-3">
-          <input id="token" type="text" class="form-control" placeholder="Github Personal Access Token" aria-label="Github Personal Access Token" aria-describedby="button-addon2"></input>
-          <button onClick={this.updateToken} class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+          <p class="text-center">Authorize this account to access your github account</p>
           <br></br>
-          <a class="link-primary" onClick={window.open('https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token',"_blank")}>Generate Token</a>
+          <a class="link-primary" onClick={()=>this.authorize()}>Authorize</a>
         </div>
       </div>
     </div>
@@ -174,8 +111,44 @@ fetch("https://api.github.com/user/repos", requestOptions)
 
   }
 
+  getRepos(token){
+    console.log('client in get repos = ', token);
+    var myHeaders = new Headers();
+  myHeaders.append("Authorization", token);
+  // myHeaders.append("withCredentials", true)
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch("https://api.github.com/user/repos", requestOptions)
+    .then(response => {return response.text()})
+    .then(result => {
+      result = JSON.parse(result);
+      response_status = result['message']
+      console.log('repos fetched');
+      console.log(result);
+      console.log('check if message exists');
+      console.log(result['message']);
+      if(result['message'] == undefined){
+        this.repolistmapper(result);
+        this.setState({list: result, loading:false});
+      }else{
+        console.log('Bad credentials recived in github api');
+        showList = null;
+        this.setState({loading: false})
+      }
+    })
+    .catch(error => console.log('error', error));
+  }
+
   render() {
-    console.log('response status = ',response_status);
+    if(this.state.client !== null & this.state.client !== "" & this.state.client !== undefined){
+      this.getRepos(this.state.client);
+      this.setState({client: null});
+    }
+
     console.log('loading = ',this.state.loading);
     if(this.state.loading){
       return (<div class="spinner-border" role="status">

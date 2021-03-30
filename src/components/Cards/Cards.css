@@ -5,6 +5,12 @@
   width: 350px;
 }
 
+.custom{
+  display: "flex";
+  justifyContent: "center";
+  alignItems: "center";
+}
+
 .img-height {
   height: 280px;
 }

@@ -1,11 +1,11 @@
 .button1 {
   float: right;
 }
-.flow {
+.flow-image {
   margin-right: 8px;
   width: 30%;
   float: left;
-  height: 150px;
+  height: 180px;
 }
 .accordion-body {
   padding: 1rem 1.25rem;

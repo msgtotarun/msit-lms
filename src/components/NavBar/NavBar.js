@@ -30,7 +30,7 @@ class NavBar extends Component {
             <div className='collapse navbar-collapse' id='navbarNavDropdown'>
               <ul className='navbar-nav me-auto mb-lg-0'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to='#'>
+                  <Link className='nav-link active' to='/Credits'>
                     Credits
                   </Link>
                 </li>

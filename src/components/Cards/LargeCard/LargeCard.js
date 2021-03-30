@@ -14,9 +14,9 @@ class LargeCard extends Component {
     if(this.props.view ==='programs')
     {
       console.log(`card id inside if ${ID}`);
-        localStorage.setItem('program',ID);
+        // localStorage.setItem('program',ID);
           this.props.history.push({
-        pathname: '/courses-catalog',
+        pathname: '/courses-catalog/'+ID,
           state: { view: 'courses',layout:layoutStyle}
         })
       }else {
