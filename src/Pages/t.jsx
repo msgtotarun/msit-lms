@@ -1,6 +1,6 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
-import Repos from '../components/Repos/Repos'
+import Repos from '../components/Repos/repos'
 const test = ()=>{
     return(
         <div>
