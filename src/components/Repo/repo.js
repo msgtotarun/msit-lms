@@ -60,7 +60,7 @@ class Repo extends Component {
 
   repolistmapper(result){
 
-    let repoCard = (props) => {
+    var repoCard = (props) => {
       return (<div class="col"><div class="card repocard">
     <div class="card-body">
       <h5 class="card-title">{props.title}</h5>
@@ -73,7 +73,7 @@ class Repo extends Component {
     </div></div>);
     }
 
-    showList = result.map(repo => {
+    showList = result.map((repo) => {
       // console.log('in repo mapper');
       var title = repo['name'];
       var sub = repo['full_name'];
