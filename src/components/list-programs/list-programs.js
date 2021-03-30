@@ -22,7 +22,7 @@ class ListPrograms extends Component {
       })
     } else {
       this.props.history.push({
-        pathname: "/module-catalog/" + ID,
+        pathname: "/modulesCatalog/" + ID,
       });
     }
   }

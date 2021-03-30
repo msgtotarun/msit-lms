@@ -19,7 +19,7 @@ const Routes = () => {
       <Route key="profile" exact path='/Profile' component={Profile}></Route>
       <Route key="profile-coded" exact path='/Profile?code=:code' component={Profile}></Route>
       <Route key="credits" exact path='/Credits' component={Credits}></Route>
-      <Route exact path='/module-catalog/:courseId' component={moduleCatalog}></Route>
+      <Route exact path='/modulesCatalog/:courseId' component={moduleCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
       <Route path='*' exact={true} component={pageNotFound} />
     </Switch>
