@@ -36,7 +36,7 @@ class Repos extends Component {
     userID = localStorage.getItem('id')
     console.log("link to check if token exists");
     console.log(process.env.REACT_APP_API_URL2+"/clientcheck/"+userID);
-    fetch(process.env.REACT_APP_API_URL2+"clientcheck/"+userID)
+    fetch(process.env.REACT_APP_API_URL2+"/clientcheck/"+userID)
     .then(response => response.text())
     .then(result =>{
       console.log("user github token check =");
@@ -46,21 +46,27 @@ class Repos extends Component {
       console.log('after getting client');
       var client = result['client']
       console.log(client)
-    this.setState({client: client})
+    if(client !=="" & client !== null &client !== undefined){
+      this.setState({client: client})
+    }
+    else{
+      console.log('Bad credentials recived in github api');
+      showList = null;
+      this.setState({loading: false})
+    }
   })
     .catch(error => console.log('error', error));
   }
 
   repolistmapper(result){
-    result.map(repo => {
+    showList = result.map(repo => {
+      // console.log('in repo mapper');
       var title = repo['name'];
       var sub = repo['full_name'];
       var rlink = repo["html_url"];
       var desc = repo["description"];
-      return <repoCard key={rlink} title={title} rlink={rlink} desc={desc} sub={sub}></repoCard>
+      return (<repoCard key={rlink} title={title} rlink={rlink} desc={desc} sub={sub}></repoCard>);
     });
-
-    showList = result
     console.log("showlist = ");
     console.log(showList)
   }
@@ -130,7 +136,7 @@ class Repos extends Component {
       console.log(result['message']);
       if(result['message'] == undefined){
         this.repolistmapper(result);
-        this.setState({list: result, loading:false});
+        this.setState({loading:false});
       }
       else{
         console.log('Bad credentials recived in github api');
