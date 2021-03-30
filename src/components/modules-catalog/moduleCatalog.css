@@ -13,7 +13,11 @@ button {
   color: black;
   padding: 10px 0px;
 }
-button:hover,
+.moduleButton:hover {
+  opacity: 0.96;
+  background-color: #563d7c;
+  color: white;
+}
 .active {
   background-color: #563d7c;
   color: white;

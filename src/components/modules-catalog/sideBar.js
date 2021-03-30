@@ -1,12 +1,17 @@
 import React, { Component } from "react";
-let sid = 1;
-let id = "";
+let activeId = "";
 export default class sideList extends Component {
   getactive(active) {
-    if (active === id) {
-      return "active";
+    if (activeId === "") {
+      activeId = this.props.name;
+      this.setState({ active: this.props.name });
+      this.props.desc(JSON.stringify(this.props.module));
+      return "moduleButton active";
     }
-    return "";
+    if (active === activeId) {
+      return "moduleButton active";
+    }
+    return "moduleButton";
   }
   setSubModule(contents) {
     let ModuleItem = (props) => {
@@ -15,7 +20,7 @@ export default class sideList extends Component {
           <button
             className={this.getactive(props.activity)}
             onClick={() => {
-              id = props.activity;
+              activeId = props.activity;
               this.props.subModuledesc(props.content);
             }}>
             {props.activity}
@@ -23,8 +28,6 @@ export default class sideList extends Component {
         </li>
       );
     };
-    // console.log('set list modules contents');
-    // console.log(contents);
     let moduleToDisplay = contents.map((content) => {
       return (
         <ModuleItem
@@ -36,26 +39,31 @@ export default class sideList extends Component {
     return moduleToDisplay;
   }
   render() {
-    sid++;
+    let sid = this.props.sid;
     let colapse = "colapse-" + sid;
     let head = "head-" + sid;
-
     return (
       <div className='accordion-item'>
         <h2 className='accordion-header' id={head}>
           <button
-            className='accordion-button collapsed'
+            className={
+              sid === 1 ? "accordion-button" : "accordion-button collapsed"
+            }
             type='button'
             data-bs-toggle='collapse'
             data-bs-target={`#${colapse}`}
             aria-expanded='false'
             aria-controls={colapse}>
-            {this.props.sid}. {this.props.name}
+            {sid}. {this.props.name}
           </button>
         </h2>
         <div
           id={colapse}
-          className='accordion-collapse collapse'
+          className={
+            sid === 1
+              ? "accordion-collapse collapse show"
+              : "accordion-collapse collapse"
+          }
           aria-labelledby={head}
           data-bs-parent='#accordionExample'>
           <div className='accordion-body' id='flow1'>
@@ -65,7 +73,7 @@ export default class sideList extends Component {
                   key={this.props.key}
                   className={this.getactive(this.props.name)}
                   onClick={() => {
-                    id = this.props.name;
+                    activeId = this.props.name;
                     this.setState({ active: this.props.name });
                     this.props.desc(JSON.stringify(this.props.module));
                   }}>

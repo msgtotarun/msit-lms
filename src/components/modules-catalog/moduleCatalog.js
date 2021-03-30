@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NavBar from "../NavBar/NavBar";
 import { withRouter } from "react-router-dom";
-import SideList from "./sideList";
+import SideBar from "./sideBar";
 import "./moduleCatalog.css";
 
 var dropDownItems = "";
@@ -42,19 +42,19 @@ class moduleCatalog extends Component {
       .catch((error) => console.log("error", error));
   }
 
-  SetSideList(list) {
+  SetSideBar(list) {
     var sid = 0;
     dropDownItems = list.map((module) => {
       ++sid;
       return (
-        <SideList
+        <SideBar
           key={module["name"]}
           name={module["name"]}
           module={module}
           moduleContent={module.content}
           subModuledesc={this.setSubModuleDesciption}
           desc={this.setModuleDesc}
-          sid={sid}></SideList>
+          sid={sid}></SideBar>
       );
     });
   }
@@ -88,7 +88,7 @@ class moduleCatalog extends Component {
       return <NavBar></NavBar>;
     }
 
-    this.SetSideList(this.state.list);
+    this.SetSideBar(this.state.list);
     return (
       <div>
         <NavBar></NavBar>
