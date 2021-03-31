@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import NavBar from "../NavBar/NavBar";
-import { Link, withRouter } from "react-router-dom";
-import SideList from "./sideList";
+import { withRouter } from "react-router-dom";
+import SideBar from "./sideBar";
 import "./moduleCatalog.css";
 
 var dropDownItems = "";
-var moduleToDisplay = "";
+
 class moduleCatalog extends Component {
   constructor(props) {
     super(props);
@@ -14,8 +14,10 @@ class moduleCatalog extends Component {
       list: null,
       loading: true,
     };
-    this.setModule = this.setModule.bind(this);
+    this.setModuleDesc = this.setModuleDesc.bind(this);
+    this.setSubModuleDesciption = this.setSubModuleDesciption.bind(this);
   }
+
   componentDidMount() {
     var token = localStorage.getItem("token");
     // let courseId = window.location.pathname.replace("/modules-catalog/", "");
@@ -40,30 +42,29 @@ class moduleCatalog extends Component {
       .catch((error) => console.log("error", error));
   }
 
-  setDropList(list) {
+  SetSideBar(list) {
+    var sid = 0;
     dropDownItems = list.map((module) => {
+      ++sid;
       return (
-        <SideList
+        <SideBar
           key={module["name"]}
           name={module["name"]}
-          module={JSON.stringify(module)}
-          ModuleList={this.setListModules(module.content)}
-          desc={this.setModule}></SideList>
+          module={module}
+          moduleContent={module.content}
+          subModuledesc={this.setSubModuleDesciption}
+          desc={this.setModuleDesc}
+          sid={sid}></SideBar>
       );
     });
   }
 
-  setDescription(descript) {
+  setSubModuleDesciption(descript) {
     descript = JSON.parse(descript);
     var description = descript["activity_json"];
     var html = "<div>";
     description.forEach((desc) => {
       console.log(desc);
-      // html =
-      //   html +
-      //   "<p className='fs-2 text-start'> Activity ID:" +
-      //   descript["activity_id"] +
-      //   "</p>";
       html = "<h1>" + html + desc["title"] + "</h1><br></br>";
       if (desc["text"] !== undefined) {
         html = html + desc["text"] + "<br></br>";
@@ -77,32 +78,7 @@ class moduleCatalog extends Component {
     this.setState({ desc: html });
   }
 
-  setListModules(contents) {
-    let ModuleItem = (props) => {
-      return (
-        <li className='sidebar_li'>
-          <a
-            className='text-truncate'
-            onClick={() => this.setDescription(props.content)}>
-            {props.activity}
-          </a>
-        </li>
-      );
-    };
-    // console.log('set list modules contents');
-    // console.log(contents);
-    moduleToDisplay = contents.map((content) => {
-      return (
-        <ModuleItem
-          content={JSON.stringify(content)}
-          key={content.activity_name}
-          activity={content.activity_name}></ModuleItem>
-      );
-    });
-    return moduleToDisplay;
-  }
-
-  setModule(mod) {
+  setModuleDesc(mod) {
     mod = JSON.parse(mod);
     this.setState({ desc: mod["desc"] });
   }
@@ -112,12 +88,12 @@ class moduleCatalog extends Component {
       return <NavBar></NavBar>;
     }
 
-    this.setDropList(this.state.list);
+    this.SetSideBar(this.state.list);
     return (
       <div>
         <NavBar></NavBar>
 
-        <aside>
+        <aside id='aside'>
           <div className='accordion ' id='accordionExample'>
             {dropDownItems}
           </div>

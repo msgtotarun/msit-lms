@@ -9,16 +9,13 @@ body {
   padding: 0;
   padding-top: 60px;
   box-sizing: border-box;
+  font-family: "Nunito Sans";
 }
 .nav-404 {
   display: flex;
-  font-family: "Nunito Sans";
+
   font-size: 1em;
   flex-direction: column;
-}
-html,
-button {
-  font-family: "Nunito Sans";
 }
 
 .h-404 {
