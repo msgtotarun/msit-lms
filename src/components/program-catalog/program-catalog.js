@@ -37,6 +37,7 @@ class ProgramCatalog extends Component {
     layoutStyle = localStorage.getItem('layout');
     if (layoutStyle === undefined | layoutStyle === null){
       localStorage.getItem('layout',true);
+      layoutStyle = true;
     }
     else if(layoutStyle === 'true'){
       layoutStyle = true;
