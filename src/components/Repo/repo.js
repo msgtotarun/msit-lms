@@ -59,18 +59,6 @@ class Repo extends Component {
   }
 
   repolistmapper(result){
-    var repoCard = (props) => {
-      return (<div class="col"><div class="card repocard">
-    <div class="card-body">
-      <h5 class="card-title">{props.title}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">
-      {props.sub}
-      </h6>
-      <p class="card-text">{props.desc}</p>
-      <a href="#" class="card-link">{props.rlink}</a>
-    </div>
-    </div></div>);
-    }
 
     showList = result.map((repo) => {
       // console.log('in repo mapper');
@@ -78,7 +66,19 @@ class Repo extends Component {
       var sub = repo['full_name'];
       var rlink = repo["html_url"];
       var desc = repo["description"];
-      return (<repoCard key={rlink} title={title} rlink={rlink} desc={desc} sub={sub}></repoCard>);
+
+      return (<div class="col"><div class="card repocard">
+    <div class="card-body">
+      <p class="fs-5 text-truncated"><i class="bi bi-github"></i> {title}</p>
+      <p class="fs-6 text-truncated">
+      {sub}
+      </p>
+      <p class="card-text text-truncate"><i class="bi bi-info-circle"></i> {desc}</p>
+      <i class="bi bi-link-45deg"></i> <a href={rlink} class="card-link text-truncate">Redirect to Repository</a>
+    </div>
+    </div></div>);
+
+      // return (<repoCard key={rlink} title={title} rlink={rlink} desc={desc} sub={sub}></repoCard>);
     });
     console.log("showlist = ");
     console.log(showList)
@@ -115,8 +115,10 @@ class Repo extends Component {
     response = "No repositories to diplay"
   }else{
     html = (<div class="container">
-    <div className="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+    <div class="overflow-scroll">
+    <div className="row row-cols-1 row-cols-md-3 g-4">
     {showList}
+    </div>
     </div>
     </div>);
     response = "repositories available for user"
@@ -179,6 +181,19 @@ class Repo extends Component {
 
   }
 
+}
+
+function repoCard (props){
+  return (<div class="col"><div class="card repocard">
+<div class="card-body">
+  <h5 class="card-title">{props.title}</h5>
+  <h6 class="card-subtitle mb-2 text-muted">
+  {props.sub}
+  </h6>
+  <p class="card-text">{props.desc}</p>
+  <a href="#" class="card-link">{props.rlink}</a>
+</div>
+</div></div>);
 }
 
 export default withRouter(Repo);

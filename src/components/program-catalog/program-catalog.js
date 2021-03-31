@@ -27,12 +27,22 @@ class ProgramCatalog extends Component {
       return;
     }
 
-    try {
-      layoutStyle = this.props.location.state.layout;
-    } catch (err) {
-      if (err.name === "TypeError") {
-        layoutStyle = this.props.layout;
-      }
+    // try {
+    //   layoutStyle = this.props.location.state.layout;
+    // } catch (err) {
+    //   if (err.name === "TypeError") {
+    //     layoutStyle = this.props.layout;
+    //   }
+    // }
+    layoutStyle = localStorage.getItem('layout');
+    if (layoutStyle === undefined | layoutStyle === null){
+      localStorage.getItem('layout',true);
+    }
+    else if(layoutStyle === 'true'){
+      layoutStyle = true;
+    }
+    else{
+      layoutStyle = false;
     }
 
     this.getRenderList(userID, token);
@@ -110,6 +120,7 @@ class ProgramCatalog extends Component {
   handleLayout(value) {
     if (this.state.layout !== value) {
       layoutStyle = value;
+      localStorage.setItem('layout',value);
       this.setState({ layout: !this.state.layout });
     }
   }

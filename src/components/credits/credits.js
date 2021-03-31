@@ -11,11 +11,11 @@ class Credits extends Component{
         super();
         this.state = {
             developers : [
-                {Name: "Kalluru Rohit", Contact: "", Image: "" },
-                {Name: "Mallika Bhargavi", Contact: "", Image: ""},
-                {Name: "Radhika Patnala", Contact: "", Image: ""},
-                {Name: "Tarun Kumar", Contact: "", Image: ""},
-                {Name: "Muvvala Sravan Kumar", Contact: "", Image: ""}
+                {Name: "Kalluru Rohit", Contact: "rohithkalluru@gmail.com", Image: "" },
+                {Name: "Mallika Bhargavi", Contact: "dsmbhargavi@gmail.com", Image: ""},
+                {Name: "Radhika Patnala", Contact: "raninmy@gmail.com", Image: ""},
+                {Name: "Tarun Kumar", Contact: "msgtotarun@gmail.com", Image: ""},
+                {Name: "Muvvala Sravan Kumar", Contact: "muvvalasravan@gmail.com", Image: ""}
             ]
         }
 
@@ -57,7 +57,7 @@ class Credits extends Component{
 
         return (<div class="container">
         <NavBar></NavBar>
-        <div className="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+        <div className="row row-cols-1 row-cols-md-3 g-4 marg">
         {list}
         </div>
         </div>)
