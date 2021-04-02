@@ -15,7 +15,7 @@ class ProgramCatalog extends Component {
     this.state = {
       layout: false,
       list: null,
-      loading: false,
+      loading: true,
     };
   }
   componentWillMount() {
@@ -67,13 +67,10 @@ class ProgramCatalog extends Component {
         var json = JSON.parse(result);
         // json = json[0]['enrollments'];
         console.log("get programs api fetched");
-
+        console.log(json);
         if (json[0]["enrollments"][0]["programID"] !== null) {
           console.log(json[0]["enrollments"]);
-          this.setState({ list: json[0]["enrollments"], layout: layoutStyle });
-        }
-        else {
-          this.setState({ loading: true });
+          this.setState({ list: json[0]["enrollments"], layout: layoutStyle,loading: false });
         }
       })
       .catch((error) => {
@@ -110,15 +107,16 @@ class ProgramCatalog extends Component {
             json["courses"] = json["courses"].filter((obj) => {
               return obj["courseInstances"][0]["isLive"] === true;
             });
-          this.setState({ list: json["courses"], layout: layoutStyle }, () => {
+          this.setState({ list: json["courses"], layout: layoutStyle,loading: false }, () => {
             console.log("list state updated");
             console.log(this.state.list);
           });
-        } else {
-          this.setState({ loading: true });
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error)
+        this.setState({ loading: false });
+    });
   }
 
   handleLayout(value) {
@@ -134,7 +132,7 @@ class ProgramCatalog extends Component {
         <NavBar />
         <div class='alert alert-dark' role='alert'>
           <h4 class='alert-heading'>No {view} to display</h4>
-          <p>You are not enrolled in any programs</p>
+          <p>You are not enrolled in any {view}</p>
           <hr></hr>
           <p class='mb-0'>
             Kindly, contact your mentor to enroll into programs.
@@ -185,6 +183,7 @@ class ProgramCatalog extends Component {
           button='Enter'></ListPrograms>
       );
     });
+    List = (<div className='accordion ' id='accordionExample'>{List}</div>)
     console.log("list in html dom format is as shown below");
     console.log(List);
     return List;
@@ -213,7 +212,7 @@ class ProgramCatalog extends Component {
 
     console.log("card in html dom format is as shown below");
     console.log(List);
-
+    List = (<Rows>{List}</Rows>)
     return List;
   }
 
@@ -240,18 +239,19 @@ class ProgramCatalog extends Component {
     console.log("set layout list = ");
     console.log(this.state.list);
     console.log(`setlist if check = ${this.state.list === null}`);
-    if (!this.state.list) {
-      if (this.state.loading) {
-        ret = this.nodata();
-      }
-    } else {
+
+    if (this.state.loading === true) {
+      ret =  (<div className='container list-card'>
+            <NavBar />
+            </div>);
+    }else if (this.state.list === null) {
+      ret = this.nodata();
+    } else if(view==="programs"){
       console.log("inside set layout");
       console.log(this.state.list);
-      showList = layoutStyle
-        ? this.setCard(this.state.list)
-        : this.setList(this.state.list);
-      console.log("showlist");
-      console.log(showList);
+      showList = this.setCard(this.state.list);
+    }else{
+      showList = this.setList(this.state.list);
     }
 
     return ret;
@@ -274,75 +274,10 @@ class ProgramCatalog extends Component {
     }
 
     // console.log(this.props.location.state.view)
-    var doc = null;
-    if (layoutStyle === false) {
-      console.log("changed to list layout");
-      doc = (
-        <div className='container list-card'>
+    return (<div className='container list-card'>
           <NavBar />
-          <div class='btn-group w-18 marged'>
-            <button
-              class='btn btn-light btn-sm dropdown-toggle'
-              type='button'
-              data-bs-toggle='dropdown'
-              aria-expanded='false'>
-              <i class='bi bi-display'></i> View
-            </button>
-            <ul class='dropdown-menu'>
-              <li
-                onClick={() => {
-                  this.handleLayout(true);
-                }}>
-                <i class='bi bi-grid-3x3-gap'></i> Grid
-              </li>
-              <li
-                onClick={() => {
-                  this.handleLayout(false);
-                }}>
-                <i class='bi bi-list-task'></i> List
-              </li>
-            </ul>
-          </div>
-          <div className='accordion ' id='accordionExample'>
             {showList}
-          </div>
-        </div>
-      );
-    } else {
-      doc = (
-        <div className='container grid-card'>
-          <NavBar />
-          <div class='btn-group w-18 marged'>
-            <button
-              class='btn btn-light btn-sm dropdown-toggle'
-              type='button'
-              data-bs-toggle='dropdown'
-              aria-expanded='false'>
-              <i class='bi bi-display'></i> View
-            </button>
-            <ul class='dropdown-menu'>
-              <li
-                onClick={() => {
-                  this.handleLayout(true);
-                }}>
-                <i class='bi bi-grid-3x3-gap'></i> Grid
-              </li>
-              <li
-                onClick={() => {
-                  this.handleLayout(false);
-                }}>
-                <i class='bi bi-list-task'></i> List
-              </li>
-            </ul>
-          </div>
-          <Rows view={view}>{showList}</Rows>
-        </div>
-      );
-    }
-    console.log("doc is as follows");
-    console.log(doc);
-
-    return doc;
+        </div>);
   }
 }
 

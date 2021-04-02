@@ -29,16 +29,15 @@ class LargeCard extends Component {
     return (
       <div class='card mb-3 pad'>
         <div class='row g-0'>
-            <img class='image col-md-4' src={this.props.image} alt='...'></img>
           <div class='col'>
             <div class='card-body position-relative'>
               <h5 class='card-title'>{this.props.title}</h5>
               <hr></hr>
               <p class='card-text text-prop'>{this.props.description}</p>
-              <button onClick={() => {
+              <a onClick={() => {
                   this.handleClick(this.props.id);
                 }}
-                type="button" class="btn btn-outline-primary btn-md bottom-0 end-0">Enter</button>
+                type="button" class="stretched-link"></a>            
             </div>
           </div>
         </div>
