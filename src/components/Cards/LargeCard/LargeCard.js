@@ -20,43 +20,25 @@ class LargeCard extends Component {
           state: { view: 'courses',layout:layoutStyle}
         })
       }else {
-      this.props.history.push({
-        pathname: "/modulesCatalog/" + ID,
-      });
+      window.location = "/modulesCatalog/"+ID;
     }
   }
 
   render() {
 
-    if (this.props.view === "modules"){
-      return (<div class="card text-center">
-  <div class="card-header">
-    {this.props.title}
-  </div>
-  <div class="card-body">
-    {this.props.description}
-    <button type="button" class="btn btn-outline-primary" onClick={()=>{this.handleClick(this.props.id)}}>{this.props.button}</button>
-  </div>
-</div>);
-    }
-
     return (
       <div class='card mb-3 pad'>
         <div class='row g-0'>
-          <div class='col-md-4'>
-            <img class='image' src={this.props.image} alt='...'></img>
-          </div>
-          <div class='col-md-8'>
-            <div class='card-body'>
+            <img class='image col-md-4' src={this.props.image} alt='...'></img>
+          <div class='col'>
+            <div class='card-body position-relative'>
               <h5 class='card-title'>{this.props.title}</h5>
               <hr></hr>
               <p class='card-text text-prop'>{this.props.description}</p>
-              <a
-                href='#'
-                onClick={() => {
+              <button onClick={() => {
                   this.handleClick(this.props.id);
                 }}
-                class='stretched-link'></a>
+                type="button" class="btn btn-outline-primary btn-md bottom-0 end-0">Enter</button>
             </div>
           </div>
         </div>

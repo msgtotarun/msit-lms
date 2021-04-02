@@ -16,7 +16,7 @@ class Cards extends Component {
                   </div>
                   <img src={this.props.image} class="card-img-top"  />
                   <div class="card-body">
-                      <p class="fs-3 text-center">{this.props.contact}</p>
+                      <p class="fs-4 text-center">{this.props.contact}</p>
                   </div>
               </div>
       );

@@ -72,6 +72,9 @@ class ProgramCatalog extends Component {
           console.log(json[0]["enrollments"]);
           this.setState({ list: json[0]["enrollments"], layout: layoutStyle });
         }
+        else {
+          this.setState({ loading: true });
+        }
       })
       .catch((error) => {
         console.log("error", error);
