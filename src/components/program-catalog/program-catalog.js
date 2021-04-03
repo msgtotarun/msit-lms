@@ -14,7 +14,7 @@ class ProgramCatalog extends Component {
     super(props);
     this.state = {
       layout: false,
-      list: null,
+      list: [],
       loading: true,
     };
   }
@@ -229,7 +229,7 @@ class ProgramCatalog extends Component {
       ID = program["courseInstances"][0]["_id"];
       Title = program["courseID"]["courseName"];
       Desc = program["courseID"]["courseDescription"];
-      Img = program["courseID"]["image"];
+      Img = program["courseID"]["image"]["image"];
     }
     return [ID, Title, Desc, Img];
   }
@@ -243,8 +243,13 @@ class ProgramCatalog extends Component {
     if (this.state.loading === true) {
       ret =  (<div className='container list-card'>
             <NavBar />
+                      <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
             </div>);
-    }else if (this.state.list === null) {
+    }else if (this.state.list.length === 0) {
       ret = this.nodata();
     } else if(view==="programs"){
       console.log("inside set layout");

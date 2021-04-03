@@ -4,9 +4,11 @@ import './list-programs.css';
 
 var content = null;
 var id = 0;
+var img = "";
 class ListPrograms extends Component {
   constructor(props) {
     super(props);
+    this.Image();
   }
 
   handleListClick(ID) {
@@ -25,6 +27,10 @@ class ListPrograms extends Component {
     }
   }
 
+  Image(){
+    img = `data:image/jpeg;base64,${this.props.image}`;
+  }
+
   render() {
     // console.log('inside list programs component');
     // console.log('props in list-programs is as follows');
@@ -33,6 +39,7 @@ class ListPrograms extends Component {
     ++id;
     let colapse = "colapse" + id;
     let head = "head" + id;
+    var button = "<button type='button' className='btn btn-outline-primary button1 bottom-0 end-0'>Enter</button>"
 
     return (
       <div className='accordion-item'>
@@ -53,15 +60,12 @@ class ListPrograms extends Component {
           aria-labelledby={head}
           data-bs-parent='#accordionExample'>
           <div className='accordion-body' id='flow1'>
-            <div>
-              <img className='flow-image' src={this.props.image} alt='' />
-            </div>
-            <div>
-              <p className='flow2'>{this.props.description}</p>
-            </div>
+          <div className="col position-relative">
+          <img className='flow-image' src={img} alt='' />
+            <div dangerouslySetInnerHTML={{ __html: this.props.description}} />
             <button
               type='button'
-              className='btn btn-outline-primary button1 bottom-0 end-0'
+              className='btn btn-outline-primary button1 position-absolute bottom-0 end-0'
               onClick={() => {
                 this.handleListClick(this.props.id);
               }}>
@@ -69,6 +73,7 @@ class ListPrograms extends Component {
             </button>
           </div>
         </div>
+      </div>
       </div>
     );
   }

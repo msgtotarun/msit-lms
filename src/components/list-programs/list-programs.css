@@ -4,9 +4,8 @@
 }
 .flow-image {
   margin-right: 8px;
-  width: 30%;
-  float: left;
-  height: 180px;
+  width: 100%;
+  height: 200px;
 }
 .accordion-body {
   padding: 1rem 1.25rem;
