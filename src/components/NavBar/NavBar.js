@@ -35,12 +35,12 @@ class NavBar extends Component {
               </ul>
               <ul className='navbar-nav ms-auto'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to='#'>
+                  <Link className='nav-link active' to='/CourseProgress'>
                     Course status
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <span className='nav-link active'>{userName}</span>
+                  <Link className='nav-link active'>{userName}</Link>
                 </li>
                 <li className='nav-item'>
                   <Link

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router";
 let activeId = "";
-export default class sideList extends Component {
+class sideBar extends Component {
   getactive(active) {
     if (activeId === "") {
       activeId = this.props.name;
@@ -88,3 +89,4 @@ export default class sideList extends Component {
     );
   }
 }
+export default withRouter(sideBar);

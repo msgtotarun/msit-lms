@@ -5,7 +5,7 @@ import SideBar from "./sideBar";
 import "./moduleCatalog.css";
 
 var dropDownItems = "";
-
+var descType = "";
 class moduleCatalog extends Component {
   constructor(props) {
     super(props);
@@ -31,8 +31,8 @@ class moduleCatalog extends Component {
     })
       .then((response) => response.text())
       .then((result) => {
-        console.log("result = ");
-        console.log(result);
+        // console.log("result = ");
+        // console.log(result);
         var json = JSON.parse(result);
         // console.log(json.contentJSON[0]);
         if (json.contentJSON !== "undefined") {
@@ -68,7 +68,9 @@ class moduleCatalog extends Component {
       html = "<h1>" + html + desc["title"] + "</h1><br></br>";
       if (desc["text"] !== undefined) {
         html = html + desc["text"] + "<br></br>";
-      } else {
+        descType = "";
+      } else if (desc["questions"] !== undefined) {
+        descType = desc["questions"][0]["questionType"];
         html =
           html + desc["questions"][0]["questionText"][0]["text"] + "<br></br>";
       }
@@ -77,9 +79,28 @@ class moduleCatalog extends Component {
 
     this.setState({ desc: html });
   }
+  submission() {
+    if (descType !== "") {
+      let submit = (
+        <div className='submission'>
+          <form>
+            <input
+              className='submitBox'
+              type='text'
+              placeholder='paste your submission link here'
+            />
+            <button type='button'>submit</button>
+          </form>
+        </div>
+      );
+      return submit;
+    } else return "";
+  }
 
   setModuleDesc(mod) {
+    descType = "";
     mod = JSON.parse(mod);
+    console.log("in desc");
     this.setState({ desc: mod["desc"] });
   }
 
@@ -103,6 +124,7 @@ class moduleCatalog extends Component {
             className='contentarea'
             dangerouslySetInnerHTML={{ __html: this.state.desc }}
           />
+          <div>{this.submission()}</div>
         </main>
       </div>
     );

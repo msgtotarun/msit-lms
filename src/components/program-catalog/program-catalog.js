@@ -84,10 +84,10 @@ class ProgramCatalog extends Component {
     )
       .then((response) => response.text())
       .then((result) => {
-        console.log(`course result = ${result}`);
+        // console.log(`course result = ${result}`);
         var json = JSON.parse(result);
-        console.log("course data");
-        console.log(json);
+        // console.log("course data");
+        // console.log(json);
         // filtering isLive objects
         if (json["courses"][0]["courseID"] !== null) {
           json["courses"] = json["courses"].filter((obj) => {
@@ -127,7 +127,7 @@ class ProgramCatalog extends Component {
   }
 
   getRenderList(userID, token) {
-    console.log("inside get render list");
+    // console.log("inside get render list");
     try {
       view = this.props.location.state.view;
     } catch (err) {
@@ -136,8 +136,8 @@ class ProgramCatalog extends Component {
       }
     }
 
-    console.log(`userID = ${userID}, props.view = ${view}`);
-    console.log(view === "programs");
+    // console.log(`userID = ${userID}, props.view = ${view}`);
+    // console.log(view === "programs");
     if ("programs" === view) {
       this.getPrograms(userID, token);
     } else {
@@ -152,9 +152,9 @@ class ProgramCatalog extends Component {
     console.log(`view = ${view}`);
     List = List.map((program) => {
       var [ID, Title, Desc, Img] = this.getData(program);
-      console.log(
-        `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
-      );
+      // console.log(
+      //   `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
+      // );
       return (
         <ListPrograms
           id={ID}
@@ -166,15 +166,15 @@ class ProgramCatalog extends Component {
           button='Enter'></ListPrograms>
       );
     });
-    console.log("list in html dom format is as shown below");
-    // console.log(List);
+    // console.log("list in html dom format is as shown below");
+    // // console.log(List);
     return List;
   }
 
   setCard(List) {
-    console.log("state object print");
-    console.log(this.props.location.state);
-    console.log("**********************");
+    // console.log("state object print");
+    // console.log(this.props.location.state);
+    // console.log("**********************");
     // var view = this.props.location.state.view;
     console.log("inside set card");
     List = List.map((program) => {
@@ -192,8 +192,8 @@ class ProgramCatalog extends Component {
       );
     });
 
-    console.log("card in html dom format is as shown below");
-    console.log(List);
+    // console.log("card in html dom format is as shown below");
+    // console.log(List);
 
     return List;
   }
@@ -231,8 +231,8 @@ class ProgramCatalog extends Component {
       showList = layoutStyle
         ? this.setCard(this.state.list)
         : this.setList(this.state.list);
-      console.log("showlist");
-      console.log(showList);
+      // console.log("showlist");
+      // console.log(showList);
     }
 
     return ret;
@@ -320,8 +320,8 @@ class ProgramCatalog extends Component {
         </div>
       );
     }
-    console.log("doc is as follows");
-    console.log(doc);
+    // console.log("doc is as follows");
+    // console.log(doc);
 
     return doc;
   }
@@ -332,7 +332,7 @@ function Rows(props) {
 }
 
 function Cols(props) {
-  console.log(props);
+  // console.log(props);
   return (
     <>
       <LargeCard

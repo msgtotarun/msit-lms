@@ -42,3 +42,7 @@ main {
   padding: 30px;
   width: 100%;
 }
+.submitBox {
+  margin-left: 0;
+  width: 100vh;
+}
