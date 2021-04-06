@@ -7,7 +7,6 @@ var courseSelect = [];
 var view = "Program";
 const token = localStorage.getItem("token");
 const userID = localStorage.getItem("id");
-let buttondisplay = true;
 
 class CourseProgress extends Component {
   constructor(props) {
@@ -20,7 +19,7 @@ class CourseProgress extends Component {
       courseList: null,
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     console.log("inside cdm");
 
     if (token === undefined) {
@@ -158,41 +157,33 @@ class CourseProgress extends Component {
     //  console.log("select program",programSelect);
     else if (program && programSelect.length === 0) {
       // console.log("select program",programSelect);
-      programSelect = this.setProgramDropDown(this.state.programList, true);
+      programSelect = this.setDropDown(this.state.programList, true);
       //  console.log("programSelect",programSelect);
     }
 
     return ret;
   }
-  setProgramDropDown(List) {
-    console.log("listprogram:", List);
+  setDropDown(List, isProgram) {
+    console.log("list:", List);
     let Li = (props) => {
       //  console.log(props.Id);
       return <option value={props.Id}>{props.title}</option>;
     };
+    if (isProgram) {
+      List = List.map((program) => {
+        var [ID, Title] = this.getData(program, true);
+        // console.log("Title:",Title);
 
-    List = List.map((program) => {
-      var [ID, Title] = this.getData(program, true);
-      // console.log("Title:",Title);
+        return <Li key={ID} title={Title} Id={ID}></Li>;
+      });
+    } else {
+      List = List?.map((course) => {
+        var [ID, Title] = this.getData(course, false);
+        console.log("Title:", Title);
 
-      return <Li key={ID} title={Title} Id={ID}></Li>;
-    });
-    return List;
-  }
-
-  setCourseDropDown(List) {
-    console.log("listcourse:", List);
-    let Li = (props) => {
-      //  console.log(props.Id);
-      return <option value={props.Id}>{props.title}</option>;
-    };
-
-    List = List?.map((program) => {
-      var [ID, Title] = this.getData(program, false);
-      console.log("Title:", Title);
-
-      return <Li key={ID} title={Title} Id={ID}></Li>;
-    });
+        return <Li key={ID} title={Title} Id={ID}></Li>;
+      });
+    }
     return List;
   }
 
@@ -218,39 +209,21 @@ class CourseProgress extends Component {
           value={this.state.programId}
           class='form-select form-select-sm program select'
           aria-label='.form-select-sm example'
+          disabled={this.state.programId}
           onChange={(e) => {
-            this.setState({ programId: e.target.value });
-          }}>
-          <option>Select Your Program</option>
-          {programSelect}
-        </select>
-
-        {buttondisplay && (
-          <button
-            type='submit'
-            class='btn btn-xs btn-default'
-            onClick={() => {
+            this.setState({ programId: e.target.value }, () => {
               if (this.state.programId !== "") {
-                buttondisplay = false;
                 if (!this.state.courseList) {
                   // this.setState({loading:false}) ;
                   this.getCourses(this.state.programId);
                   console.log("courselist in render", this.state.courseList);
                 }
-                // else
-                // {
-
-                // () => {
-                console.log("course select:", courseSelect);
-                // }
-                // );
-
-                // }
               }
-            }}>
-            Select
-          </button>
-        )}
+            });
+          }}>
+          <option>Select Your Program</option>
+          {programSelect}
+        </select>
       </div>
     );
 
@@ -258,18 +231,14 @@ class CourseProgress extends Component {
 
     // console.log("coursedata:",courseList);
     if (this.state.courseList) {
-      courseSelect = this.setCourseDropDown(this.state.courseList);
-
+      courseSelect = this.setDropDown(this.state.courseList, false);
       var courseSelectData = "";
-      // console.log("courseselectdata");
-      // console.log("programid:",this.state.programid);
-      //  console.log("course select:",this.state.courseSelect);
-      // console.log(courseSelect?.length);
       if (courseSelect?.length > 0) {
         courseSelectData = (
           <div>
             <select
               value={this.state.courseId}
+              disabled={this.state.courseId}
               class='form-select form-select-sm courseselect'
               aria-label='.form-select-sm course'
               onChange={(e) => {
@@ -278,12 +247,24 @@ class CourseProgress extends Component {
               <option>Select Your Course</option>
               {courseSelect}
             </select>
+          </div>
+        );
+      } else {
+        alert("no Course found");
+      }
+    }
+    return (
+      <div>
+        {programSelectData}
+        {courseSelectData}
+        {this.state.programId && (
+          <div>
             <button
               type='submit'
               class='btn btn-xs btn-default'
               onClick={() => {
                 courseSelect = "";
-                buttondisplay = true;
+
                 this.setState({
                   programId: "",
                   courseId: "",
@@ -292,17 +273,13 @@ class CourseProgress extends Component {
               }}>
               Back
             </button>
+            {this.state.courseId && (
+              <button type='submit' class='btn btn-xs btn-default'>
+                Enter
+              </button>
+            )}
           </div>
-        );
-      }
-    }
-    return (
-      <div>
-        {programSelectData}
-        {courseSelectData}
-        <button type='submit' class='btn btn-xs btn-default'>
-          Enter
-        </button>
+        )}
       </div>
     );
   }

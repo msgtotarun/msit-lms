@@ -13,7 +13,7 @@ class ProgramCatalog extends Component {
     super(props);
     this.state = {
       layout: false,
-      list: null,
+      list: [],
       loading: false,
     };
   }
