@@ -47,7 +47,7 @@ class Repo extends Component {
       var client = result['client']
       console.log(client)
     if(client !=="" & client !== null &client !== undefined){
-      this.setState({client: client})
+      this.getRepos(client);
     }
     else{
       console.log('Bad credentials recived in github api');
@@ -154,7 +154,7 @@ class Repo extends Component {
         this.setState({loading:false});
       }
       else{
-        console.log('Bad credentials recived in github api');
+        console.log('Bad credentials received in github api');
         showList = null;
         this.setState({loading: false})
       }
@@ -163,11 +163,6 @@ class Repo extends Component {
   }
 
   render() {
-
-    if(this.state.client !== null & this.state.client !== "" & this.state.client !== undefined){
-      this.getRepos(this.state.client);
-      this.setState({client: null});
-    }
 
     // console.log('response status = ',response_status);
     console.log('loading = ',this.state.loading);
