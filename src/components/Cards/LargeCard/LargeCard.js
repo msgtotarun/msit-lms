@@ -27,17 +27,17 @@ class LargeCard extends Component {
   render() {
 
     return (
-      <div class='card mb-3 pad'>
-        <div class='row g-0'>
-          <div class='col'>
-            <div class='card-body position-relative'>
-              <h5 class='card-title'>{this.props.title}</h5>
+      <div className='card mb-3 pad'>
+        <div className='row g-0'>
+          <div className='col'>
+            <div className='card-body position-relative'>
+              <h5 className='card-title'>{this.props.title}</h5>
               <hr></hr>
-              <p class='card-text text-prop'>{this.props.description}</p>
+              <div dangerouslySetInnerHTML={{ __html: this.props.description}} />
               <a onClick={() => {
                   this.handleClick(this.props.id);
                 }}
-                type="button" class="stretched-link"></a>            
+                type="button" className="stretched-link"></a>            
             </div>
           </div>
         </div>

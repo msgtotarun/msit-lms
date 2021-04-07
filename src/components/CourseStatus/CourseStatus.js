@@ -21,10 +21,19 @@ class CourseStatus extends Component {
 
   componentWillMount(){
     this.getPrograms();
-    setInterval(this.chartAuthorize, 30000);
+    // setInterval(this.chartAuthorize, 100000);
   }
 
-  async chartAuthorize(){
+  async chartAuthorize(select){
+
+    if(select === "Course" & ctitle === "Select Course"){
+      alert('select a valid course');
+      return;
+    }
+    else{
+      alert('select a valid program');
+      return;
+    }
 
       var requestOptions = {
         method: 'GET',
@@ -33,8 +42,17 @@ class CourseStatus extends Component {
 
       fetch(process.env.REACT_APP_API_URL2+`/auth/${localStorage.getItem('id')}/${localStorage.getItem("token")}`, requestOptions)
         .then(response => response.text())
-        .then(result => {console.log(result)})
-        .catch(error => console.log('error', error));
+        .then(result => {
+          result = JSON.parse(result);
+          console.log(result);
+          if(result['state'] === "Invalid" ){
+              throw "Invalid credentials";
+          }
+          else{
+              this.charts();
+          }
+        })
+        .catch(error => {console.log('error', error)});
 
   }
 
@@ -122,6 +140,10 @@ class CourseStatus extends Component {
   }
 
   charts(){
+
+    document.getElementById("Images").innerHTML = "";
+    document.getElementById("Tables").innerHTML = "";
+
     if(this.state.cselect === ""){
 
         var requestOptions = {
@@ -151,6 +173,7 @@ class CourseStatus extends Component {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
+            loading = false;
             ReactDOM.render(images,document.getElementById("Images"));
             ReactDOM.render(tables,document.getElementById("Tables"));
           
@@ -160,7 +183,41 @@ class CourseStatus extends Component {
       var program = document.getElementById("course");
       cid = program.options[program.selectedIndex].value;
       ctitle = program.options[program.selectedIndex].text;
-      document.getElementById("course").disabled = true;
+
+
+      // document.getElementById("course").disabled = true;
+
+
+      var PTitle = ptitle.replace(" ", "zzz");
+      var Cid = cid.replace(" ","zzz");
+        console.log("prog charts api =",`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${Cid}`)
+        fetch(`${process.env.REACT_APP_API_URL2}/program/activityscore/${PTitle}`, requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            console.log(result)
+            result = JSON.parse(result);
+            var images = result[0];
+            
+            var img_keys = ["pie","area","bar","scatter"];
+            images = img_keys.map(img => {
+              var value = images[img];
+              value = `data:image/png;base64,${value}`;
+              return <img className='flow-image' src={value} alt={img} />
+            });
+
+            var tables = result[1];
+            var tab_keys = ["pietable","graphtable","bartable","scattertable"]
+            tables = tab_keys.map(tab => {
+              var value = tables[tab];
+              return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
+            })
+            loading = false;
+            ReactDOM.render(images,document.getElementById("Images"));
+            ReactDOM.render(tables,document.getElementById("Tables"));
+          
+          })
+          .catch(error => console.log('error', error));
+
     }
   }
 
@@ -193,10 +250,10 @@ class CourseStatus extends Component {
         </select>
         </div>
     <div class="col-sm">
-    <button type="button" class="btn btn-primary" onClick={()=>{this.getCourses();}}>Select Course</button>
+    <button type="button" class="btn btn-primary" onClick={()=>{loading=true; this.getCourses();}}>Select Course</button>
     </div>
     <div class="col-sm">
-    <button type="button" class="btn btn-primary" onClick={() => this.charts()}>Enter</button>
+    <button type="button" class="btn btn-primary" onClick={() =>{loading=true; this.chartAuthorize("Program")}}>Enter</button>
     </div>
   </div>
       </div>
@@ -229,10 +286,10 @@ class CourseStatus extends Component {
           </select>
           </div>
       <div class="col-sm">
-      <button type="button" class="btn btn-primary" onClick={() => {this.setState({cselect: ""}); cid=""; ctitle=""; loading = false; }}>Back</button>
+      <button type="button" class="btn btn-primary" onClick={() => {this.setState({cselect: ""}); cid=""; ctitle="Select Course"; loading = false; }}>Back</button>
       </div>
       <div class="col-sm">
-      <button type="button" class="btn btn-primary" onClick={() => this.charts()}>Enter</button>
+      <button type="button" class="btn btn-primary" onClick={() => {loading=true; this.chartAuthorize("Course")}}>Enter</button>
       </div>
     </div>
         </div>
@@ -243,9 +300,13 @@ class CourseStatus extends Component {
   render() {
     if(loading){
       return (<div className="container">
-            <NavBar></NavBar></div>);
+            <NavBar></NavBar>
+            <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+            </div>
+            </div>);
     }
-
+    loading = true;
     var card = this.card();
     return (<div className="container">
             <NavBar></NavBar>
