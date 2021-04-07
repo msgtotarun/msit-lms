@@ -8,13 +8,14 @@ import "./program-catalog.css";
 var showList = [];
 var view = null;
 var layoutStyle = null;
+var msitDescription = null;
 class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
       layout: false,
       list: [],
-      loading: false,
+      loading: true,
     };
   }
   componentWillMount() {
@@ -26,17 +27,27 @@ class ProgramCatalog extends Component {
       return;
     }
 
-    try {
-      layoutStyle = this.props.location.state.layout;
-    } catch (err) {
-      if (err.name === "TypeError") {
-        layoutStyle = this.props.layout;
-      }
+    // try {
+    //   layoutStyle = this.props.location.state.layout;
+    // } catch (err) {
+    //   if (err.name === "TypeError") {
+    //     layoutStyle = this.props.layout;
+    //   }
+    // }
+    layoutStyle = localStorage.getItem("layout");
+    if ((layoutStyle === undefined) | (layoutStyle === null)) {
+      localStorage.getItem("layout", true);
+      layoutStyle = true;
+    } else if (layoutStyle === "true") {
+      layoutStyle = true;
+    } else {
+      layoutStyle = false;
     }
 
     this.getRenderList(userID, token);
     // this.setLayout();
   }
+
   async getPrograms(userID, token) {
     // example code
     token = localStorage.getItem("token");
@@ -54,10 +65,14 @@ class ProgramCatalog extends Component {
         var json = JSON.parse(result);
         // json = json[0]['enrollments'];
         console.log("get programs api fetched");
-
+        console.log(json);
         if (json[0]["enrollments"][0]["programID"] !== null) {
-          // console.log(json[0]["enrollments"]);
-          this.setState({ list: json[0]["enrollments"], layout: layoutStyle });
+          console.log(json[0]["enrollments"]);
+          this.setState({
+            list: json[0]["enrollments"],
+            layout: layoutStyle,
+            loading: false,
+          });
         }
       })
       .catch((error) => {
@@ -69,7 +84,8 @@ class ProgramCatalog extends Component {
   async getCourses(programID, userID, token) {
     token = localStorage.getItem("token");
     userID = localStorage.getItem("id");
-    programID = localStorage.getItem("program");
+    // programID = localStorage.getItem("program");
+    programID = this.props.match.params.programId;
     console.log(
       `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${programID}/?token=${token}`
     );
@@ -84,29 +100,35 @@ class ProgramCatalog extends Component {
     )
       .then((response) => response.text())
       .then((result) => {
-        // console.log(`course result = ${result}`);
+        console.log(`course result = ${result}`);
         var json = JSON.parse(result);
-        // console.log("course data");
-        // console.log(json);
-        // filtering isLive objects
+        // json = json[0]['enrollments'];
+        console.log("course data");
+        console.log(json);
+
         if (json["courses"][0]["courseID"] !== null) {
           json["courses"] = json["courses"].filter((obj) => {
             return obj["courseInstances"][0]["isLive"] === true;
           });
-          this.setState({ list: json["courses"], layout: layoutStyle }, () => {
-            // console.log("list state updated");
-            // console.log(this.state.list);
-          });
-        } else {
-          this.setState({ loading: true });
+          this.setState(
+            { list: json["courses"], layout: layoutStyle, loading: false },
+            () => {
+              console.log("list state updated");
+              console.log(this.state.list);
+            }
+          );
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+        this.setState({ loading: false });
+      });
   }
 
   handleLayout(value) {
     if (this.state.layout !== value) {
       layoutStyle = value;
+      localStorage.setItem("layout", value);
       this.setState({ layout: !this.state.layout });
     }
   }
@@ -116,18 +138,15 @@ class ProgramCatalog extends Component {
         <NavBar />
         <div class='alert alert-dark' role='alert'>
           <h4 class='alert-heading'>No {view} to display</h4>
-          <p>You are not enrolled in any programs</p>
           <hr></hr>
-          <p class='mb-0'>
-            Kindly, contact your mentor to enroll into programs.
-          </p>
+          <p class='mb-0'>Kindly, contact your mentor for more Information.</p>
         </div>
       </div>
     );
   }
 
   getRenderList(userID, token) {
-    // console.log("inside get render list");
+    console.log("inside get render list");
     try {
       view = this.props.location.state.view;
     } catch (err) {
@@ -136,12 +155,13 @@ class ProgramCatalog extends Component {
       }
     }
 
-    // console.log(`userID = ${userID}, props.view = ${view}`);
-    // console.log(view === "programs");
+    console.log(`userID = ${userID}, props.view = ${view}`);
+    console.log(view === "programs");
     if ("programs" === view) {
       this.getPrograms(userID, token);
     } else {
-      var id = localStorage.getItem("program");
+      // var id = localStorage.getItem("program");
+      var id = this.props.match.params.programId;
       this.getCourses(id, userID, token);
     }
   }
@@ -152,9 +172,9 @@ class ProgramCatalog extends Component {
     console.log(`view = ${view}`);
     List = List.map((program) => {
       var [ID, Title, Desc, Img] = this.getData(program);
-      // console.log(
-      //   `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
-      // );
+      console.log(
+        `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
+      );
       return (
         <ListPrograms
           id={ID}
@@ -166,73 +186,84 @@ class ProgramCatalog extends Component {
           button='Enter'></ListPrograms>
       );
     });
-    // console.log("list in html dom format is as shown below");
-    // // console.log(List);
+    List = (
+      <div className='accordion ' id='accordionExample'>
+        {List}
+      </div>
+    );
+    console.log("list in html dom format is as shown below");
+    console.log(List);
     return List;
   }
 
   setCard(List) {
-    // console.log("state object print");
-    // console.log(this.props.location.state);
-    // console.log("**********************");
+    console.log("state object print");
+    console.log(this.props.location.state);
+    console.log("**********************");
     // var view = this.props.location.state.view;
     console.log("inside set card");
     List = List.map((program) => {
-      var [ID, Title, Desc, Img] = this.getData(program);
+      var [ID, Title] = this.getData(program);
       // console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
-      return (
-        <Cols
-          id={ID}
-          key={ID}
-          view={view}
-          title={Title}
-          description={Desc}
-          image={Img}
-          button='Enter'></Cols>
-      );
+      return <Cols id={ID} key={ID} view={view} title={Title}></Cols>;
     });
 
-    // console.log("card in html dom format is as shown below");
-    // console.log(List);
-
+    console.log("card in html dom format is as shown below");
+    console.log(List);
+    List = <Rows>{List}</Rows>;
     return List;
   }
 
   getData(program) {
-    // console.log("fetched data from api");
-    // console.log(program);
-    var [ID, Title, Desc, Img] = [null, null, null, null];
+    console.log("fetched data from api");
+    console.log(program);
+    var [ID, Title] = [null, null];
     if (view === "programs") {
       ID = program["programID"]["_id"];
       Title = program["programID"]["programName"];
-      Desc = program["programID"]["programDescription"];
-      Img = program["programID"]["programImage"];
+      if (msitDescription === null) {
+        msitDescription = program["programID"]["programDescription"].replace(
+          "<br> <br> .",
+          ""
+        );
+      }
+
+      return [ID, Title];
     } else {
+      var [Desc, Img] = [null, null];
       ID = program["courseInstances"][0]["_id"];
       Title = program["courseID"]["courseName"];
       Desc = program["courseID"]["courseDescription"];
-      Img = program["courseID"]["image"];
+      Img = program["courseID"]["image"]["image"];
+      return [ID, Title, Desc, Img];
     }
-    return [ID, Title, Desc, Img];
   }
 
   setLayout() {
     var ret = null;
-    // console.log("set layout list = ");
-    // console.log(this.state.list);
-    // console.log(`setlist if check = ${this.state.list === null}`);
-    if (!this.state.list) {
-      if (this.state.loading) {
-        ret = this.nodata();
-      }
+    console.log("set layout list = ");
+    console.log(this.state.list);
+    console.log(`setlist if check = ${this.state.list === null}`);
+
+    if (this.state.loading === true) {
+      ret = (
+        <div className='container list-card'>
+          <NavBar />
+          <div class='d-flex justify-content-center'>
+            <div class='spinner-border' role='status'>
+              <span class='visually-hidden'>Loading...</span>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (this.state.list.length === 0) {
+      ret = this.nodata();
+    } else if (view === "programs") {
+      console.log("inside set layout");
+      console.log(this.state.list);
+      showList = this.setCard(this.state.list);
     } else {
-      // console.log("inside set layout");
-      // console.log(this.state.list);
-      showList = layoutStyle
-        ? this.setCard(this.state.list)
-        : this.setList(this.state.list);
-      // console.log("showlist");
-      // console.log(showList);
+      showList = this.setList(this.state.list);
     }
 
     return ret;
@@ -240,99 +271,41 @@ class ProgramCatalog extends Component {
 
   render() {
     var user = localStorage.getItem("token");
-    // console.log(`render list =`);
-    // console.log(this.state.list);
+    console.log(`render list =`);
+    console.log(this.state.list);
     user ??
       this.props.history.push({
         pathname: "/",
       });
 
     var value = this.setLayout();
-    // console.log(`value =`);
-    // console.log(value);
+    console.log(`value =`);
+    console.log(value);
     if (value !== null) {
       return value;
     }
 
     // console.log(this.props.location.state.view)
-    var doc = null;
-    if (this.state.layout === false) {
-      console.log("changed to list layout");
-      doc = (
-        <div className='container list-card'>
-          <NavBar />
-          <div class='btn-group w-18 marged'>
-            <button
-              class='btn btn-light btn-sm dropdown-toggle'
-              type='button'
-              data-bs-toggle='dropdown'
-              aria-expanded='false'>
-              <i class='bi bi-display'></i> View
-            </button>
-            <ul class='dropdown-menu'>
-              <li
-                onClick={() => {
-                  this.handleLayout(true);
-                }}>
-                <i class='bi bi-grid-3x3-gap'></i> Grid
-              </li>
-              <li
-                onClick={() => {
-                  this.handleLayout(false);
-                }}>
-                <i class='bi bi-list-task'></i> List
-              </li>
-            </ul>
-          </div>
-          <div className='accordion ' id='accordionExample'>
-            {showList}
-          </div>
-        </div>
-      );
-    } else {
-      doc = (
-        <div className='container grid-card'>
-          <NavBar />
-          <div class='btn-group w-18 marged'>
-            <button
-              class='btn btn-light btn-sm dropdown-toggle'
-              type='button'
-              data-bs-toggle='dropdown'
-              aria-expanded='false'>
-              <i class='bi bi-display'></i> View
-            </button>
-            <ul class='dropdown-menu'>
-              <li
-                onClick={() => {
-                  this.handleLayout(true);
-                }}>
-                <i class='bi bi-grid-3x3-gap'></i> Grid
-              </li>
-              <li
-                onClick={() => {
-                  this.handleLayout(false);
-                }}>
-                <i class='bi bi-list-task'></i> List
-              </li>
-            </ul>
-          </div>
-          <Rows view={view}>{showList}</Rows>
-        </div>
-      );
-    }
-    // console.log("doc is as follows");
-    // console.log(doc);
-
-    return doc;
+    return (
+      <div className='container list-card'>
+        <NavBar />
+        {showList}
+      </div>
+    );
   }
 }
 
 function Rows(props) {
-  return <div className='container'>{props.children}</div>;
+  return (
+    <div className='container programContainer'>
+      <div className='msitInfo mb-5'>{msitDescription}</div>
+      <div>{props.children}</div>
+    </div>
+  );
 }
 
 function Cols(props) {
-  // console.log(props);
+  console.log(props);
   return (
     <>
       <LargeCard

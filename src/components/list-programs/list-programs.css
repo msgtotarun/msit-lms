@@ -1,13 +1,17 @@
 .button1 {
   float: right;
+  width: auto;
 }
-.flow {
-  margin-right: 8px;
+.flow-image {
+  position: absolute;
   width: 30%;
-  float: left;
-  height: 150px;
+  margin-left: 70%;
+  object-fit: contain;
+  margin-top: 10rem;
 }
 .accordion-body {
+  box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%),
+    0 1px 5px 0 rgb(0 0 0 / 12%);
   padding: 1rem 1.25rem;
   width: inherit;
   min-height: 200px;

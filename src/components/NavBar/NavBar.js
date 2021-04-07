@@ -28,19 +28,21 @@ class NavBar extends Component {
             <div className='collapse navbar-collapse' id='navbarNavDropdown'>
               <ul className='navbar-nav me-auto mb-lg-0'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to='#'>
+                  <Link className='nav-link active' to='/credits'>
                     Credits
                   </Link>
                 </li>
               </ul>
               <ul className='navbar-nav ms-auto'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to='/CourseProgress'>
+                  <Link className='nav-link active' to='/CourseStatus'>
                     Course status
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link active'>{userName}</Link>
+                  <Link className='nav-link active' to='/profile'>
+                    {userName}
+                  </Link>
                 </li>
                 <li className='nav-item'>
                   <Link

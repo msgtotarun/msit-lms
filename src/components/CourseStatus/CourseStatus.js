@@ -8,7 +8,7 @@ var view = "Program";
 const token = localStorage.getItem("token");
 const userID = localStorage.getItem("id");
 
-class CourseProgress extends Component {
+class CourseStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -285,4 +285,4 @@ class CourseProgress extends Component {
   }
 }
 
-export default withRouter(CourseProgress);
+export default withRouter(CourseStatus);

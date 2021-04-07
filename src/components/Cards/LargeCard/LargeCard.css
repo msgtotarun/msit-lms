@@ -1,18 +1,22 @@
 .card-body {
-  text-align: left;
+  text-align: center;
   flex: 1 1 auto;
-  padding: 1rem 1rem;
 }
 
-.pos {
-  margin-left: 65%;
+.card {
+  height: 50px;
+  width: 35rem;
+  color: white;
+  background-color: #563d7c;
 }
+
+.row {
+  height: inherit;
+}
+
 .card:hover {
   /* background: url(https://www.udemy.com/staticx/udemy/js/webpack/icon-play.ac3f32ecb72a0c3f674fa5a3f3062a56.svg); */
-  background-color: whitesmoke;
+  opacity: 0.95;
   transform: scale(1);
   box-shadow: 1px 1px 1px 1px black;
-}
-.image {
-  border-style: groove;
 }

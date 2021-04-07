@@ -1,30 +1,46 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "./list-programs.css";
+
+var content = null;
 var id = 0;
+var img = "";
 class ListPrograms extends Component {
+  constructor(props) {
+    super(props);
+    this.Image();
+  }
+
   handleListClick(ID) {
-    var layoutStyle = false;
+    var layoutStyle = this.props.layout;
     console.log("list-programs ID after recieving = " + ID);
     console.log(`list view prop = ${this.props.view}`);
     if (this.props.view === "programs") {
       console.log(`list id inside if = ${ID}`);
-      localStorage.setItem("program", ID);
+      // localStorage.setItem('program', ID);
       this.props.history.push({
-        pathname: "/courses-catalog",
+        pathname: "/courses-catalog/" + ID,
         state: { view: "courses", layout: layoutStyle },
       });
     } else {
-      this.props.history.push({
-        pathname: "/moduleCatalog/" + ID,
-      });
+      window.location = "/modulesCatalog/" + ID;
     }
   }
 
+  Image() {
+    img = `data:image/jpeg;base64,${this.props.image}`;
+  }
+
   render() {
+    // console.log('inside list programs component');
+    // console.log('props in list-programs is as follows');
+    // console.log(this.props);
+
     ++id;
     let colapse = "colapse" + id;
     let head = "head" + id;
+    var button =
+      "<button type='button' className='btn btn-outline-primary button1 bottom-0 end-0'>Enter</button>";
 
     return (
       <div className='accordion-item'>
@@ -45,21 +61,20 @@ class ListPrograms extends Component {
           aria-labelledby={head}
           data-bs-parent='#accordionExample'>
           <div className='accordion-body' id='flow1'>
-            <div>
-              <img className='flow' src={this.props.image} alt='' />
+            <div className='col position-relative'>
+              <img className='flow-image' src={img} alt='' />
+              <div
+                dangerouslySetInnerHTML={{ __html: this.props.description }}
+              />
+              <button
+                type='button'
+                className='btn btn-outline-primary button1 position-absolute bottom-0 end-0'
+                onClick={() => {
+                  this.handleListClick(this.props.id);
+                }}>
+                {this.props.button}
+              </button>
             </div>
-            <div>
-              <p className='flow2'>{this.props.description}</p>
-            </div>
-            <button
-              type='button'
-              className='btn btn-outline-primary'
-              onClick={() => {
-                this.handleListClick(this.props.id);
-              }}
-              style={{ float: "right" }}>
-              {this.props.button}
-            </button>
           </div>
         </div>
       </div>
