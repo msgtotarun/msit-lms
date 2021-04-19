@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import NavBar from '../NavBar/NavBar';
 import ReactDOM from 'react-dom';
-
+import './CourseStatus.css'
 
 var pid = "";
 var cid = "";
 var ptitle = "Select Program";
 var ctitle = "Select Course";
 var loading = true;
+var load = (<div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+                </div>);
 class CourseStatus extends Component {
 
   constructor(props) {
@@ -21,19 +24,24 @@ class CourseStatus extends Component {
 
   componentWillMount(){
     this.getPrograms();
+    this.chartAuthorize()
     // setInterval(this.chartAuthorize, 100000);
   }
 
-  async chartAuthorize(select){
+  componentWillUnmount(){
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    
+    fetch(`${process.env.REACT_APP_API_URL2}/deauth`, requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+  }
 
-    if(select === "Course" & ctitle === "Select Course"){
-      alert('select a valid course');
-      return;
-    }
-    else{
-      alert('select a valid program');
-      return;
-    }
+  async chartAuthorize(){
+
 
       var requestOptions = {
         method: 'GET',
@@ -47,9 +55,6 @@ class CourseStatus extends Component {
           console.log(result);
           if(result['state'] === "Invalid" ){
               throw "Invalid credentials";
-          }
-          else{
-              this.charts();
           }
         })
         .catch(error => {console.log('error', error)});
@@ -99,11 +104,14 @@ class CourseStatus extends Component {
       var token = localStorage.getItem("token");
       var userID = localStorage.getItem("id");
       var program = document.getElementById("program");
-      pid = program.options[program.selectedIndex].value;
-      ptitle = program.options[program.selectedIndex].text;
-      if(ptitle === "Select Program"){
-        alert('select a valid program')
-      }
+
+    
+    if(program.options[program.selectedIndex].text === "Select Program" | program.options[program.selectedIndex].text === "No programs to display"){
+      alert('selected program is not a valid program');
+      return;
+    }
+    pid = program.options[program.selectedIndex].value;
+    ptitle = program.options[program.selectedIndex].text;
       // programID = localStorage.getItem("program");
       // programID = this.props.match.params.programId
       console.log("pid =",pid,"ptitle =",ptitle);
@@ -127,11 +135,38 @@ class CourseStatus extends Component {
           console.log(json);
 
           if (json["courses"][0]["courseID"] !== null) {
-              json["courses"] = json["courses"].filter((obj) => {
-                return obj["courseInstances"][0]["isLive"] === true;
+              
+            json = json['courses'].map(course => {
+
+              course['courseInstances'] = course['courseInstances'].filter((obj) => {
+                return obj["isLive"] === true;
               });
+
+              course['courseInstances'] = course['courseInstances'].map(element => {
+                element['courseInstanceLabel'] = course['courseID']['courseName']+" > "+element['courseInstanceLabel'];
+                return element;
+              });
+              // console.log('mapped course =');
+              // console.log(course)
+              return course['courseInstances'];
+            });
+
+            json = json.filter((obj) => {
+              // console.log('filtering courses =');
+              // console.log(obj)
+              // console.log('course instance details =');
+              // console.log(obj['courseInstances']);
+              return obj.length !== 0;
+            });
+
+            var json_1d = []
+            for(var i = 0; i < json.length; i++)
+            {
+                json_1d = json_1d.concat(json[i]);
+            }
+
               loading = false;
-              this.setState({clist:json['courses'],cselect:pid})
+              this.setState({clist:json_1d,cselect:pid})
           }
         })
         .catch((error) => {
@@ -141,17 +176,24 @@ class CourseStatus extends Component {
 
   charts(){
 
-    document.getElementById("Images").innerHTML = "";
-    document.getElementById("Tables").innerHTML = "";
+    // document.getElementById("Images").innerHTML = "";
+    // document.getElementById("Tables").innerHTML = "";
+    var program = document.getElementById("program");
+    pid = program.options[program.selectedIndex].value;
+    ptitle = program.options[program.selectedIndex].text;
 
+    var PTitle = ptitle.split(' ').join('zzz');
     if(this.state.cselect === ""){
+
+      ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load,document.getElementById("Tables"));
 
         var requestOptions = {
           method: 'POST',
           redirect: 'follow'
         };
 
-        var PTitle = ptitle.replace(" ", "zzz");
+        // var PTitle = ptitle.replace(" ", "zzz");
         console.log("prog charts api =",`${process.env.REACT_APP_API_URL2}/program/activityscore/${PTitle}`)
         fetch(`${process.env.REACT_APP_API_URL2}/program/activityscore/${PTitle}`, requestOptions)
           .then(response => response.text())
@@ -168,7 +210,7 @@ class CourseStatus extends Component {
             });
 
             var tables = result[1];
-            var tab_keys = ["pietable","graphtable","bartable","scattertable"]
+            var tab_keys = ["coursetable","programtable","pietable","graphtable","bartable","scattertable"]
             tables = tab_keys.map(tab => {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
@@ -184,14 +226,26 @@ class CourseStatus extends Component {
       cid = program.options[program.selectedIndex].value;
       ctitle = program.options[program.selectedIndex].text;
 
+      console.log("cid =",cid,"ctitle =",ctitle);
+
+      if(ctitle === "Select Course" | ctitle === "No active courses in this program"){
+        alert('select a valid course');
+        return;
+      }
+
+      ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load,document.getElementById("Tables"));
 
       // document.getElementById("course").disabled = true;
 
-
-      var PTitle = ptitle.replace(" ", "zzz");
-      var Cid = cid.replace(" ","zzz");
-        console.log("prog charts api =",`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${Cid}`)
-        fetch(`${process.env.REACT_APP_API_URL2}/program/activityscore/${PTitle}`, requestOptions)
+      var requestOptions = {
+        method: 'POST',
+        redirect: 'follow'
+      };
+      // var PTitle = ptitle.replace(" ", "zzz");
+      var CTitle = ctitle.split(' ').join('zzz');
+        console.log("prog charts api =",`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}`)
+        fetch(`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}`, requestOptions)
           .then(response => response.text())
           .then(result => {
             console.log(result)
@@ -206,7 +260,7 @@ class CourseStatus extends Component {
             });
 
             var tables = result[1];
-            var tab_keys = ["pietable","graphtable","bartable","scattertable"]
+            var tab_keys = ["coursetable","moduletable","pietable","graphtable","bartable","scattertable"]
             tables = tab_keys.map(tab => {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
@@ -230,10 +284,15 @@ class CourseStatus extends Component {
 
     console.log("list after program filter");
     console.log(list);
+    if(list.length === 0){
+      list = (<option value="No programs to display">No programs to display</option>);
+    }
+    else{
     list = list.map((program) => {
           return <option value={program["programID"]["_id"]} key={program["programID"]["_id"]}>{program["programID"]["programName"]}</option>
         });
-    
+    }
+
     console.log("list after program map");
     console.log(list);
 
@@ -241,7 +300,7 @@ class CourseStatus extends Component {
 
         return (
         <div className="col">
-        <div class="card-body position-relative">
+        <div id="selection" class="card-body position-relative">
         <div class="row gx-5">
         <div class="col-sm">
         <select id="program" class="form-select" aria-label={ptitle}>
@@ -250,10 +309,10 @@ class CourseStatus extends Component {
         </select>
         </div>
     <div class="col-sm">
-    <button type="button" class="btn btn-primary" onClick={()=>{loading=true; this.getCourses();}}>Select Course</button>
+    <button type="button" class="btn btn-primary" onClick={()=>{this.getCourses();}}>Select Course</button>
     </div>
     <div class="col-sm">
-    <button type="button" class="btn btn-primary" onClick={() =>{loading=true; this.chartAuthorize("Program")}}>Enter</button>
+    <button type="button" class="btn btn-primary" onClick={() =>{this.charts()}}>Enter</button>
     </div>
   </div>
       </div>
@@ -261,9 +320,12 @@ class CourseStatus extends Component {
       }
       else if (this.state.cselect === pid){
         var clist = this.state.clist ;
+        console.log('course list  = ');
+        console.log(clist)
         if(this.state.clist.length !== 0){
           clist = clist.map((program) => {
-            return <option value={program["courseInstances"][0]["_id"]} key={program["courseInstances"][0]["_id"]}>{program["courseID"]["courseName"]}</option>
+          console.log('course instance label =',program['courseInstanceLabel']);
+          return <option value={program["_id"]} key={program["_id"]}>{program['courseInstanceLabel']}</option>
           });
         }else{
           clist = (<option>No active courses in this program</option>)
@@ -289,7 +351,7 @@ class CourseStatus extends Component {
       <button type="button" class="btn btn-primary" onClick={() => {this.setState({cselect: ""}); cid=""; ctitle="Select Course"; loading = false; }}>Back</button>
       </div>
       <div class="col-sm">
-      <button type="button" class="btn btn-primary" onClick={() => {loading=true; this.chartAuthorize("Course")}}>Enter</button>
+      <button type="button" class="btn btn-primary" onClick={() => {this.charts()}}>Enter</button>
       </div>
     </div>
         </div>
@@ -299,6 +361,7 @@ class CourseStatus extends Component {
 
   render() {
     if(loading){
+      console.log("in render loading")
       return (<div className="container">
             <NavBar></NavBar>
             <div class="spinner-border" role="status">

@@ -1,0 +1,11 @@
+.overflow{
+    height: calc(50% - 17px);
+}
+
+.flow-image{
+    height: 20rem
+}
+
+thead{
+    background-color: blueviolet;
+}

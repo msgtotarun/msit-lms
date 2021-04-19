@@ -103,10 +103,31 @@ class ProgramCatalog extends Component {
         console.log("course data");
         console.log(json);
 
-        if (json["courses"][0]["courseID"] !== null) {
-            json["courses"] = json["courses"].filter((obj) => {
-              return obj["courseInstances"][0]["isLive"] === true;
+        if (json["courses"][0]["courseID"] !== undefined) {
+
+            json['courses'] = json['courses'].map(course => {
+
+              course['courseInstances'] = course['courseInstances'].filter((obj) => {
+                return obj["isLive"] === true;
+              });
+              // console.log('mapped course =');
+              // console.log(course)
+              return course;
             });
+
+            json['courses'] = json['courses'].filter(obj => {
+              // console.log('filtering courses =');
+              // console.log(obj)
+              // console.log('course instance details =');
+              // console.log(obj['courseInstances']);
+              return obj['courseInstances'].length !== 0;
+            });
+
+            // console.log('filtered and mapped courses = ');
+            // console.log(json['courses'])
+            // json["courses"] = json["courses"].filter((obj) => {
+            //   return obj["courseInstances"][0]["isLive"] === true;
+            // });
           this.setState({ list: json["courses"], layout: layoutStyle,loading: false }, () => {
             console.log("list state updated");
             console.log(this.state.list);
@@ -175,7 +196,7 @@ class ProgramCatalog extends Component {
       return (
         <ListPrograms
           id={ID}
-          key={ID}
+          key={JSON.parse(ID)['_id']}
           view={view}
           title={Title}
           description={Desc}
@@ -226,7 +247,7 @@ class ProgramCatalog extends Component {
       Desc = program["programID"]["programDescription"];
       Img = program["programID"]["programImage"];
     } else {
-      ID = program["courseInstances"][0]["_id"];
+      ID = JSON.stringify(program["courseInstances"]);
       Title = program["courseID"]["courseName"];
       Desc = program["courseID"]["courseDescription"];
       Img = program["courseID"]["image"]["image"];
