@@ -23,7 +23,6 @@ class CourseStatus extends Component {
   }
 
   componentWillMount(){
-    this.getPrograms();
     this.chartAuthorize()
     // setInterval(this.chartAuthorize, 100000);
   }
@@ -56,6 +55,7 @@ class CourseStatus extends Component {
           if(result['state'] === "Invalid" ){
               throw "Invalid credentials";
           }
+          this.getPrograms();
         })
         .catch(error => {console.log('error', error)});
 
@@ -128,45 +128,42 @@ class CourseStatus extends Component {
           token
       ).then((response) => response.text())
       .then((result) => {
-          console.log(`course result = ${result}`);
+          console.log(`course result =`);
+          console.log(result);
           var json = JSON.parse(result);
           // json = json[0]['enrollments'];
           console.log("course data");
           console.log(json);
 
-          if (json["courses"][0]["courseID"] !== null) {
+          if (json["courses"].length !== 0) {
               
-            json = json['courses'].map(course => {
+            json['courses'] = json['courses'].map(course => {
 
               course['courseInstances'] = course['courseInstances'].filter((obj) => {
                 return obj["isLive"] === true;
               });
 
-              course['courseInstances'] = course['courseInstances'].map(element => {
-                element['courseInstanceLabel'] = course['courseID']['courseName']+" > "+element['courseInstanceLabel'];
-                return element;
-              });
               // console.log('mapped course =');
               // console.log(course)
-              return course['courseInstances'];
+              return course;
             });
 
-            json = json.filter((obj) => {
+            json['courses'] = json['courses'].filter((obj) => {
               // console.log('filtering courses =');
               // console.log(obj)
               // console.log('course instance details =');
               // console.log(obj['courseInstances']);
-              return obj.length !== 0;
+              return obj['courseInstances'].length !== 0;
             });
 
-            var json_1d = []
-            for(var i = 0; i < json.length; i++)
-            {
-                json_1d = json_1d.concat(json[i]);
-            }
-
               loading = false;
-              this.setState({clist:json_1d,cselect:pid})
+              this.setState({clist:json['courses'],cselect:pid})
+          }
+          else{
+
+            loading = false;
+            var info = [{_id:"1" ,courseInstances:"No active courses in this program", courseID: {courseName:"No active courses in this program"}}]
+            this.setState({clist:info,cselect:pid})
           }
         })
         .catch((error) => {
@@ -222,16 +219,12 @@ class CourseStatus extends Component {
           })
           .catch(error => console.log('error', error));
     }else{
-      var program = document.getElementById("course");
-      cid = program.options[program.selectedIndex].value;
-      ctitle = program.options[program.selectedIndex].text;
+
+      var program = document.getElementById("subselect");
+      var cid = program.options[program.selectedIndex].value;
+      var ctitle = program.options[program.selectedIndex].text;
 
       console.log("cid =",cid,"ctitle =",ctitle);
-
-      if(ctitle === "Select Course" | ctitle === "No active courses in this program"){
-        alert('select a valid course');
-        return;
-      }
 
       ReactDOM.render(load,document.getElementById("Images"));
       ReactDOM.render(load,document.getElementById("Tables"));
@@ -244,8 +237,9 @@ class CourseStatus extends Component {
       };
       // var PTitle = ptitle.replace(" ", "zzz");
       var CTitle = ctitle.split(' ').join('zzz');
-        console.log("prog charts api =",`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}`)
-        fetch(`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}`, requestOptions)
+      let token = localStorage.getItem('token');
+        console.log("prog charts api =",`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}/${token}`)
+        fetch(`${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}/${token}`, requestOptions)
           .then(response => response.text())
           .then(result => {
             console.log(result)
@@ -275,15 +269,41 @@ class CourseStatus extends Component {
     }
   }
 
+  handleChange(){
+    var program = document.getElementById("course");
+    var subcid = program.options[program.selectedIndex].value;
+    var subctitle = program.options[program.selectedIndex].text;
+
+    if(subctitle === "Select Course" | subctitle === "No active courses in this program"){
+      alert('select a valid course');
+      return;
+    }
+
+    subcid = JSON.parse(subcid)
+    // console.log("subcid =",subcid)
+    var subcourses = subcid.map((obj,ind,arr)=>{
+      console.log('obj =',obj)
+      if(ind === 0){
+        return <option defaultValue={obj["_id"]} value={obj["_id"]} key={obj["_id"]}>{obj["courseInstanceLabel"]}</option>
+      }
+      return <option value={obj["_id"]} key={obj["_id"]}>{obj["courseInstanceLabel"]}</option>
+    });
+
+    subcid = (<select id="subselect" className="form-select">{subcourses}</select>);
+    ReactDOM.render(subcid,document.getElementById("subcourse"));
+
+  }
+
   card(){
+    console.log(`cselect print = ${this.state.cselect} card pid print = ${pid}`);
     loading = true; 
     var list = this.state.plist;
-    list = list.filter((obj) => {
-          return obj["programID"]["_id"] !== pid
-        });
+    // list = list.filter((obj) => {
+    //       return obj["programID"]["_id"] !== pid
+    //     });
 
-    console.log("list after program filter");
-    console.log(list);
+    // console.log("list after program filter");
+    // console.log(list);
     if(list.length === 0){
       list = (<option value="No programs to display">No programs to display</option>);
     }
@@ -304,7 +324,7 @@ class CourseStatus extends Component {
         <div class="row gx-5">
         <div class="col-sm">
         <select id="program" class="form-select" aria-label={ptitle}>
-        <option selected>{ptitle}</option>
+        <option defaultValue={pid}>{ptitle}</option>
         {list}
         </select>
         </div>
@@ -322,13 +342,13 @@ class CourseStatus extends Component {
         var clist = this.state.clist ;
         console.log('course list  = ');
         console.log(clist)
-        if(this.state.clist.length !== 0){
+        if(clist.length !== 0){
           clist = clist.map((program) => {
-          console.log('course instance label =',program['courseInstanceLabel']);
-          return <option value={program["_id"]} key={program["_id"]}>{program['courseInstanceLabel']}</option>
+          console.log('course instances =',program["courseInstances"]);
+          return <option value={JSON.stringify(program["courseInstances"])} key={program["_id"]}>{program['courseID']['courseName']}</option>
           });
         }else{
-          clist = (<option>No active courses in this program</option>)
+          clist = (<option>No active courses in this program</option>);
         }
 
         return (
@@ -342,13 +362,16 @@ class CourseStatus extends Component {
           </select>
           </div>
           <div class="col-sm">
-          <select id="course" class="form-select" aria-label="Select Course">
+          <select id="course" class="form-select" aria-label="Select Course" onChange={this.handleChange}>
           <option selected>{ctitle}</option>
           {clist}
           </select>
           </div>
+          <div id="subcourse" className="col-sm">
+
+          </div>
       <div class="col-sm">
-      <button type="button" class="btn btn-primary" onClick={() => {this.setState({cselect: ""}); cid=""; ctitle="Select Course"; loading = false; }}>Back</button>
+      <button type="button" class="btn btn-primary" onClick={() => {ReactDOM.render("",document.getElementById("subcourse"));pid=this.state.cselect; ptitle="Select Program";this.setState({cselect: ""}); cid=""; ctitle="Select Course"; loading = false; }}>Back</button>
       </div>
       <div class="col-sm">
       <button type="button" class="btn btn-primary" onClick={() => {this.charts()}}>Enter</button>
