@@ -37,7 +37,7 @@ class NavBar extends Component {
               </ul>
               <ul className='navbar-nav ms-auto'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to='#'>
+                  <Link className='nav-link active' to='/CourseStatus'>
                     Course status
                   </Link>
                 </li>

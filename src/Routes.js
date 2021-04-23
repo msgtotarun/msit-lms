@@ -6,6 +6,7 @@ import Home from './Pages/Home'
 import pageNotFound from './Pages/pageNotFound'
 import test from './Pages/t'
 import Credits from './components/credits/credits'
+import CourseStatus from './components/CourseStatus/CourseStatus'
 import Profile from './components/profile/profile'
 
 const Routes = () => {
@@ -19,6 +20,7 @@ const Routes = () => {
       <Route key="profile" exact path='/Profile' component={Profile}></Route>
       <Route key="profile-coded" exact path='/Profile?code=:code' component={Profile}></Route>
       <Route key="credits" exact path='/Credits' component={Credits}></Route>
+      <Route key="CourseStatus" exact path='/CourseStatus' component={CourseStatus}></Route>
       <Route exact path='/modulesCatalog/:courseId' component={moduleCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
       <Route path='*' exact={true} component={pageNotFound} />

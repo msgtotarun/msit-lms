@@ -234,7 +234,7 @@ class CourseStatus extends Component {
       var cid = program.options[program.selectedIndex].value;
       var ctitle = program.options[program.selectedIndex].text;
 
-      if(ctitle === "Select Course"){
+      if(ctitle === "Select Course" | ctitle === "No active courses in this program"){
         alert('select a valid course');
         return;
       }
