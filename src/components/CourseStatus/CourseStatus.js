@@ -105,13 +105,14 @@ class CourseStatus extends Component {
       var userID = localStorage.getItem("id");
       var program = document.getElementById("program");
 
+      pid = program.options[program.selectedIndex].value;
+      ptitle = program.options[program.selectedIndex].text;
     
-    if(program.options[program.selectedIndex].text === "Select Program" | program.options[program.selectedIndex].text === "No programs to display"){
+    if(ptitle === "Select Program" | ptitle === "No programs to display"){
       alert('selected program is not a valid program');
       return;
     }
-    pid = program.options[program.selectedIndex].value;
-    ptitle = program.options[program.selectedIndex].text;
+    
       // programID = localStorage.getItem("program");
       // programID = this.props.match.params.programId
       console.log("pid =",pid,"ptitle =",ptitle);
@@ -178,6 +179,11 @@ class CourseStatus extends Component {
     var program = document.getElementById("program");
     pid = program.options[program.selectedIndex].value;
     ptitle = program.options[program.selectedIndex].text;
+    
+    if(ptitle === "Select Program" | ptitle === "No programs to display"){
+      alert('selected program is not a valid program');
+      return;
+    }
 
     var PTitle = ptitle.split(' ').join('zzz');
     if(this.state.cselect === ""){
@@ -221,8 +227,17 @@ class CourseStatus extends Component {
     }else{
 
       var program = document.getElementById("subselect");
+      if(program === null){
+        alert('select a course to proceed');
+        return;
+      }
       var cid = program.options[program.selectedIndex].value;
       var ctitle = program.options[program.selectedIndex].text;
+
+      if(ctitle === "Select Course"){
+        alert('select a valid course');
+        return;
+      }
 
       console.log("cid =",cid,"ctitle =",ctitle);
 
@@ -357,13 +372,13 @@ class CourseStatus extends Component {
           <div class="row gx-5">
           <div class="col-sm">
           <select id="program" class="form-select" aria-label={ptitle} disabled>
-          <option selected>{ptitle}</option>
+          <option defaultValue={pid}>{ptitle}</option>
           {list}
           </select>
           </div>
           <div class="col-sm">
           <select id="course" class="form-select" aria-label="Select Course" onChange={this.handleChange}>
-          <option selected>{ctitle}</option>
+          <option defaultValue={cid}>{ctitle}</option>
           {clist}
           </select>
           </div>
@@ -371,7 +386,7 @@ class CourseStatus extends Component {
 
           </div>
       <div class="col-sm">
-      <button type="button" class="btn btn-primary" onClick={() => {ReactDOM.render("",document.getElementById("subcourse"));pid=this.state.cselect; ptitle="Select Program";this.setState({cselect: ""}); cid=""; ctitle="Select Course"; loading = false; }}>Back</button>
+      <button type="button" class="btn btn-primary" onClick={() => {ReactDOM.render("",document.getElementById("subcourse"));pid="Select Program"; ptitle="Select Program";this.setState({cselect: ""}); ctitle="Select Course"; cid=ctitle; loading = false; }}>Back</button>
       </div>
       <div class="col-sm">
       <button type="button" class="btn btn-primary" onClick={() => {this.charts()}}>Enter</button>
