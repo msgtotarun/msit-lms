@@ -12,6 +12,10 @@
     white-space: inherit;
 } */
 
+.btn-primary{
+  margin-left: 50%;
+}
+
 .container{
   padding-left: 0px;
 }

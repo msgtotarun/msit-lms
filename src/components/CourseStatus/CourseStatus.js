@@ -188,7 +188,7 @@ class CourseStatus extends Component {
     var PTitle = ptitle.split(' ').join('zzz');
     if(this.state.cselect === ""){
 
-      ReactDOM.render(load,document.getElementById("Images"));
+      // ReactDOM.render(load,document.getElementById("Images"));
       ReactDOM.render(load,document.getElementById("Tables"));
 
         var requestOptions = {
@@ -205,21 +205,21 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["pie","area","bar","scatter"];
-            images = img_keys.map(img => {
-              var value = images[img];
-              value = `data:image/png;base64,${value}`;
-              return <img className='flow-image' src={value} alt={img} />
-            });
+            // var img_keys = ["pie","area","bar","scatter"];
+            // images = img_keys.map(img => {
+            //   var value = images[img];
+            //   value = `data:image/png;base64,${value}`;
+            //   return <img className='flow-image' src={value} alt={img} />
+            // });
 
             var tables = result[1];
-            var tab_keys = ["coursetable","programtable","pietable","graphtable","bartable","scattertable"]
+            var tab_keys = ["coursetable","programtable","pietable","bartable","scattertable"]
             tables = tab_keys.map(tab => {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
-            ReactDOM.render(images,document.getElementById("Images"));
+            // ReactDOM.render(images,document.getElementById("Images"));
             ReactDOM.render(tables,document.getElementById("Tables"));
           
           })
@@ -241,7 +241,7 @@ class CourseStatus extends Component {
 
       console.log("cid =",cid,"ctitle =",ctitle);
 
-      ReactDOM.render(load,document.getElementById("Images"));
+      // ReactDOM.render(load,document.getElementById("Images"));
       ReactDOM.render(load,document.getElementById("Tables"));
 
       // document.getElementById("course").disabled = true;
@@ -261,21 +261,21 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["pie","area","bar","scatter"];
-            images = img_keys.map(img => {
-              var value = images[img];
-              value = `data:image/png;base64,${value}`;
-              return <img className='flow-image' src={value} alt={img} />
-            });
+            // var img_keys = ["pie","area","bar","scatter"];
+            // images = img_keys.map(img => {
+            //   var value = images[img];
+            //   value = `data:image/png;base64,${value}`;
+            //   return <img className='flow-image' src={value} alt={img} />
+            // });
 
             var tables = result[1];
-            var tab_keys = ["coursetable","moduletable","pietable","graphtable","bartable","scattertable"]
+            var tab_keys = ["coursetable","moduletable","pietable","bartable","scattertable"]
             tables = tab_keys.map(tab => {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
-            ReactDOM.render(images,document.getElementById("Images"));
+            // ReactDOM.render(images,document.getElementById("Images"));
             ReactDOM.render(tables,document.getElementById("Tables"));
           
           })
@@ -415,8 +415,7 @@ class CourseStatus extends Component {
             {card}
             </div>
     <div className="row">
-    <div id="Images" className="col overflow"></div>
-    <div id="Tables" className="col overflow"></div>
+    <div id="Tables" className="col"></div>
     </div>
   </div>);
   }

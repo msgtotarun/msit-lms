@@ -34,3 +34,9 @@ h5 {
   height: auto;
   padding-left: 24%;
 }
+
+.card-img-top{
+    border-radius: 50%;
+    height: 15rem;
+    width: revert;
+}

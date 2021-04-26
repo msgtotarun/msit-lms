@@ -189,13 +189,14 @@ class ProgramCatalog extends Component {
     // view = this.props.location.state.view;
     console.log(`view = ${view}`);
     List = List.map((program) => {
-      var [ID, Title, Desc, Img] = this.getData(program);
+      var [ID, Title, Desc, Img,instance] = this.getData(program);
       console.log(
         `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
       );
       return (
         <ListPrograms
           id={ID}
+          inst = {instance}
           key={JSON.parse(ID)['_id']}
           view={view}
           title={Title}
@@ -240,7 +241,7 @@ class ProgramCatalog extends Component {
   getData(program) {
     console.log("fetched data from api");
     console.log(program);
-    var [ID, Title, Desc, Img] = [null, null, null, null];
+    var [ID, Title, Desc, Img,instance] = [null, null, null, null,null];
     if (view === "programs") {
       ID = program["programID"]["_id"];
       Title = program["programID"]["programName"];
@@ -251,8 +252,9 @@ class ProgramCatalog extends Component {
       Title = program["courseID"]["courseName"];
       Desc = program["courseID"]["courseDescription"];
       Img = program["courseID"]["image"]["image"];
+      instance = program['courseID']['_id'];
     }
-    return [ID, Title, Desc, Img];
+    return [ID, Title, Desc, Img,instance];
   }
 
   setLayout() {

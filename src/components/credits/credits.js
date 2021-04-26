@@ -11,11 +11,11 @@ class Credits extends Component{
         super();
         this.state = {
             developers : [
-                {Name: "Kalluru Rohit", Contact: "rohithkalluru@gmail.com", Image: "" },
-                {Name: "Mallika Bhargavi", Contact: "dsmbhargavi@gmail.com", Image: ""},
-                {Name: "Radhika Patnala", Contact: "raninmy@gmail.com", Image: ""},
-                {Name: "Tarun Kumar", Contact: "msgtotarun@gmail.com", Image: ""},
-                {Name: "Muvvala Sravan Kumar", Contact: "muvvalasravan@gmail.com", Image: ""}
+                {Name: "Kalluru Rohit", Contact: "rohithkalluru@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" },
+                {Name: "Mallika Bhargavi", Contact: "dsmbhargavi@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"},
+                {Name: "Radhika Patnala", Contact: "raninmy@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"},
+                {Name: "Tarun Kumar", Contact: "msgtotarun@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"},
+                {Name: "Muvvala Sravan Kumar", Contact: "muvvalasravan@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"}
             ]
         }
 

@@ -60,25 +60,25 @@ class Profile extends Component {
     }
 
     authorize(code){
-const client_id = process.env.REACT_APP_GITHUB_CLIENT
-const client_secret = process.env.REACT_APP_GITHUB_CLIENT_SECRET
-var myHeaders = new Headers();
+        const client_id = process.env.REACT_APP_GITHUB_CLIENT
+        const client_secret = process.env.REACT_APP_GITHUB_CLIENT_SECRET
+        var myHeaders = new Headers();
 
-myHeaders.append("Accept", "application/json");
+        myHeaders.append("Accept", "application/json");
 
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  redirect: 'follow'
-};
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        redirect: 'follow'
+        };
 
-fetch("https://github.com/login/oauth/access_token?code="+code+"&client_id="+client_id+"&client_secret="+client_secret, requestOptions)
-  .then(response => response.text())
-  .then(result => {
-    result = JSON.parse(result);
-    this.updateToken(result["access_token"])
-    console.log(result)})
-  .catch(error => console.log('error', error));
+        fetch("https://github.com/login/oauth/access_token?code="+code+"&client_id="+client_id+"&client_secret="+client_secret, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            result = JSON.parse(result);
+            this.updateToken(result["access_token"])
+            console.log(result)})
+        .catch(error => console.log('error', error));
     }
 
     render() {
@@ -92,7 +92,7 @@ fetch("https://github.com/login/oauth/access_token?code="+code+"&client_id="+cli
         var role = 'Null';
         var img1 = 'Null';
         if (this.state.user != null) {
-            img1 = this.state.user['image']
+            img1 = "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
             name = this.state.user['firstName'] + ' ' + this.state.user['lastName'];
             firstName = this.state.user['firstName'];
             lastName = this.state.user['lastName'];

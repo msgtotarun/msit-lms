@@ -47,7 +47,7 @@ class ListPrograms extends Component {
       return (<div className="row">
 
       <div className="col-sm">
-      <select id="cselect" class="form-select">{options}</select>
+      <select id={this.props.inst} class="form-select">{options}</select>
       </div>
 
       <div className="col-sm">
@@ -55,7 +55,7 @@ class ListPrograms extends Component {
       type='button'
       className='btn btn-outline-primary button1 position-absolute bottom-0 end-0'
       onClick={() => {
-        let course = document.getElementById('cselect');
+        let course = document.getElementById(this.props.inst);
         let id = course.options[course.selectedIndex].value;
         this.handleListClick(id);
       }}>

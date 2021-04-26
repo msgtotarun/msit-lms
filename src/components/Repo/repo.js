@@ -94,9 +94,7 @@ class Repo extends Component {
     <div class="col-md-8">
       <div class="card-body">
         <div class="input-group mb-3">
-          <h3 className="text-center ">Authorize this acccount to access your github account</h3>
-          <br></br>
-          <a class="link-primary" onClick={() => {window.location = "https://github.com/login/oauth/authorize?client_id="+clientID;}}>Authorize</a>
+          <button class="btn-primary" onClick={() => {window.location = "https://github.com/login/oauth/authorize?client_id="+clientID;}}>Authorize</button>
         </div>
       </div>
     </div>
