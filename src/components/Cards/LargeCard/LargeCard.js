@@ -18,9 +18,10 @@ class LargeCard extends Component {
         pathname: "/courses-catalog/" + ID,
         state: { view: "courses", layout: layoutStyle },
       });
-    } else {
-      window.location = "/modulesCatalog/" + ID;
     }
+    // else {
+    //   window.location = "/modulesCatalog/" + this.props.programId + ID;
+    // }
   }
 
   render() {

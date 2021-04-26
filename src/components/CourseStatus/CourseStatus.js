@@ -26,36 +26,13 @@ class CourseStatus extends Component {
       return;
     }
 
-    // try {
-    //   layoutStyle = this.props.location.state.layout;
-    // } catch (err) {
-    //   if (err.name === "TypeError") {
-    //     layoutStyle = this.props.layout;
-    //   }
-    // }
-
     this.getRenderList(userID, token);
     // this.setLayout();
   }
 
   getRenderList(userID, token) {
     console.log("inside get render list");
-    // try {
-    //   view = this.props.location.state.view;
-    // } catch (err) {
-    //   if (err.name === "TypeError") {
-    //     view = this.props.view;
-    //   }
-    // }
-
-    // console.log(`userID = ${userID}, props.view = ${view}`);
-    // console.log(view === "program");
-    // if ("programs" === view) {
     this.getPrograms(userID, token);
-    // } else {
-    // var id = localStorage.getItem("programID");
-    // this.getCourses(id, userID, token);
-    // }
   }
 
   async getPrograms(userID, token) {
@@ -264,12 +241,16 @@ class CourseStatus extends Component {
               class='btn btn-xs btn-default'
               onClick={() => {
                 courseSelect = "";
-
-                this.setState({
-                  programId: "",
-                  courseId: "",
-                  courseList: null,
-                });
+                if (this.state.courseId) {
+                  this.setState({
+                    courseId: "",
+                  });
+                } else
+                  this.setState({
+                    programId: "",
+                    courseId: "",
+                    courseList: null,
+                  });
               }}>
               Back
             </button>

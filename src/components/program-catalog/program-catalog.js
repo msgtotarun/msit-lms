@@ -9,6 +9,7 @@ var showList = [];
 var view = null;
 var layoutStyle = null;
 var msitDescription = null;
+var programID = "";
 class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
@@ -85,7 +86,7 @@ class ProgramCatalog extends Component {
     token = localStorage.getItem("token");
     userID = localStorage.getItem("id");
     // programID = localStorage.getItem("program");
-    programID = this.props.match.params.programId;
+    // programID = this.props.match.params.programId;
     console.log(
       `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${programID}/?token=${token}`
     );
@@ -161,8 +162,8 @@ class ProgramCatalog extends Component {
       this.getPrograms(userID, token);
     } else {
       // var id = localStorage.getItem("program");
-      var id = this.props.match.params.programId;
-      this.getCourses(id, userID, token);
+      programID = this.props.match.params.programId;
+      this.getCourses(programID, userID, token);
     }
   }
 
@@ -171,19 +172,21 @@ class ProgramCatalog extends Component {
     // view = this.props.location.state.view;
     console.log(`view = ${view}`);
     List = List.map((program) => {
-      var [ID, Title, Desc, Img] = this.getData(program);
-      console.log(
-        `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
-      );
+      var [ID, courseId, Title, Desc, Img] = this.getData(program);
+      // console.log(
+      //   `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
+      // );
       return (
         <ListPrograms
           id={ID}
           key={ID}
+          programId={programID}
+          courseId={courseId}
           view={view}
           title={Title}
           description={Desc}
           image={Img}
-          button='Enter'></ListPrograms>
+          button='Course Home'></ListPrograms>
       );
     });
     List = (
@@ -230,12 +233,13 @@ class ProgramCatalog extends Component {
 
       return [ID, Title];
     } else {
-      var [Desc, Img] = [null, null];
+      var [courseId, Desc, Img] = [null, null, null];
       ID = program["courseInstances"][0]["_id"];
+      courseId = program["courseID"]["_id"];
       Title = program["courseID"]["courseName"];
       Desc = program["courseID"]["courseDescription"];
       Img = program["courseID"]["image"]["image"];
-      return [ID, Title, Desc, Img];
+      return [ID, courseId, Title, Desc, Img];
     }
   }
 
@@ -314,9 +318,7 @@ function Cols(props) {
         layout={layoutStyle}
         id={props.id}
         title={props.title}
-        description={props.description}
-        button={props.button}
-        image={props.image}></LargeCard>
+        description={props.description}></LargeCard>
     </>
   );
 }

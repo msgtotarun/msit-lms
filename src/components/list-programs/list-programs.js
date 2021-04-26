@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
+import dompurify from "dompurify";
 import "./list-programs.css";
-
-var content = null;
 var id = 0;
 var img = "";
 class ListPrograms extends Component {
@@ -23,7 +22,13 @@ class ListPrograms extends Component {
         state: { view: "courses", layout: layoutStyle },
       });
     } else {
-      window.location = "/modulesCatalog/" + ID;
+      window.location =
+        "/modulesCatalog/" +
+        this.props.programId +
+        "/" +
+        this.props.courseId +
+        "/" +
+        ID;
     }
   }
 
@@ -39,8 +44,6 @@ class ListPrograms extends Component {
     ++id;
     let colapse = "colapse" + id;
     let head = "head" + id;
-    var button =
-      "<button type='button' className='btn btn-outline-primary button1 bottom-0 end-0'>Enter</button>";
 
     return (
       <div className='accordion-item'>
@@ -61,20 +64,24 @@ class ListPrograms extends Component {
           aria-labelledby={head}
           data-bs-parent='#accordionExample'>
           <div className='accordion-body' id='flow1'>
-            <div className='col position-relative'>
-              <img className='flow-image' src={img} alt='' />
+            <h6 id='courseDescription'>Course Description</h6>
+            <div className='list-body'>
               <div
-                dangerouslySetInnerHTML={{ __html: this.props.description }}
+                id='list-body-id'
+                dangerouslySetInnerHTML={{
+                  __html: dompurify.sanitize(this.props.description),
+                }}
               />
-              <button
-                type='button'
-                className='btn btn-outline-primary button1 position-absolute bottom-0 end-0'
-                onClick={() => {
-                  this.handleListClick(this.props.id);
-                }}>
-                {this.props.button}
-              </button>
+              <img className='flow-image' src={img} alt='' />
             </div>
+            <button
+              type='button'
+              className='btn button1 list-button'
+              onClick={() => {
+                this.handleListClick(this.props.id);
+              }}>
+              {this.props.button}
+            </button>
           </div>
         </div>
       </div>

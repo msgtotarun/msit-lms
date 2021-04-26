@@ -27,7 +27,7 @@ const Routes = () => {
         render={() => <ProgramCatalog layout={true} view='coursess' />}></Route>
       <Route
         exact
-        path='/modulesCatalog/:courseId'
+        path='/modulesCatalog/:programId/:courseId/:courseInstanceId'
         component={modulesCatalog}></Route>
       <Route exact path='/profile' component={profile}></Route>
       <Route exact path='/credits' component={credits}></Route>

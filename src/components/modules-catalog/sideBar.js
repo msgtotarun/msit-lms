@@ -29,7 +29,7 @@ class sideBar extends Component {
         </li>
       );
     };
-    let moduleToDisplay = contents.map((content) => {
+    let moduleToDisplay = contents?.map((content) => {
       return (
         <ModuleItem
           content={JSON.stringify(content)}

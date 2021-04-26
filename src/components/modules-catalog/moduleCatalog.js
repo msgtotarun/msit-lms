@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import NavBar from "../NavBar/NavBar";
 import { withRouter } from "react-router-dom";
 import SideBar from "./sideBar";
+import dompurify from "dompurify";
 import "./moduleCatalog.css";
 
 var dropDownItems = "";
 var descType = "";
+let courseInstanceId, programId, courseId;
 class moduleCatalog extends Component {
   constructor(props) {
     super(props);
@@ -21,10 +23,12 @@ class moduleCatalog extends Component {
   componentDidMount() {
     var token = localStorage.getItem("token");
     // let courseId = window.location.pathname.replace("/modules-catalog/", "");
-    let courseId = this.props.match.params.courseId;
-    // console.log("cid " + courseId);
+    courseInstanceId = this.props.match.params.courseInstanceId;
+    courseId = this.props.match.params.courseId;
+    programId = this.props.match.params.programId;
+    console.log(courseId, programId);
 
-    let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${courseId}/?token=${token}`;
+    let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${courseInstanceId}/?token=${token}`;
     console.log(link);
     fetch(link, {
       method: "get",
@@ -61,13 +65,14 @@ class moduleCatalog extends Component {
 
   setSubModuleDesciption(descript) {
     descript = JSON.parse(descript);
+    console.log(descript);
     var description = descript["activity_json"];
     var html = "<div>";
     description.forEach((desc) => {
       console.log(desc);
       html = "<h1>" + html + desc["title"] + "</h1><br></br>";
       if (desc["text"] !== undefined) {
-        html = html + desc["text"] + "<br></br>";
+        html = html + desc["text"];
         descType = "";
       } else if (desc["questions"] !== undefined) {
         descType = desc["questions"][0]["questionType"];
@@ -89,7 +94,9 @@ class moduleCatalog extends Component {
               type='text'
               placeholder='paste your submission link here'
             />
-            <button type='button'>submit</button>
+            <button id='link-submit' type='button'>
+              submit
+            </button>
           </form>
         </div>
       );
@@ -122,7 +129,9 @@ class moduleCatalog extends Component {
         <main>
           <div
             className='contentarea'
-            dangerouslySetInnerHTML={{ __html: this.state.desc }}
+            dangerouslySetInnerHTML={{
+              __html: dompurify.sanitize(this.state.desc),
+            }}
           />
           <div>{this.submission()}</div>
         </main>
