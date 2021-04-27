@@ -8,7 +8,7 @@ import "./program-catalog.css";
 var showList = [];
 var view = null;
 var layoutStyle = null;
-const { REACT_APP_APIBASE_URL } = process.env;
+var msitDescription = null;
 class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +36,7 @@ class ProgramCatalog extends Component {
     // }
     layoutStyle = localStorage.getItem('layout');
     if (layoutStyle === undefined | layoutStyle === null){
-      localStorage.getItem('layout',true);
+      localStorage.setItem('layout',true);
       layoutStyle = true;
     }
     else if(layoutStyle === 'true'){
@@ -68,9 +68,13 @@ class ProgramCatalog extends Component {
         // json = json[0]['enrollments'];
         console.log("get programs api fetched");
         console.log(json);
-        if (json[0]["enrollments"][0]["programID"] !== null) {
+        if (json[0]["enrollments"].length !== 0 | json[0]["enrollments"][0]["programID"] !== null) {
           console.log(json[0]["enrollments"]);
-          this.setState({ list: json[0]["enrollments"], layout: layoutStyle,loading: false });
+          this.setState({
+            list: json[0]["enrollments"],
+            layout: layoutStyle,
+            loading: false,
+          });
         }
       })
       .catch((error) => {
@@ -155,9 +159,7 @@ class ProgramCatalog extends Component {
           <h4 class='alert-heading'>No {view} to display</h4>
           <p>You are not enrolled in any {view}</p>
           <hr></hr>
-          <p class='mb-0'>
-            Kindly, contact your mentor to enroll into programs.
-          </p>
+          <p class='mb-0'>Kindly, contact your mentor for more Information.</p>
         </div>
       </div>
     );
@@ -196,13 +198,14 @@ class ProgramCatalog extends Component {
       return (
         <ListPrograms
           id={ID}
-          inst = {instance}
+          programId={this.props.match.params.programId}
+          courseId = {instance}
           key={JSON.parse(ID)['_id']}
           view={view}
           title={Title}
           description={Desc}
           image={Img}
-          button='Enter'></ListPrograms>
+          button='Course Home'></ListPrograms>
       );
     });
     List = (<div className='accordion ' id='accordionExample'>{List}</div>)
@@ -226,8 +229,6 @@ class ProgramCatalog extends Component {
           key={ID}
           view={view}
           title={Title}
-          description={Desc}
-          image={Img}
           button='Enter'></Cols>
       );
     });
@@ -245,8 +246,12 @@ class ProgramCatalog extends Component {
     if (view === "programs") {
       ID = program["programID"]["_id"];
       Title = program["programID"]["programName"];
-      Desc = program["programID"]["programDescription"];
-      Img = program["programID"]["programImage"];
+      if (msitDescription === null) {
+        msitDescription = program["programID"]["programDescription"].replace(
+          "<br> <br> .",
+          ""
+        );
+      }
     } else {
       ID = JSON.stringify(program["courseInstances"]);
       Title = program["courseID"]["courseName"];
@@ -264,21 +269,23 @@ class ProgramCatalog extends Component {
     console.log(`setlist if check = ${this.state.list === null}`);
 
     if (this.state.loading === true) {
-      ret =  (<div className='container list-card'>
-            <NavBar />
-                      <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
+      ret = (
+        <div className='container list-card'>
+          <NavBar />
+          <div class='d-flex justify-content-center'>
+            <div class='spinner-border' role='status'>
+              <span class='visually-hidden'>Loading...</span>
             </div>
           </div>
-            </div>);
-    }else if (this.state.list.length === 0) {
+        </div>
+      );
+    } else if (this.state.list.length === 0) {
       ret = this.nodata();
-    } else if(view==="programs"){
+    } else if (view === "programs") {
       console.log("inside set layout");
       console.log(this.state.list);
       showList = this.setCard(this.state.list);
-    }else{
+    } else {
       showList = this.setList(this.state.list);
     }
 
@@ -310,7 +317,12 @@ class ProgramCatalog extends Component {
 }
 
 function Rows(props) {
-  return <div className='container'>{props.children}</div>;
+  return (
+    <div className='container programContainer'>
+      <div className='msitInfo mb-5'>{msitDescription}</div>
+      <div>{props.children}</div>
+    </div>
+  );
 }
 
 function Cols(props) {
@@ -322,10 +334,7 @@ function Cols(props) {
         key={props.id}
         layout={layoutStyle}
         id={props.id}
-        title={props.title}
-        description={props.description}
-        button={props.button}
-        image={props.image}></LargeCard>
+        title={props.title}></LargeCard>
     </>
   );
 }

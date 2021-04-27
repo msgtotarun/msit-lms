@@ -63,7 +63,7 @@ class Repo extends Component {
       var desc = repo["description"];
 
       return (
-        <div key={rlink} class='col'>
+        <div class='col'>
           <div class='card repocard'>
             <div class='card-body'>
               <p class='fs-5 text-truncated'>
@@ -74,7 +74,7 @@ class Repo extends Component {
                 <i class='bi bi-info-circle'></i> {desc}
               </p>
               <i class='bi bi-link-45deg'></i>{" "}
-              <a href="#" onClick={() => {window.open(rlink, '_blank').focus();}} class='card-link text-truncate'>
+              <a href={rlink} class='card-link text-truncate'>
                 Redirect to Repository
               </a>
             </div>

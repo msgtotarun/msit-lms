@@ -1,23 +1,33 @@
 .button1 {
+  margin: 20px;
   float: right;
   width: auto;
 }
 .flow-image {
-  margin-right: 8px;
+  display: grid;
+  height: 100%;
+  padding: 5px;
+  margin: 10px;
+  max-height: 50%;
+  align-items: center;
   width: 100%;
-  height: 200px;
+  object-fit: contain;
 }
 .accordion-body {
   padding: 1rem 1.25rem;
-  width: inherit;
   min-height: 200px;
 }
+.list-body {
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr;
+}
 .accordion {
+  flex-direction: column;
   padding: 18px;
   width: 100%;
   text-align: left;
   border: none;
-  transition: 0.4s;
+  transition: 0.4s ease-out;
 }
 .accordion-item {
   margin-bottom: 10px;
@@ -49,4 +59,17 @@
 .accordion-button:not(.collapsed)::after {
   transform: rotate(180deg);
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+.list-button {
+  margin: 5px;
+  margin-top: -30px;
+  background-color: #563d7c;
+  color: whitesmoke;
+}
+.list-button:hover {
+  opacity: 0.9;
+  color: whitesmoke;
+}
+#courseDescription {
+  font-weight: 800;
 }

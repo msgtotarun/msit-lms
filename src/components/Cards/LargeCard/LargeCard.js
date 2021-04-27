@@ -14,30 +14,33 @@ class LargeCard extends Component {
     if(this.props.view ==='programs')
     {
       console.log(`card id inside if ${ID}`);
-        // localStorage.setItem('program',ID);
-          this.props.history.push({
-        pathname: '/courses-catalog/'+ID,
-          state: { view: 'courses',layout:layoutStyle}
-        })
-      }else {
-      window.location = "/modulesCatalog/"+ID;
+      // localStorage.setItem('program',ID);
+      this.props.history.push({
+        pathname: "/courses-catalog/" + ID,
+        state: { view: "courses", layout: layoutStyle },
+      });
     }
+    // else {
+    //   window.location = "/modulesCatalog/" + this.props.programId + ID;
+    // }
   }
 
   render() {
-
+    console.log('program title =',this.props.title,'id =',this.props.id);
     return (
-      <div className='card mb-3 pad'>
-        <div className='row g-0'>
-          <div className='col'>
-            <div className='card-body position-relative'>
-              <h5 className='card-title'>{this.props.title}</h5>
-              <hr></hr>
-              <div dangerouslySetInnerHTML={{ __html: this.props.description}} />
-              <a onClick={() => {
+      <div class='card mb-3 pad'>
+        <div class='row g-0'>
+          <div class='col'>
+            <div class='card-body position-relative'>
+              <h5 class='card-title'>{this.props.title}</h5>
+
+              {/* <p class='card-text text-prop'>{this.props.description}</p> */}
+              <a
+                onClick={() => {
                   this.handleClick(this.props.id);
                 }}
-                type="button" className="stretched-link"></a>            
+                type='button'
+                class='stretched-link'></a>
             </div>
           </div>
         </div>

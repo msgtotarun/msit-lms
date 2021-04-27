@@ -21,8 +21,9 @@ const Routes = () => {
       <Route key="profile-coded" exact path='/Profile?code=:code' component={Profile}></Route>
       <Route key="credits" exact path='/Credits' component={Credits}></Route>
       <Route key="CourseStatus" exact path='/CourseStatus' component={CourseStatus}></Route>
-      <Route exact path='/modulesCatalog/:courseId' component={moduleCatalog}></Route>
+      <Route exact path='/modulesCatalog/:programId/:courseId/:courseInstanceId' component={moduleCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
+      <Route exact path='/CourseStatus' component={CourseStatus}></Route>
       <Route path='*' exact={true} component={pageNotFound} />
     </Switch>
   );

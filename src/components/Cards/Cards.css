@@ -5,10 +5,10 @@
   width: 350px;
 }
 
-.custom{
+.custom {
   display: "flex";
-  justifyContent: "center";
-  alignItems: "center";
+  justify-content: "center";
+  align-items: "center";
 }
 
 .img-height {

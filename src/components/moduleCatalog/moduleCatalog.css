@@ -3,12 +3,16 @@
   width: 55vh;
   overflow-y: auto;
   height: 90vh;
+  top: 60px;
 }
 
 button {
+  box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%),
+    0 1px 5px 0 rgb(0 0 0 / 12%);
   font-size: medium;
   width: 100%;
   border: none;
+  border-radius: 10px;
   background-color: white;
   color: black;
   padding: 10px 0px;
@@ -34,11 +38,33 @@ li.sidebar_li.a:hover {
 }
 
 main {
-  width: auto;
+  box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%),
+    0 1px 5px 0 rgb(0 0 0 / 12%);
   margin-left: 60vh;
+  margin-top: 4%;
+  width: 70%;
+  border-radius: 20px;
 }
 .contentarea {
   text-align: left;
   padding: 30px;
-  width: 100%;
+}
+.submitBox {
+  border-style: none;
+  outline: none;
+  border-bottom: 1px solid #563d7c;
+  width: 95%;
+  padding: 10px;
+}
+.submitBox:focus {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #563d7c;
+}
+#link-submit {
+  background-color: #563d7c;
+  color: whitesmoke;
+  margin: 15px;
+  padding: auto;
+  width: 100px;
 }

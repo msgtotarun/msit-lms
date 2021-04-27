@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router";
 let activeId = "";
-export default class sideList extends Component {
+class sideBar extends Component {
   getactive(active) {
     if (activeId === "") {
       activeId = this.props.name;
@@ -28,7 +29,7 @@ export default class sideList extends Component {
         </li>
       );
     };
-    let moduleToDisplay = contents.map((content) => {
+    let moduleToDisplay = contents?.map((content) => {
       return (
         <ModuleItem
           content={JSON.stringify(content)}
@@ -88,3 +89,4 @@ export default class sideList extends Component {
     );
   }
 }
+export default withRouter(sideBar);
