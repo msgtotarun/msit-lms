@@ -115,16 +115,15 @@ class moduleCatalog extends Component {
     if (descType === "filesubmission") {
       let submitLink = (
         <div className='submission'>
-          <form onSubmit={this.submitNow}>
+          <form>
             <input
+              id="submit"
               className='submitBox'
               type='text'
               name='submitLink'
-              value={this.state.submitLink}
-              onChange={this.handleInputChange}
               placeholder='paste your submission link here'
             />
-            <button id='link-submit' type='submit'>
+            <button id='link-submit' type='button' onClick={this.submitNow}>
               submit
             </button>
           </form>
@@ -135,6 +134,7 @@ class moduleCatalog extends Component {
     } else return "";
   }
   submitNow() {
+    console.log(" submission link =",document.getElementById('submit').value);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -147,7 +147,7 @@ class moduleCatalog extends Component {
       activityId: activityId,
       questionId: questionId,
       response: {
-        assignment: this.state.submitLink,
+        assignment: document.getElementById('submit').value,
       },
       maxMarks: maxMarks,
     });
@@ -160,7 +160,7 @@ class moduleCatalog extends Component {
     };
 
     fetch(
-      `${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/insert/?token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im11cnRoeXZlbXVyaTIxMUBnbWFpbC5jb20iLCJpYXQiOjE2MTg1NzIxOTZ9.ZSreEuKmn97N6eID-EkF29HFjONhHQHYx8Vj63YsHN_FmJmpmF1NlIBa7Rcqoj7w4X3ninLA3gPiiQ7ji3XRTQ`,
+      `${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/insert/?token=${localStorage.getItem('token')}`,
       requestOptions
     )
       .then((response) => response.text())
