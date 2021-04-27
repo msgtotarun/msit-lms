@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { Link, withRouter } from "react-router-dom";
-import "./repo.css";
+import "./Repositories.css";
 
 var showList = [];
 var layoutStyle = null;
@@ -9,7 +9,7 @@ var layoutStyle = null;
 const clientID = process.env.REACT_APP_GITHUB_CLIENT;
 const clientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
 const { REACT_APP_APIBASE_URL } = process.env;
-class Repo extends Component {
+class Repositories extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,7 +63,7 @@ class Repo extends Component {
       var desc = repo["description"];
 
       return (
-        <div key={rlink} class='col'>
+        <div class='col'>
           <div class='card repocard'>
             <div class='card-body'>
               <p class='fs-5 text-truncated'>
@@ -74,7 +74,7 @@ class Repo extends Component {
                 <i class='bi bi-info-circle'></i> {desc}
               </p>
               <i class='bi bi-link-45deg'></i>{" "}
-              <a href="#" onClick={()=>{window.open(rlink,"_blank")}} class='card-link text-truncate'>
+              <a href={rlink} class='card-link text-truncate'>
                 Redirect to Repository
               </a>
             </div>
@@ -208,4 +208,4 @@ function repoCard(props) {
   );
 }
 
-export default withRouter(Repo);
+export default withRouter(Repositories);
