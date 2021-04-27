@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { Link, withRouter } from "react-router-dom";
-import "./Repo.css";
+import "./repo.css";
 
 var showList = [];
 var layoutStyle = null;
