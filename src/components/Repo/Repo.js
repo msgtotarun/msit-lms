@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import "./Repo.css";
 
 var showList = [];
-var layoutStyle = null;
+
 // var client = null
 const clientID = process.env.REACT_APP_GITHUB_CLIENT;
 const clientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
@@ -164,7 +164,7 @@ class Repo extends Component {
         console.log(result);
         console.log("check if message exists");
         console.log(result["message"]);
-        if (result["message"] == undefined) {
+        if (result["message"] === undefined) {
           this.repolistmapper(result);
           this.setState({ loading: false });
         } else {

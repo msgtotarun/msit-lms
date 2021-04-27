@@ -3,10 +3,6 @@ import { withRouter } from "react-router-dom";
 import "./LargeCard.css";
 
 class LargeCard extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleClick(ID) {
     var layoutStyle = this.props.layout;
     console.log("ID after recieving = " + ID);

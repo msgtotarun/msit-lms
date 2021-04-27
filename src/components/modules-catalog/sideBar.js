@@ -14,7 +14,7 @@ class sideBar extends Component {
     }
     return "moduleButton";
   }
-  setSubModule(contents) {
+  setSubModule(moduleId, contents) {
     let ModuleItem = (props) => {
       return (
         <li className='sidebar_li'>
@@ -22,7 +22,7 @@ class sideBar extends Component {
             className={this.getactive(props.activity)}
             onClick={() => {
               activeId = props.activity;
-              this.props.subModuledesc(props.content);
+              this.props.subModuledesc(moduleId, props.content);
             }}>
             {props.activity}
           </button>
@@ -33,7 +33,8 @@ class sideBar extends Component {
       return (
         <ModuleItem
           content={JSON.stringify(content)}
-          key={content.activity_name}
+          id={content.activity_id}
+          key={content.activity_id}
           activity={content.activity_name}></ModuleItem>
       );
     });
@@ -81,7 +82,7 @@ class sideBar extends Component {
                   {"OverView"}
                 </button>
               </li>
-              {this.setSubModule(this.props.moduleContent)}
+              {this.setSubModule(this.props.id, this.props.moduleContent)}
             </div>
           </div>
         </div>

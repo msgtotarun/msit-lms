@@ -7,7 +7,14 @@ import "./moduleCatalog.css";
 
 var dropDownItems = "";
 var descType = "";
-let courseInstanceId, programId, courseId;
+let courseInstanceId,
+  programId,
+  courseId,
+  activityId,
+  questionId,
+  moduleId,
+  maxMarks,
+  activityType;
 class moduleCatalog extends Component {
   constructor(props) {
     super(props);
@@ -15,9 +22,12 @@ class moduleCatalog extends Component {
       desc: "",
       list: null,
       loading: true,
+      submitLink: "",
     };
     this.setModuleDesc = this.setModuleDesc.bind(this);
     this.setSubModuleDesciption = this.setSubModuleDesciption.bind(this);
+    this.state.submission = this.submission.bind(this);
+    this.submitNow = this.submitNow.bind(this);
   }
 
   componentDidMount() {
@@ -52,7 +62,8 @@ class moduleCatalog extends Component {
       ++sid;
       return (
         <SideBar
-          key={module["name"]}
+          id={module["module_id"]}
+          key={module["module_id"]}
           name={module["name"]}
           module={module}
           moduleContent={module.content}
@@ -63,10 +74,12 @@ class moduleCatalog extends Component {
     });
   }
 
-  setSubModuleDesciption(descript) {
+  setSubModuleDesciption(Id, descript) {
+    moduleId = Id;
     descript = JSON.parse(descript);
     console.log(descript);
     var description = descript["activity_json"];
+    activityId = descript["activity_id"];
     var html = "<div>";
     description.forEach((desc) => {
       console.log(desc);
@@ -74,34 +87,85 @@ class moduleCatalog extends Component {
       if (desc["text"] !== undefined) {
         html = html + desc["text"];
         descType = "";
-      } else if (desc["questions"] !== undefined) {
+      } else if (desc["questions"] ?? [0] === "undefined") {
         descType = desc["questions"][0]["questionType"];
+        questionId = desc["questions"][0]["question_id"];
+        activityType = desc["activityType"];
+        console.log("qsId", questionId);
+        maxMarks = desc["questions"][0]["max_marks"];
         html =
-          html + desc["questions"][0]["questionText"][0]["text"] + "<br></br>";
+          html +
+          desc["questions"][0]["questionText"][0]["text"] +
+          "</a><br><br>" +
+          "Max marks: " +
+          desc["questions"][0]["max_marks"];
       }
     });
     html = html + "</div>";
 
     this.setState({ desc: html });
   }
+  handleInputChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
   submission() {
-    if (descType !== "") {
-      let submit = (
+    // console.log("DESC", descType);
+    if (descType === "filesubmission") {
+      let submitLink = (
         <div className='submission'>
-          <form>
+          <form onSubmit={this.submitNow}>
             <input
               className='submitBox'
               type='text'
+              name='submitLink'
+              value={this.state.submitLink}
+              onChange={this.handleInputChange}
               placeholder='paste your submission link here'
             />
-            <button id='link-submit' type='button'>
+            <button id='link-submit' type='submit'>
               submit
             </button>
           </form>
         </div>
       );
-      return submit;
+      descType = "";
+      return submitLink;
     } else return "";
+  }
+  submitNow() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      programId: programId,
+      courseInstanceId: courseInstanceId,
+      courseId: courseId,
+      moduleId: moduleId,
+      activityType: activityType,
+      activityId: activityId,
+      questionId: questionId,
+      response: {
+        assignment: this.state.submitLink,
+      },
+      maxMarks: maxMarks,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      `${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/insert/?token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im11cnRoeXZlbXVyaTIxMUBnbWFpbC5jb20iLCJpYXQiOjE2MTg1NzIxOTZ9.ZSreEuKmn97N6eID-EkF29HFjONhHQHYx8Vj63YsHN_FmJmpmF1NlIBa7Rcqoj7w4X3ninLA3gPiiQ7ji3XRTQ`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   }
 
   setModuleDesc(mod) {

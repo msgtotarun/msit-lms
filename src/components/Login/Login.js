@@ -46,7 +46,7 @@ class Login extends Component {
           this.setState({
             isLogined: true,
           });
-          const setId = await fetch(
+          await fetch(
             `${REACT_APP_APIBASE_URL}/api/user/id/?token=${data.token}`,
             {
               method: "get",
