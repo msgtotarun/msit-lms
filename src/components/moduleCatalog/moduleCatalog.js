@@ -127,55 +127,6 @@ class moduleCatalog extends Component {
         </div>);
         ReactDOM.render(content,document.getElementById('content'));
     }
-    // switch(description) {
-    //   case description['activityType']==="quiz":
-        
-    //     // this.setState({desc: ""});
-    //     break;
-    //   case description['activityType']==="youtubevideo":
-    //     // code block
-    //     break;
-    //   case description['activityType']==="assignment":
-    //     console.log('in assignment case');
-    //     activityId = descript["activity_id"];
-    //     var html = "<div>";
-    //     description.forEach((desc) => {
-    //       console.log(desc);
-    //       html = "<h1>" + html + desc["title"] + "</h1><br></br>";
-    //       if (desc["text"] !== undefined) {
-    //         html = html + desc["text"];
-    //         descType = "";
-    //       } else if (desc["questions"] ?? [0] === "undefined") {
-    //         descType = desc["questions"][0]["questionType"];
-    //         questionId = desc["questions"][0]["question_id"];
-    //         activityType = desc["activityType"];
-    //         console.log("qsId", questionId);
-    //         maxMarks = desc["questions"][0]["max_marks"];
-    //         html =
-    //           html +
-    //           desc["questions"][0]["questionText"][0]["text"] +
-    //           "</a><br><br>" +
-    //           "Max marks: " +
-    //           desc["questions"][0]["max_marks"];
-    //       }
-    //     });
-    //     html = html + "</div>";
-    //     content = (
-    //       <div className="container">
-    //       <div
-    //       className='contentarea'
-    //       dangerouslySetInnerHTML={{
-    //         __html: dompurify.sanitize(html),
-    //       }}
-    //     />
-    //     <div>{this.submission()}</div>
-    //     </div>);
-    //     ReactDOM.render(content,document.getElementById('content'));
-    //     // this.setState({ desc: html });
-    //     break;
-    //   default:
-    //     content = "";
-    // }
 
   }
 
