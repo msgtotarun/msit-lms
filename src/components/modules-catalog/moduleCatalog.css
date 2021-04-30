@@ -44,6 +44,7 @@ main {
   margin-top: 4%;
   width: 70%;
   border-radius: 20px;
+  height: auto;
 }
 .contentarea {
   text-align: left;
@@ -67,4 +68,10 @@ main {
   margin: 15px;
   padding: auto;
   width: 100px;
+}
+.player-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  aspect-ratio: 16/9;
 }

@@ -72,7 +72,7 @@ class ListPrograms extends Component {
                   __html: dompurify.sanitize(this.props.description),
                 }}
               />
-              <img className='flow-image' src={img} alt='' />
+              <img className='flow-image' src={img} />
             </div>
             <button
               type='button'

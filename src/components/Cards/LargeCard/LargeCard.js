@@ -22,7 +22,7 @@ class LargeCard extends Component {
 
   render() {
     return (
-      <div class='card mb-3 pad'>
+      <div class='card mb-3 pad large_card'>
         <div class='row g-0'>
           <div class='col'>
             <div class='card-body position-relative'>

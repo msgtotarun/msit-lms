@@ -19,9 +19,9 @@ class sideBar extends Component {
       return (
         <li className='sidebar_li'>
           <button
-            className={this.getactive(props.activity)}
+            className={this.getactive(props.activity + this.props.id)}
             onClick={() => {
-              activeId = props.activity;
+              activeId = props.activity + this.props.id;
               this.props.subModuledesc(moduleId, props.content);
             }}>
             {props.activity}
@@ -41,6 +41,7 @@ class sideBar extends Component {
     return moduleToDisplay;
   }
   render() {
+    console.log("sidebar render");
     let sid = this.props.sid;
     let colapse = "colapse-" + sid;
     let head = "head-" + sid;

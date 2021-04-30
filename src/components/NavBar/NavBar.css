@@ -6,3 +6,12 @@
   border: 2px solid white;
   border-radius: 20px;
 }
+.navbar-toggler {
+  box-shadow: none;
+  width: 25px;
+  border: none;
+}
+.navbar-dark .navbar-toggler {
+  color: #563d7c;
+  border-color: none;
+}
