@@ -90,7 +90,7 @@ class moduleCatalog extends Component {
     if(description[0]['activityType']==="quiz"){
       description = JSON.stringify(description);
       content = (<Quiz mid={moduleId}>{description}</Quiz>);
-      // ReactDOM.render(content,document.getElementById('content'));
+      ReactDOM.render(content,document.getElementById('content'));
     }else if(description[0]['activityType']==="assignment"){
       console.log('in assignment case');
         activityId = descript["activity_id"];
@@ -126,7 +126,7 @@ class moduleCatalog extends Component {
         />
         <div>{this.submission()}</div>
         </div>);
-        // ReactDOM.render(content,document.getElementById('content'));
+        ReactDOM.render(content,document.getElementById('content'));
     }else if(description[0]['activityType']==="notes"){
       console.log('notes');
         activityId = descript["activity_id"];
