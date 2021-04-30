@@ -28,7 +28,7 @@ class LargeCard extends Component {
   render() {
     console.log('program title =',this.props.title,'id =',this.props.id);
     return (
-      <div class='card mb-3 pad'>
+      <div class='large_card mb-3 pad'>
         <div class='row g-0'>
           <div class='col'>
             <div class='card-body position-relative'>

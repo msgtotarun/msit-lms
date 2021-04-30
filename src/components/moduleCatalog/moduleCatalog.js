@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import Quiz from './Quiz/Quiz';
 import SideBar from "./sideBar";
 import dompurify from "dompurify";
+import ReactPlayer from "react-player";
 import "./moduleCatalog.css";
 
 var dropDownItems = "";
@@ -80,7 +81,7 @@ class moduleCatalog extends Component {
   setSubModuleDesciption(Id, descript) {
 
     moduleId = Id;
-    ReactDOM.render("",document.getElementById('content'));
+    // ReactDOM.render("",document.getElementById('content'));
     descript = JSON.parse(descript);
     // console.log(descript);
     var description = descript["activity_json"];
@@ -89,7 +90,7 @@ class moduleCatalog extends Component {
     if(description[0]['activityType']==="quiz"){
       description = JSON.stringify(description);
       content = (<Quiz mid={moduleId}>{description}</Quiz>);
-      ReactDOM.render(content,document.getElementById('content'));
+      // ReactDOM.render(content,document.getElementById('content'));
     }else if(description[0]['activityType']==="assignment"){
       console.log('in assignment case');
         activityId = descript["activity_id"];
@@ -125,8 +126,66 @@ class moduleCatalog extends Component {
         />
         <div>{this.submission()}</div>
         </div>);
+        // ReactDOM.render(content,document.getElementById('content'));
+    }else if(description[0]['activityType']==="notes"){
+      console.log('notes');
+        activityId = descript["activity_id"];
+        var html = "<div>";
+        description.forEach((desc) => {
+          console.log(desc);
+          html = "<h1>" + html + desc["title"] + "</h1><br></br>";
+          if (desc["text"] !== undefined) {
+            html = html + desc["text"];
+            descType = "";
+          }
+        });
+          html = html + "</div>";
+        content = (
+          <div className="container">
+          <div
+          className='contentarea'
+          dangerouslySetInnerHTML={{
+            __html: dompurify.sanitize(html),
+          }}
+        />
+        </div>);
         ReactDOM.render(content,document.getElementById('content'));
     }
+
+    else if(description[0]['activityType']==="youtubevideo"){
+      console.log('youtube vedio');
+        activityId = descript["activity_id"];   
+        var html = "<div>";
+        description.forEach((desc) => {
+          console.log(desc);
+          html = "<h1>" + html + desc["title"] + "</h1><br></br>"; 
+        });
+        html = html + "</div>";
+        var vedio = "<div>";
+        description.forEach((desc) => {
+          //console.log(desc);;
+          (description[0]['activityType']==="youtubevideo")?
+          vedio =  "https://www.youtube.com/watch?v=" + desc['videoURL']:vedio = desc['videoURL'];
+          console.log(vedio);
+        });
+        vedio = vedio +"</div>"
+        
+        content = (
+          <div>
+            <div
+          dangerouslySetInnerHTML={{
+            __html: dompurify.sanitize(html),
+          }}
+          />
+          <div className="reactplayer">
+          <ReactPlayer url={vedio} />
+          </div>
+           
+        </div>);
+        ReactDOM.render(content,document.getElementById('content'));
+    }
+
+    this.setState({ loading: false });
 
   }
 
@@ -189,8 +248,19 @@ class moduleCatalog extends Component {
   }
 
   setModuleDesc(mod) {
+    console.log("mod =",mod);
     descType = "";
-    this.setState({ desc: mod["desc"] });
+    content = (
+      <div className="container">
+      <div
+      className='contentarea'
+      dangerouslySetInnerHTML={{
+        __html: dompurify.sanitize(mod['desc']),
+      }}
+    />
+    <div>{this.submission()}</div>
+    </div>);
+    this.setState({ loading: false });
   }
 
   render() {
@@ -209,7 +279,7 @@ class moduleCatalog extends Component {
           </div>
         </aside>
         <main id="content">
-
+        {content}
         </main>
       </div>
     );

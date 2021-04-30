@@ -23,7 +23,7 @@
   margin-right: 3%;
 }
 
-.card {
+.large_card {
   height: 50px;
   width: 35rem;
   color: white;
@@ -34,7 +34,7 @@
   height: inherit;
 }
 
-.card:hover {
+.large_card:hover {
   /* background: url(https://www.udemy.com/staticx/udemy/js/webpack/icon-play.ac3f32ecb72a0c3f674fa5a3f3062a56.svg); */
   opacity: 0.95;
   transform: scale(1);
