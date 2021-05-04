@@ -5,13 +5,6 @@
   height: fit-content;
 }
 
-.card {
-  height: 50px;
-  width: 35rem;
-  color: white;
-  background-color: #563d7c;
-}
-
 .row {
   height: inherit;
 }

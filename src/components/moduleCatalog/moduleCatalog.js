@@ -19,6 +19,9 @@ let courseInstanceId,
   moduleId,
   maxMarks,
   activityType;
+
+// const { Component } = React;
+
 class moduleCatalog extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +31,7 @@ class moduleCatalog extends Component {
       loading: true,
       submitLink: "",
     };
+    // this.child = React.createRef();
     this.setModuleDesc = this.setModuleDesc.bind(this);
     this.setSubModuleDesciption = this.setSubModuleDesciption.bind(this);
     this.state.submission = this.submission.bind(this);
@@ -89,8 +93,8 @@ class moduleCatalog extends Component {
     console.log(`switch assignment condition ${(description[0]['activityType']=== "assignment")}`);
     if(description[0]['activityType']==="quiz"){
       description = JSON.stringify(description);
-      content = (<Quiz mid={moduleId}>{description}</Quiz>);
-      ReactDOM.render(content,document.getElementById('content'));
+      // content = (<Quiz ref={this.child} mid={moduleId}>{description}</Quiz>);
+      content = (<Quiz pid={programId} cin={courseInstanceId} cid={courseId} aid={descript['activity_id']} mid={moduleId}>{description}</Quiz>);
     }else if(description[0]['activityType']==="assignment"){
       console.log('in assignment case');
         activityId = descript["activity_id"];
@@ -126,7 +130,6 @@ class moduleCatalog extends Component {
         />
         <div>{this.submission()}</div>
         </div>);
-        ReactDOM.render(content,document.getElementById('content'));
     }else if(description[0]['activityType']==="notes"){
       console.log('notes');
         activityId = descript["activity_id"];
@@ -149,10 +152,9 @@ class moduleCatalog extends Component {
           }}
         />
         </div>);
-        ReactDOM.render(content,document.getElementById('content'));
     }
 
-    else if(description[0]['activityType']==="youtubevideo"){
+    else if(description[0]['activityType']==="youtubevideo" | description[0]['activityType']==="video"){
       console.log('youtube vedio');
         activityId = descript["activity_id"];   
         var html = "<div>";
@@ -182,9 +184,8 @@ class moduleCatalog extends Component {
           </div>
            
         </div>);
-        ReactDOM.render(content,document.getElementById('content'));
     }
-
+    // ReactDOM.render(content,document.getElementById('content'));
     this.setState({ loading: false });
 
   }
@@ -248,6 +249,8 @@ class moduleCatalog extends Component {
   }
 
   setModuleDesc(mod) {
+    // ReactDOM.render("",document.getElementById('content'));
+    mod = JSON.parse(mod)
     console.log("mod =",mod);
     descType = "";
     content = (
@@ -260,6 +263,7 @@ class moduleCatalog extends Component {
     />
     <div>{this.submission()}</div>
     </div>);
+    // ReactDOM.render(content,document.getElementById('content'));
     this.setState({ loading: false });
   }
 
