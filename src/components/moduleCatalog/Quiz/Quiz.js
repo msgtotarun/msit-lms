@@ -6,7 +6,7 @@ import './Quiz.css';
 var questions = "";
 var size = 0;
 let qsize = 0;
-var submit = false;
+var submit = true;
 
 class Quiz extends Component {
   constructor(props){
@@ -27,6 +27,7 @@ class Quiz extends Component {
     fetch(`${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/latest/${localStorage.getItem('id')}/${this.props.pid}/${this.props.cid}/${this.props.cin}/${this.props.mid}/${this.props.aid}/${qid}?token=${localStorage.getItem('token')}`, requestOptions)
       .then(response => response.text())
       .then(result =>{
+        console.log('result fetched in quiz api =',result);
         result = JSON.parse(result);
         if(result['error'] !== undefined & result['error'] === 'not found'){
           correct = result['error'];
@@ -41,7 +42,7 @@ class Quiz extends Component {
       })
       .catch(error => console.log('error', error));
 
-    
+    console.log('correct in submitted =',correct);
 
     var reached = false;
     if(item === qsize){
@@ -77,6 +78,7 @@ class Quiz extends Component {
                 [correct,reached,json] = this.getSubmitted(con['question_id'],size);
                 console.log(`correct = ${correct}`)
                 if(correct === true | correct === false){
+                  console.log(`opt correct ${opt['correct']}`)
                   if(opt['correct'] === true){
                     return (<div key={ouniq} class="form-check">
                         <input className="form-check-input" type="checkbox" defaultChecked={true} QID={con['question_id']} data={opt['option']} value={opt['correct']} disabled></input>
@@ -263,8 +265,9 @@ class Quiz extends Component {
   }
 
   render() {
-    if(this.state.loading === true){
+    if(this.state.loading === true & submit === true){
       this.setQuiz();
+      submit = false;
       return (<div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>);
