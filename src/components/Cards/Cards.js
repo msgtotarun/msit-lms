@@ -12,7 +12,7 @@ class Cards extends Component {
     return (
               <div class="card flow">
                   <div class="card-body">
-                      <h5 class="card-title">{this.props.name}</h5>
+                      <h5 class="card-title title">{this.props.name}</h5>
                   </div>
                   <img src={this.props.image} class="card-img-top"  />
                   <div class="card-body">
