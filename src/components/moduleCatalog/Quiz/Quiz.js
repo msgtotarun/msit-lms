@@ -18,13 +18,22 @@ class Quiz extends Component {
     this.submission = this.submission.bind(this);
   }
 
-  getSubmitted(qid,item){
+  // async componentDidMount(){
+  //   try{
+  //   await this.setQuiz();
+  //   }catch (err){
+  //     // this.setState({loading: false})
+  //     console.log(err)
+  //   }
+  // }
+
+  async getSubmitted(qid,item){
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
     var correct,json;
-    fetch(`${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/latest/${localStorage.getItem('id')}/${this.props.pid}/${this.props.cid}/${this.props.cin}/${this.props.mid}/${this.props.aid}/${qid}?token=${localStorage.getItem('token')}`, requestOptions)
+    await fetch(`${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/latest/${localStorage.getItem('id')}/${this.props.pid}/${this.props.cid}/${this.props.cin}/${this.props.mid}/${this.props.aid}/${qid}?token=${localStorage.getItem('token')}`, requestOptions)
       .then(response => response.text())
       .then(result =>{
         console.log('result fetched in quiz api =',result);
@@ -52,7 +61,7 @@ class Quiz extends Component {
     return [correct,reached,json];
   }
 
-  setQuiz(){
+  async setQuiz(){
     var contents = JSON.parse(this.props.children);
     contents = contents[0];
     size = 0;
@@ -61,7 +70,7 @@ class Quiz extends Component {
     console.log(contents)
         qsize = contents['questions'].length;
         var correct,reached,json;
-        var content = contents['questions'].map(con =>{
+        var content = await contents['questions'].map(async (con) =>{
           size = size + 1;
           let question = `${size}) `;
           con['questionText'].forEach((item,ind) => {
@@ -71,41 +80,46 @@ class Quiz extends Component {
           });
           var op = 0;
           console.log('question id = ',con['question_id'])
-          
-          let options = con['options'].map(opt => {
-                op = op+1;
-                let ouniq = `OPT${size}${op}`;
-                [correct,reached,json] = this.getSubmitted(con['question_id'],size);
-                console.log(`correct = ${correct}`)
-                if(correct === true | correct === false){
-                  console.log(`opt correct ${opt['correct']}`)
-                  if(opt['correct'] === true){
-                    return (<div key={ouniq} class="form-check">
-                        <input className="form-check-input" type="checkbox" defaultChecked={true} QID={con['question_id']} data={opt['option']} value={opt['correct']} disabled></input>
-                        <label className="form-check-label" for="flexCheckDefault">
-                          {opt['option']}
-                        </label>
-                      </div>);
-                  }
-                  return (<div key={ouniq} class="form-check">
-                        <input className="form-check-input" type="checkbox" QID={con['question_id']} data={opt['option']} value={opt['correct']} disabled></input>
-                        <label className="form-check-label" for="flexCheckDefault">
-                          {opt['option']}
-                        </label>
-                      </div>);
-                }
-                return (<div key={ouniq} class="form-check">
-                <input className="form-check-input" type="checkbox" QID={con['question_id']} data={opt['option']} value={opt['correct']}></input>
-                <label className="form-check-label" for="flexCheckDefault">
-                  {opt['option']}
-                </label>
-              </div>);
-          });
+          [correct,reached,json] = await this.getSubmitted(con['question_id'],size);
+          console.log(`correct = ${correct}`);
 
           let uniq = `QZ${size}`;
 
 
-          if(correct === true){
+          if(correct === true | correct === false){
+
+            let options = json['response']['choices'].map(async (opt) => {
+              op = op+1;
+              let ouniq = `OPT${size}${op}`;
+
+                if(opt['selected'] === true){
+                  return (<div key={ouniq} class="form-check">
+                    <input className="form-check-input" type="checkbox" defaultChecked={true} QID={con['question_id']} data={opt['option']} value={opt['selected']} disabled></input>
+                    <label className="form-check-label" for="flexCheckDefault">
+                      {opt['option']}
+                    </label>
+                  </div>);
+                }
+
+                return (<div key={ouniq} class="form-check">
+                <input className="form-check-input" type="checkbox" QID={con['question_id']} data={opt['option']} value={opt['selected']} disabled></input>
+                <label className="form-check-label" for="flexCheckDefault">
+                  {opt['option']}
+                </label>
+              </div>);
+
+            });
+
+            var correctText,correctClass;
+            if(correct === true){
+              correctText = "Correct";
+              correctClass = "text-success text-center";
+            }
+            else{
+              correctText = "Incorrect";
+              correctClass = "text-danger text-center";
+            }
+
                 return (<div key={uniq} className="card border-primary mb-3 custom-card">
               <div
               className='card-header bg-transparent border-success'
@@ -117,39 +131,36 @@ class Quiz extends Component {
                 {options}
               </div>
               <div className="card-footer bg-transparent border-success" id={"Sub"+size.toString()}><p className="text-start">
-              Score: {json['awardedMarks']}</p><p className="text-success text-center">Correct</p>
+              Score: {json['awardedMarks']}</p><p className={correctClass}>{correctText}</p>
               <p className="text-end">submitted on {json['timestamp']}</p></div>
               </div>);
-          }else if(correct === false){
-            return (<div key={uniq} className="card border-primary mb-3 custom-card">
-          <div
-          className='card-header bg-transparent border-success'
-          dangerouslySetInnerHTML={{
-            __html: dompurify.sanitize(question),
-          }}
-        />
-          <div className="card-body" id={"Q"+size.toString()}>
-            {options}
-          </div>
-          <div className="card-footer bg-transparent border-success" id={"Sub"+size.toString()}><p className="text-start">
-          Score: {json['awardedMarks']}</p><p className="text-success text-danger">Incorrect</p>
-          <p className="text-end">submitted on {json['timestamp']}</p></div>
-          </div>);
-      }
+          }
 
-          return (<div key={uniq} className="card border-primary mb-3 custom-card">
-          <div
-          className='card-header bg-transparent border-success'
-          dangerouslySetInnerHTML={{
-            __html: dompurify.sanitize(question),
-          }}
-        />
-          <div className="card-body" id={"Q"+size.toString()}>
-            {options}
-          <button className="btn-primary custom-btn" id={`Btn${size}`} type="button" onClick={() => {this.submission(size.toString())}}>Submit</button>
-          </div>
-          <div className="card-footer bg-transparent border-success" id={"Sub"+size.toString()}></div>
-          </div>);
+          let options = con['options'].map((opt) => {
+            op = op+1;
+            let ouniq = `OPT${size}${op}`;
+
+            return (<div key={ouniq} class="form-check">
+                <input className="form-check-input" type="checkbox" QID={con['question_id']} data={opt['option']} value={opt['correct']}></input>
+                <label className="form-check-label" for="flexCheckDefault">
+                  {opt['option']}
+                </label>
+              </div>);
+          });
+
+            return (<div key={uniq} className="card border-primary mb-3 custom-card">
+            <div
+            className='card-header bg-transparent'
+            dangerouslySetInnerHTML={{
+              __html: dompurify.sanitize(question),
+            }}
+          />
+            <div className="card-body" id={"Q"+size.toString()}>
+              {options}
+            <button className="btn-primary custom-btn" id={`Btn${size}`} type="button" onClick={() => {this.submission(size.toString())}}>Submit</button>
+            </div>
+            <div className="card-footer bg-transparent" id={"Sub"+size.toString()}></div>
+            </div>);
 
         });
 
@@ -273,7 +284,7 @@ class Quiz extends Component {
           </div>);
     }
 
-
+    // await this.setQuiz();
 
     return (<div className="row" id="questions">{questions}
     </div>);
