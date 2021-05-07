@@ -1,24 +1,17 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans");
-:root {
-  --blue: #0e0620;
-  --white: #fff;
-  --green: #2ccf6d;
-}
 body {
   margin: 0;
   padding: 0;
   padding-top: 60px;
   box-sizing: border-box;
+  font-family: "Nunito Sans";
+  justify-content: center;
 }
 .nav-404 {
   display: flex;
-  font-family: "Nunito Sans";
+
   font-size: 1em;
   flex-direction: column;
-}
-html,
-button {
-  font-family: "Nunito Sans";
 }
 
 .h-404 {

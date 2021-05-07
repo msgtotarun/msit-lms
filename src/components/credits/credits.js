@@ -1,27 +1,67 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
+import {Link,withRouter} from "react-router-dom";
+import NavBar from '../NavBar/NavBar';
+import Cards from '../Cards/Cards'
 import './credits.css';
 
+
+
 class Credits extends Component{
+    constructor(){
+        super();
+        this.state = {
+            developers : [
+                {Name: "Kalluru Rohit", Contact: "rohithkalluru@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" },
+                {Name: "Mallika Bhargavi", Contact: "dsmbhargavi@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"},
+                {Name: "Radhika Patnala", Contact: "raninmy@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"},
+                {Name: "Tarun Kumar", Contact: "msgtotarun@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"},
+                {Name: "Muvvala Sravan Kumar", Contact: "muvvalasravan@gmail.com", Image: "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"}
+            ]
+        }
+
+    }
+
+    // setRows(list){
+    //
+    //   <div class="row">
+    //   </div>
+    // }
+
+    setCards(list){
+      list = list.map((dev) => {
+        return <Cards name={dev.Name} image={dev.Image} contact={dev.Contact}></Cards>
+
+      })
+
+      // list = this.setRows(list)
+      // var rows = [];
+      // var display = [];
+      // var i = 0;
+      // list.forEach((card,ind,arr) => {
+      //   if(ind+1 %3 == 1){
+      //     rows = []
+      //   }
+      //   else if(i+1 %3 == 0){
+      //      var doc = (<div className="row gx-5">{rows}</div>);
+      //     display.push(doc);
+      //   }
+      //   rows.push(card)
+      // })
+
+      return list;
+    }
+
     render()
     {
-        return(
-            <div className="col-sm d-flex flex-direction:column">
-                <div className ="w-25 p-3 h-25 d-inline-block">
-                    <div className="card" >
-                        <b><h3 className="card-title">{this.props.title}</h3></b>
-                        <img src={this.props.image} className="card-img-top" alt="..."/>
-                            <div className="card-body">
-                                <a href="#" className="card-link">{this.props.link1}</a>
-                                <a href="#" className="card-link">{this.props.link2}</a>
-                            </div>
-                        <div className="card-body">
-                            <h5 className="card-title">{this.props.title}</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        var list = this.setCards(this.state.developers);
+
+        return (<div class="container">
+        <NavBar></NavBar>
+        <div className="row row-cols-1 row-cols-md-3 g-4 marg">
+        {list}
+        </div>
+        </div>)
     }
 }
 
-export default Credits;
+export default withRouter(Credits);

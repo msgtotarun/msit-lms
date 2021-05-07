@@ -1,18 +1,50 @@
 .card-body {
-  text-align: left;
+  text-align: center;
   flex: 1 1 auto;
   padding: 1rem 1rem;
+  height: fit-content;
 }
 
-.pos {
-  margin-left: 65%;
+.row {
+  height: inherit;
 }
-.card:hover {
+
+.btn{
+  width: auto;
+  float: right;
+  margin-bottom: 1%;
+  margin-right: 3%;
+}
+
+.large_card {
+  height: 50px;
+  width: 35rem;
+  color: white;
+  background-color: #563d7c;
+}
+
+.row {
+  height: inherit;
+}
+
+.large_card:hover {
   /* background: url(https://www.udemy.com/staticx/udemy/js/webpack/icon-play.ac3f32ecb72a0c3f674fa5a3f3062a56.svg); */
-  background-color: whitesmoke;
+  opacity: 0.95;
   transform: scale(1);
   box-shadow: 1px 1px 1px 1px black;
 }
+
+.card-title{
+  margin-top: 0%;
+}
+
 .image {
   border-style: groove;
+  border-style: groove;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+  width: 304px;
+  height: inherit;
 }

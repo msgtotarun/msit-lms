@@ -4,9 +4,11 @@ import "./NavBar.css";
 
 class NavBar extends Component {
   render() {
+
     var isLogined = localStorage.getItem("username") !== null;
     const userName = "Hi! " + localStorage.getItem("username");
     var home = isLogined ? "/program-catalog" : "/";
+    var profile = "/Profile"
     return (
       <nav className='navbar fixed-top navbar-expand-sm navbar-colour navbar-dark '>
         <div className='container-fluid'>
@@ -28,19 +30,19 @@ class NavBar extends Component {
             <div className='collapse navbar-collapse' id='navbarNavDropdown'>
               <ul className='navbar-nav me-auto mb-lg-0'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to='#'>
+                  <Link className='nav-link active' to='/Credits'>
                     Credits
                   </Link>
                 </li>
               </ul>
               <ul className='navbar-nav ms-auto'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to='#'>
+                  <Link className='nav-link active' to='/CourseStatus'>
                     Course status
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <span className='nav-link active'>{userName}</span>
+                  <Link className='nav-link active' to={profile}>{userName}</Link>
                 </li>
                 <li className='nav-item'>
                   <Link

@@ -1,0 +1,42 @@
+.flow {
+    margin-left: 4%;
+    width: 22rem;
+    margin-top: 4%;
+    height: 28rem;
+}
+
+.marg {
+    margin-left: 2.5%;
+}
+
+.flow1 {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 3%;
+  font-size: xx-large;
+}
+/* .flow2 {
+  vertical-align: middle;
+} */
+.title {
+  margin-top: 6%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.7rem;
+}
+.logo1 {
+  width: 28%;
+  height: auto;
+  padding-left: 15%;
+}
+.logo2 {
+  width: 38%;
+  height: auto;
+  padding-left: 24%;
+}
+
+.card-img-top{
+    border-radius: 50%;
+    height: 15rem;
+    width: revert;
+}
