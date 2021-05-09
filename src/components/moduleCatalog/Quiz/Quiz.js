@@ -34,10 +34,10 @@ class Quiz extends Component {
     };
     var correct,json;
     await fetch(`${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/latest/${localStorage.getItem('id')}/${this.props.pid}/${this.props.cid}/${this.props.cin}/${this.props.mid}/${this.props.aid}/${qid}?token=${localStorage.getItem('token')}`, requestOptions)
-      .then(response => response.text())
-      .then(result =>{
+      .then(async (response) => await response.text())
+      .then(async (result) =>{
         console.log('result fetched in quiz api =',result);
-        result = JSON.parse(result);
+        result = await JSON.parse(result);
         if(result['error'] !== undefined & result['error'] === 'not found'){
           correct = result['error'];
         }
@@ -58,6 +58,9 @@ class Quiz extends Component {
       reached = true;
     }
 
+    (correct!==null | correct !== undefined)?correct = correct : correct = "";
+    (json!==null | json !== undefined)?json = json : json = "";
+
     return [correct,reached,json];
   }
 
@@ -69,7 +72,8 @@ class Quiz extends Component {
     console.log('in quiz app contents = ')
     console.log(contents)
         qsize = contents['questions'].length;
-        var correct,reached,json;
+        var correct,json;
+        var reached = false;
         var content = await contents['questions'].map(async (con) =>{
           size = size + 1;
           let question = `${size}) `;
@@ -79,9 +83,9 @@ class Quiz extends Component {
             :question = question + item['text']
           });
           var op = 0;
-          console.log('question id = ',con['question_id'])
+          console.log('question id = ',con['question_id']);
           [correct,reached,json] = await this.getSubmitted(con['question_id'],size);
-          console.log(`correct = ${correct}`);
+          console.log(`question id = ,${con['question_id']}, correct = ${correct}, reached = ${reached}, json = ${json}`);
 
           let uniq = `QZ${size}`;
 
@@ -164,14 +168,31 @@ class Quiz extends Component {
 
         });
 
+
+        console.log('reached = ',reached)
+        content = content.map((prom) => {
+          var res;
+          prom.then((result) => {
+            console.log("promise result = ");
+            console.log(result);
+            res = result;
+          });
+          // while(res === undefined){
+          //   await new Promise(r => setTimeout(r, 1000));
+          // }
+          console.log("after map = ");
+          console.log(res);
+          return res;
+        });
+        console.log(content)
+
         questions = (<div class="col">
           {content}
         </div>);
 
-        console.log('reached = ',reached)
-        if(reached === true){
+        // if(reached === true){
           this.setState({loading: false});
-        }
+        // }
 
 
 
@@ -277,6 +298,7 @@ class Quiz extends Component {
 
   render() {
     if(this.state.loading === true & submit === true){
+      console.log('in render set quiz condition');
       this.setQuiz();
       submit = false;
       return (<div class="spinner-border" role="status">
