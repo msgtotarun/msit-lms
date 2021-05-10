@@ -7,6 +7,7 @@ var questions = "";
 var size = 0;
 let qsize = 0;
 var submit = true;
+var contents = [];
 
 class Quiz extends Component {
   constructor(props){
@@ -15,6 +16,9 @@ class Quiz extends Component {
       loading: true
     };
     // this.child = React.createRef();
+    contents = JSON.parse(props.children);
+    contents = contents[0]['questions'];
+    qsize = contents.length;
     this.submission = this.submission.bind(this);
   }
 
@@ -27,7 +31,10 @@ class Quiz extends Component {
   //   }
   // }
 
-  async getSubmitted(qid,item){
+  async getSubmitted(){
+    console.log(`selected for index ${size} question = `);
+    console.log(contents[size])
+    var qid = contents[size]['question_id'];
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
@@ -48,35 +55,35 @@ class Quiz extends Component {
           correct = result['error'];
         }
         json = result;
+        (correct!==null | correct !== undefined)?correct = correct : correct = "";
+        (json!==null | json !== undefined)?json = json : json = "";
+        contents[size]['correct'] = correct;
+        // contents[size] = Object.assign(contents[size],)
+        contents[size]['result'] = json;
+        if(size+1 === qsize){
+          this.setState({loading: false});
+          submit = false;
+        }else{
+          size = size + 1;
+          this.setState({
+            loading: true
+          });
+        }
+
+
       })
       .catch(error => console.log('error', error));
 
-    console.log('correct in submitted =',correct);
-
-    var reached = false;
-    if(item === qsize){
-      reached = true;
-    }
-
-    (correct!==null | correct !== undefined)?correct = correct : correct = "";
-    (json!==null | json !== undefined)?json = json : json = "";
-
-    return [correct,reached,json];
   }
 
   async setQuiz(){
-    var contents = JSON.parse(this.props.children);
-    contents = contents[0];
-    size = 0;
 
     console.log('in quiz app contents = ')
     console.log(contents)
-        qsize = contents['questions'].length;
         var correct,json;
-        var reached = false;
-        var content = await contents['questions'].map(async (con) =>{
-          size = size + 1;
-          let question = `${size}) `;
+        var content = contents.map((con,qind,arr) =>{
+          qind = qind+1;
+          let question = `${qind}) `;
           con['questionText'].forEach((item,ind) => {
             (item['text'] === null | item['text'] === undefined)? 
             question = question + '<img src="'+`${item['image']['imageSRC']}`+'"></img>'
@@ -84,17 +91,18 @@ class Quiz extends Component {
           });
           var op = 0;
           console.log('question id = ',con['question_id']);
-          [correct,reached,json] = await this.getSubmitted(con['question_id'],size);
-          console.log(`question id = ,${con['question_id']}, correct = ${correct}, reached = ${reached}, json = ${json}`);
+          correct = con['correct'];
+          json = con['result'];
+          console.log(`question id = ,${con['question_id']}, correct = ${correct}, json = ${json}`);
 
-          let uniq = `QZ${size}`;
+          let uniq = `QZ${qind}`;
 
 
           if(correct === true | correct === false){
 
-            let options = json['response']['choices'].map(async (opt) => {
+            let options = json['response']['choices'].map((opt) => {
               op = op+1;
-              let ouniq = `OPT${size}${op}`;
+              let ouniq = `OPT${qind}${op}`;
 
                 if(opt['selected'] === true){
                   return (<div key={ouniq} class="form-check">
@@ -117,26 +125,41 @@ class Quiz extends Component {
             var correctText,correctClass;
             if(correct === true){
               correctText = "Correct";
-              correctClass = "text-success text-center";
+              correctClass = "text-success text-center fw-bolder";
             }
             else{
               correctText = "Incorrect";
-              correctClass = "text-danger text-center";
+              correctClass = "text-danger text-center fw-bolder";
             }
 
                 return (<div key={uniq} className="card border-primary mb-3 custom-card">
               <div
-              className='card-header bg-transparent border-success'
+              className='card-header bg-transparent'
               dangerouslySetInnerHTML={{
                 __html: dompurify.sanitize(question),
               }}
             />
-              <div className="card-body" id={"Q"+size.toString()}>
+              <div className="card-body" id={"Q"+qind.toString()}>
                 {options}
               </div>
-              <div className="card-footer bg-transparent border-success" id={"Sub"+size.toString()}><p className="text-start">
-              Score: {json['awardedMarks']}</p><p className={correctClass}>{correctText}</p>
-              <p className="text-end">submitted on {json['timestamp']}</p></div>
+              <div className="card-footer bg-transparent" id={"Sub"+qind.toString()}>
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <p className="text-start">
+                    Score: {json['awardedMarks']}
+                    </p>
+                  </div>
+                  <div class="col">
+                  <p className={correctClass}>{correctText}</p>
+                  </div>
+                  <div class="col">
+                  <p className="text-end">submitted on {json['timestamp']}</p>
+                  </div>
+                </div>
+              </div>
+              
+              </div>
               </div>);
           }
 
@@ -159,31 +182,17 @@ class Quiz extends Component {
               __html: dompurify.sanitize(question),
             }}
           />
-            <div className="card-body" id={"Q"+size.toString()}>
+            <div className="card-body position-relative" id={"Q"+qind.toString()}>
               {options}
-            <button className="btn-primary custom-btn" id={`Btn${size}`} type="button" onClick={() => {this.submission(size.toString())}}>Submit</button>
+            <button className="btn-primary custom-btn position-absolute bottom-0 end-0" id={`Btn${qind}`} type="button" onClick={() => {this.submission(qind.toString())}}>Submit</button>
             </div>
-            <div className="card-footer bg-transparent" id={"Sub"+size.toString()}></div>
+            <div className="card-footer bg-transparent" id={"Sub"+qind.toString()}></div>
             </div>);
 
         });
 
 
-        console.log('reached = ',reached)
-        content = content.map((prom) => {
-          var res;
-          prom.then((result) => {
-            console.log("promise result = ");
-            console.log(result);
-            res = result;
-          });
-          // while(res === undefined){
-          //   await new Promise(r => setTimeout(r, 1000));
-          // }
-          console.log("after map = ");
-          console.log(res);
-          return res;
-        });
+        
         console.log(content)
 
         questions = (<div class="col">
@@ -191,7 +200,7 @@ class Quiz extends Component {
         </div>);
 
         // if(reached === true){
-          this.setState({loading: false});
+          // this.setState({loading: false});
         // }
 
 
@@ -256,12 +265,14 @@ class Quiz extends Component {
           element.disabled = true;
       });
 
-      document.getElementById(`Btn${ind}`).disabled = true;
+      var button = document.getElementById(`Btn${ind}`)
+      button.className = "btn btn-secondary";
+      button.disabled = true;
 
       var correct = true;
       var ans
       for(ans in answers){
-          if(options[ans].checked !== true | options[ans].checked !== "true"){
+          if(options[ans].checked !== "true" | options[ans].checked !== true){
             correct =  false;
             break;
           }
@@ -299,14 +310,13 @@ class Quiz extends Component {
   render() {
     if(this.state.loading === true & submit === true){
       console.log('in render set quiz condition');
-      this.setQuiz();
-      submit = false;
+      this.getSubmitted();
       return (<div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>);
     }
 
-    // await this.setQuiz();
+    this.setQuiz();
 
     return (<div className="row" id="questions">{questions}
     </div>);
