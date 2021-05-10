@@ -284,9 +284,9 @@ class Quiz extends Component {
 
       var info = document.getElementById("Sub"+ind);
       if(correct === true){
-        ReactDOM.render((<p className="text-success">Correct</p>),info);
+        ReactDOM.render((<p className="text-success fw-bolder">Correct</p>),info);
       }else{
-        ReactDOM.render((<p className="text-danger">Incorrect</p>),info);
+        ReactDOM.render((<p className="text-danger fw-bolder">Incorrect</p>),info);
       }
 
       this.postToDB(options,correct);
