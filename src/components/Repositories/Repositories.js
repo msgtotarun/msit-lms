@@ -96,20 +96,16 @@ class Repositories extends Component {
         <div class='card mb-3 customcard'>
           <div class='col-md-8'>
             <div class='card-body'>
-              <div class='input-group mb-3'>
-                <h3 className='text-center '>
-                  Authorize this acccount to access your github account
-                </h3>
-                <br></br>
-                <a
-                  class='link-primary'
+              <div class='input-group mb-3 position-relative'>
+                <button
+                  class='btn btn-primary position-absolute top-50 start-50 translate-middle'
                   onClick={() => {
                     window.location =
                       "https://github.com/login/oauth/authorize?client_id=" +
                       clientID;
                   }}>
                   Authorize
-                </a>
+                </button>
               </div>
             </div>
           </div>
