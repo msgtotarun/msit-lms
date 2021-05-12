@@ -207,7 +207,7 @@ class Quiz extends Component {
 
   }
 
-  postToDB(options,correct){
+  postToDB(options,correct,ind){
 
     var qid = "";
     options = options.map((opt) => {
@@ -247,7 +247,15 @@ class Quiz extends Component {
       requestOptions
     )
       .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((result) => {
+        console.log(result);
+        var info = document.getElementById("Sub"+ind);
+      if(correct === true){
+        ReactDOM.render((<p className="text-success fw-bolder">Correct</p>),info);
+      }else{
+        ReactDOM.render((<p className="text-danger fw-bolder">Incorrect</p>),info);
+      }
+      })
       .catch((error) => console.log("error", error));
   }
 
@@ -265,31 +273,34 @@ class Quiz extends Component {
           element.disabled = true;
       });
 
-      var button = document.getElementById(`Btn${ind}`)
-      button.className = "btn btn-secondary";
-      button.disabled = true;
+      console.log('answer indicies array =');
+      console.log(answers);
+
+      var button = document.getElementById(`Btn${ind}`);
+      button.outerHTML = "";
+      // button.className = "btn btn-secondary";
+      // button.disabled = true;
 
       var correct = true;
       var ans
       for(ans in answers){
-          if(options[ans].checked !== "true" | options[ans].checked !== true){
+          console.log('each answer index = ',ans);
+          console.log('answer not checked = ',(options[ans].checked !== true));
+          if(options[ans].checked !== true){
             correct =  false;
             break;
           }
       }
 
+      console.log('correctness after checking =',correct);
+
       // answers = answers.filter(ans => {
       //     return (options[ans].checked === true | options[ans].checked === "true");
       // });
 
-      var info = document.getElementById("Sub"+ind);
-      if(correct === true){
-        ReactDOM.render((<p className="text-success fw-bolder">Correct</p>),info);
-      }else{
-        ReactDOM.render((<p className="text-danger fw-bolder">Incorrect</p>),info);
-      }
+      
 
-      this.postToDB(options,correct);
+      this.postToDB(options,correct,ind);
 
     // questions = document.getElementById('content').innerHTML;
     // console.log('question after getting inner html');
