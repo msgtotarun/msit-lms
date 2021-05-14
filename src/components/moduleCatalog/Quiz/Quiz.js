@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import { withRouter } from "react-router-dom";
 import dompurify from "dompurify";
 import './Quiz.css';
 
@@ -334,4 +335,4 @@ class Quiz extends Component {
   }
 }
 
-export default Quiz;
+export default withRouter(Quiz);
