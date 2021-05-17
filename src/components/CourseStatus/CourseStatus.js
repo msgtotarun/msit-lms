@@ -275,8 +275,6 @@ class CourseStatus extends Component {
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
-            images = (<div className="container">images</div>);
-            tables = (<div className="container">tables</div>);
             ReactDOM.render(images,document.getElementById("Images"));
             ReactDOM.render(tables,document.getElementById("Tables"));
           
