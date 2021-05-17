@@ -275,6 +275,8 @@ class CourseStatus extends Component {
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
+            images = (<div className="container">images</div>);
+            tables = (<div className="container">tables</div>);
             ReactDOM.render(images,document.getElementById("Images"));
             ReactDOM.render(tables,document.getElementById("Tables"));
           
@@ -409,14 +411,20 @@ class CourseStatus extends Component {
     }
     loading = true;
     var card = this.card();
-    return (<div className="container">
+    return (<div className="container con-adjust">
             <NavBar></NavBar>
             <div className="row">
             {card}
             </div>
-    <div className="row">
-    <div id="Images" className="col"></div>
-    <div id="Tables" className="col"></div>
+    <div className="row row-adjust">
+    <div className="col">
+      <div id="Images" className="overflow-scroll flow-adjust">
+      </div>
+    </div>
+    <div className="col">
+      <div id="Tables" className="overflow-scroll flow-adjust">
+      </div>
+    </div>
     </div>
   </div>);
   }

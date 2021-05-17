@@ -9,3 +9,21 @@
 thead{
     background-color: blueviolet;
 }
+
+.row-adjust {
+    width: 100%;
+    height: -webkit-fill-available;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.con-adjust {
+    margin-left: 0;
+    margin-right: 0;
+    /* height: -webkit-fill-available; */
+    display: contents;
+}
+
+.flow-adjust{
+    height: 100%;
+}
