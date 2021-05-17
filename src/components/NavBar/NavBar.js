@@ -13,7 +13,7 @@ class NavBar extends Component {
       <nav className='navbar fixed-top navbar-expand-sm navbar-colour navbar-dark '>
         <div className='container-fluid'>
           <Link className='navbar-brand' to={home}>
-            LMS
+          <i class="bi bi-house"></i>
           </Link>
           {/* <Link className ="navbar-brand" to='/' >LMS</Link> */}
           <button
@@ -31,18 +31,18 @@ class NavBar extends Component {
               <ul className='navbar-nav me-auto mb-lg-0'>
                 <li className='nav-item'>
                   <Link className='nav-link active' to='/Credits'>
-                    Credits
+                  <i class="bi bi-people"></i> Credits
                   </Link>
                 </li>
               </ul>
               <ul className='navbar-nav ms-auto'>
                 <li className='nav-item'>
                   <Link className='nav-link active' to='/CourseStatus'>
-                    Course status
+                  <i class="bi bi-award"></i> Progress
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link active' to={profile}>{userName}</Link>
+                  <Link className='nav-link active' to={profile}><i class="bi bi-person-circle"></i></Link>
                 </li>
                 <li className='nav-item'>
                   <Link
@@ -51,7 +51,7 @@ class NavBar extends Component {
                       localStorage.clear();
                       window.location.replace("/");
                     }}>
-                    Logout
+                    <i class="bi bi-box-arrow-right"></i>
                   </Link>
                 </li>
               </ul>
