@@ -7,6 +7,7 @@ import pageNotFound from './Pages/pageNotFound'
 import test from './Pages/t'
 import Credits from './components/credits/credits'
 import CourseStatus from './components/CourseStatus/CourseStatus'
+import forgotPassword from './components/forgotPassword/forgotPassword'
 import Profile from './components/profile/profile'
 
 const Routes = () => {
@@ -24,6 +25,7 @@ const Routes = () => {
       <Route exact path='/modulesCatalog/:programId/:courseId/:courseInstanceId' component={moduleCatalog}></Route>
       <Route exact path='/test' component={test}></Route>
       <Route exact path='/CourseStatus' component={CourseStatus}></Route>
+      <Route exact path='/forgotPassword' component={forgotPassword}></Route>
       <Route path='*' exact={true} component={pageNotFound} />
     </Switch>
   );
