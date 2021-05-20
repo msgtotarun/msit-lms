@@ -165,7 +165,7 @@ class Login extends Component {
                   <div className='errorMsg'>{this.state.errors.password}</div>
                   <div className='mt-4'>
                     <div className='d-flex justify-content-center links'>
-                      <Link to='#'> Forgot your password ? </Link>
+                      <Link to='/forgotPassword'> Forgot your password ? </Link>
                     </div>
                   </div>
                   <div className='d-flex justify-content-center mt-3 login_container'>
