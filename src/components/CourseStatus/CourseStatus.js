@@ -1,46 +1,75 @@
 import React, { Component } from "react";
 import NavBar from "../NavBar/NavBar";
-import { withRouter } from "react-router-dom";
+import ReactDOM from "react-dom";
+import "./CourseStatus.css";
 
-var programSelect = [];
-var courseSelect = [];
-var view = "Program";
-const token = localStorage.getItem("token");
-const userID = localStorage.getItem("id");
-
+var pid = "";
+var cid = "";
+var ptitle = "Select Program";
+var ctitle = "Select Course";
+var loading = true;
+var load = (
+  <div class='spinner-border' role='status'>
+    <span class='visually-hidden'>Loading...</span>
+  </div>
+);
 class CourseStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      programId: "",
-      courseId: "",
-      programList: null,
-      loading: false,
-      courseList: null,
+      plist: [],
+      clist: [],
+      cselect: "",
     };
   }
-  componentDidMount() {
-    console.log("inside cdm");
 
-    if (token === undefined) {
-      return;
-    }
-
-    this.getRenderList(userID, token);
-    // this.setLayout();
+  componentWillMount() {
+    this.chartAuthorize();
+    // setInterval(this.chartAuthorize, 100000);
   }
 
-  getRenderList(userID, token) {
-    console.log("inside get render list");
-    this.getPrograms(userID, token);
+  componentWillUnmount() {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch(`${process.env.REACT_APP_API_URL2}/deauth`, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   }
 
-  async getPrograms(userID, token) {
-    // example code
-    token = localStorage.getItem("token");
-    userID = localStorage.getItem("id");
+  async chartAuthorize() {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch(
+      process.env.REACT_APP_API_URL2 +
+        `/auth/${localStorage.getItem("id")}/${localStorage.getItem("token")}`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        result = JSON.parse(result);
+        console.log(result);
+        if (result["state"] === "Invalid") {
+          throw "Invalid credentials";
+        }
+        this.getPrograms();
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }
+
+  getPrograms() {
+    var token = localStorage.getItem("token");
+    var userID = localStorage.getItem("id");
     console.log(process.env.REACT_APP_APIBASE_URL);
-    await fetch(
+    fetch(
       process.env.REACT_APP_APIBASE_URL +
         "/api/program/get/enrolled_programs/" +
         userID +
@@ -52,218 +81,453 @@ class CourseStatus extends Component {
         var json = JSON.parse(result);
         // json = json[0]['enrollments'];
         console.log("get programs api fetched");
-
+        console.log(json[0]["enrollments"]);
+        // console.log(json);
         if (json[0]["enrollments"][0]["programID"] !== null) {
           // console.log(json[0]["enrollments"]);
-          this.setState({ programList: json[0]["enrollments"] });
+          // this.setCourse(json[0]['enrollments'])
+          loading = false;
+          this.setState({ plist: json[0]["enrollments"] });
         }
       })
       .catch((error) => {
         console.log("error", error);
-        this.setState({ loading: true });
+        loading = false;
       });
   }
 
-  async getCourses(programid) {
+  // setCourse(progs){
+
+  // }
+
+  getCourses() {
+    // program = document.getElementById("programs");
+    // var programID = program.options[program.selectedIndex].value;
+    var token = localStorage.getItem("token");
+    var userID = localStorage.getItem("id");
+    var program = document.getElementById("program");
+
+    pid = program.options[program.selectedIndex].value;
+    ptitle = program.options[program.selectedIndex].text;
+
+    if ((ptitle === "Select Program") | (ptitle === "No programs to display")) {
+      alert("selected program is not a valid program");
+      return;
+    }
+
+    // programID = localStorage.getItem("program");
+    // programID = this.props.match.params.programId
+    console.log("pid =", pid, "ptitle =", ptitle);
     console.log(
-      `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${this.state.programid}/?token=${token}`
+      `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${pid}/?token=${token}`
     );
     fetch(
       process.env.REACT_APP_APIBASE_URL +
         "/api/course/get/courseinfo/" +
         userID +
         "/" +
-        programid +
+        pid +
         "/?token=" +
         token
     )
       .then((response) => response.text())
       .then((result) => {
-        // console.log(`course result = ${result}`);
+        console.log(`course result =`);
+        console.log(result);
         var json = JSON.parse(result);
-        // filtering isLive objects
-        if (json["courses"][0]["courseID"] !== null) {
+        // json = json[0]['enrollments'];
+        console.log("course data");
+        console.log(json);
+
+        if (json["courses"].length !== 0) {
+          json["courses"] = json["courses"].map((course) => {
+            course["courseInstances"] = course["courseInstances"].filter(
+              (obj) => {
+                return obj["isLive"] === true;
+              }
+            );
+
+            // console.log('mapped course =');
+            // console.log(course)
+            return course;
+          });
+
           json["courses"] = json["courses"].filter((obj) => {
-            return obj["courseInstances"][0]["isLive"] === true;
+            // console.log('filtering courses =');
+            // console.log(obj)
+            // console.log('course instance details =');
+            // console.log(obj['courseInstances']);
+            return obj["courseInstances"].length !== 0;
           });
-          // console.log("before setstate");
-          this.setState({ courseList: json["courses"] }, () => {
-            console.log("course list state updated");
-            console.log("courselist", this.state.courseList);
-          });
+
+          loading = false;
+          this.setState({ clist: json["courses"], cselect: pid });
+        } else {
+          loading = false;
+          var info = [
+            {
+              _id: "1",
+              courseInstances: "No active courses in this program",
+              courseID: { courseName: "No active courses in this program" },
+            },
+          ];
+          this.setState({ clist: info, cselect: pid });
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+      });
   }
-  nodata() {
-    return (
-      <div className='nodata container mt-5'>
-        <NavBar />
-        <div class='alert alert-dark' role='alert'>
-          <h4 class='alert-heading'>No {view} to display</h4>
-          <p>You are not enrolled in any programs</p>
-          <hr></hr>
-          <p class='mb-0'>
-            Kindly, contact your mentor to enroll into programs.
-          </p>
-        </div>
-      </div>
-    );
-  }
-  getData(program, isprogram) {
-    // console.log("fetched data from api");
-    // console.log(program);
-    var [ID, Title] = [null, null];
-    if (isprogram) {
-      ID = program["programID"]["_id"];
-      Title = program["programID"]["programName"];
-    } else {
-      ID = program["courseInstances"][0]["_id"];
-      Title = program["courseID"]["courseName"];
+
+  charts() {
+    // document.getElementById("Images").innerHTML = "";
+    // document.getElementById("Tables").innerHTML = "";
+    var program = document.getElementById("program");
+    pid = program.options[program.selectedIndex].value;
+    ptitle = program.options[program.selectedIndex].text;
+
+    if ((ptitle === "Select Program") | (ptitle === "No programs to display")) {
+      alert("selected program is not a valid program");
+      return;
     }
-    return [ID, Title];
-  }
-  setData(program) {
-    var ret = null;
-    if (!this.state.programList) {
-      // console.log();
-      if (this.state.loading) {
-        ret = this.nodata();
+
+    var PTitle = ptitle.split(" ").join("zzz");
+    if (this.state.cselect === "") {
+      // ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load, document.getElementById("Tables"));
+
+      var requestOptions = {
+        method: "POST",
+        redirect: "follow",
+      };
+
+      // var PTitle = ptitle.replace(" ", "zzz");
+      console.log(
+        "prog charts api =",
+        `${process.env.REACT_APP_API_URL2}/program/activityscore/${PTitle}`
+      );
+      fetch(
+        `${process.env.REACT_APP_API_URL2}/program/activityscore/${PTitle}`,
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => {
+          console.log(result);
+          result = JSON.parse(result);
+          var images = result[0];
+
+          // var img_keys = ["pie","area","bar","scatter"];
+          // images = img_keys.map(img => {
+          //   var value = images[img];
+          //   value = `data:image/png;base64,${value}`;
+          //   return <img className='flow-image' src={value} alt={img} />
+          // });
+
+          var tables = result[1];
+          var tab_keys = [
+            "coursetable",
+            "programtable",
+            "pietable",
+            "bartable",
+            "scattertable",
+          ];
+          tables = tab_keys.map((tab) => {
+            var value = tables[tab];
+            return (
+              <div
+                className='row'
+                dangerouslySetInnerHTML={{ __html: value }}
+              />
+            );
+          });
+          loading = false;
+          // ReactDOM.render(images,document.getElementById("Images"));
+          ReactDOM.render(tables, document.getElementById("Tables"));
+        })
+        .catch((error) => console.log("error", error));
+    } else {
+      var program = document.getElementById("subselect");
+      if (program === null) {
+        alert("select a course to proceed");
+        return;
       }
-    }
-    //  console.log("select program",programSelect);
-    else if (program && programSelect.length === 0) {
-      // console.log("select program",programSelect);
-      programSelect = this.setDropDown(this.state.programList, true);
-      //  console.log("programSelect",programSelect);
-    }
+      var cid = program.options[program.selectedIndex].value;
+      var ctitle = program.options[program.selectedIndex].text;
 
-    return ret;
+      if (
+        (ctitle === "Select Course") |
+        (ctitle === "No active courses in this program")
+      ) {
+        alert("select a valid course");
+        return;
+      }
+
+      console.log("cid =", cid, "ctitle =", ctitle);
+
+      // ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load, document.getElementById("Tables"));
+
+      // document.getElementById("course").disabled = true;
+
+      var requestOptions = {
+        method: "POST",
+        redirect: "follow",
+      };
+      // var PTitle = ptitle.replace(" ", "zzz");
+      var CTitle = ctitle.split(" ").join("zzz");
+      let token = localStorage.getItem("token");
+      console.log(
+        "prog charts api =",
+        `${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}/${token}`
+      );
+      fetch(
+        `${process.env.REACT_APP_API_URL2}/course/activityscore/${PTitle}/${CTitle}/${cid}/${token}`,
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => {
+          console.log(result);
+          result = JSON.parse(result);
+          var images = result[0];
+
+          // var img_keys = ["pie","area","bar","scatter"];
+          // images = img_keys.map(img => {
+          //   var value = images[img];
+          //   value = `data:image/png;base64,${value}`;
+          //   return <img className='flow-image' src={value} alt={img} />
+          // });
+
+          var tables = result[1];
+          var tab_keys = [
+            "coursetable",
+            "moduletable",
+            "pietable",
+            "bartable",
+            "scattertable",
+          ];
+          tables = tab_keys.map((tab) => {
+            var value = tables[tab];
+            return (
+              <div
+                className='row'
+                dangerouslySetInnerHTML={{ __html: value }}
+              />
+            );
+          });
+          loading = false;
+          // ReactDOM.render(images,document.getElementById("Images"));
+          ReactDOM.render(tables, document.getElementById("Tables"));
+        })
+        .catch((error) => console.log("error", error));
+    }
   }
-  setDropDown(List, isProgram) {
-    console.log("list:", List);
-    let Li = (props) => {
-      //  console.log(props.Id);
-      return <option value={props.Id}>{props.title}</option>;
-    };
-    if (isProgram) {
-      List = List.map((program) => {
-        var [ID, Title] = this.getData(program, true);
-        // console.log("Title:",Title);
 
-        return <Li key={ID} title={Title} Id={ID}></Li>;
-      });
+  handleChange() {
+    var program = document.getElementById("course");
+    var subcid = program.options[program.selectedIndex].value;
+    var subctitle = program.options[program.selectedIndex].text;
+
+    if (
+      (subctitle === "Select Course") |
+      (subctitle === "No active courses in this program")
+    ) {
+      alert("select a valid course");
+      return;
+    }
+
+    subcid = JSON.parse(subcid);
+    // console.log("subcid =",subcid)
+    var subcourses = subcid.map((obj, ind, arr) => {
+      console.log("obj =", obj);
+      if (ind === 0) {
+        return (
+          <option defaultValue={obj["_id"]} value={obj["_id"]} key={obj["_id"]}>
+            {obj["courseInstanceLabel"]}
+          </option>
+        );
+      }
+      return (
+        <option value={obj["_id"]} key={obj["_id"]}>
+          {obj["courseInstanceLabel"]}
+        </option>
+      );
+    });
+
+    subcid = (
+      <select id='subselect' className='form-select'>
+        {subcourses}
+      </select>
+    );
+    ReactDOM.render(subcid, document.getElementById("subcourse"));
+  }
+
+  card() {
+    console.log(
+      `cselect print = ${this.state.cselect} card pid print = ${pid}`
+    );
+    loading = true;
+    var list = this.state.plist;
+    // list = list.filter((obj) => {
+    //       return obj["programID"]["_id"] !== pid
+    //     });
+
+    // console.log("list after program filter");
+    // console.log(list);
+    if (list.length === 0) {
+      list = (
+        <option value='No programs to display'>No programs to display</option>
+      );
     } else {
-      List = List?.map((course) => {
-        var [ID, Title] = this.getData(course, false);
-        console.log("Title:", Title);
-
-        return <Li key={ID} title={Title} Id={ID}></Li>;
+      list = list.map((program) => {
+        return (
+          <option
+            value={program["programID"]["_id"]}
+            key={program["programID"]["_id"]}>
+            {program["programID"]["programName"]}
+          </option>
+        );
       });
     }
-    return List;
+
+    console.log("list after program map");
+    console.log(list);
+
+    if (this.state.cselect === "") {
+      return (
+        <div className='col'>
+          <div id='selection' class='card-body position-relative'>
+            <div class='row gx-5'>
+              <div class='col-sm'>
+                <select id='program' class='form-select' aria-label={ptitle}>
+                  <option defaultValue={pid}>{ptitle}</option>
+                  {list}
+                </select>
+              </div>
+              <div class='col-sm'>
+                <button
+                  type='button'
+                  class='btn btn-primary'
+                  onClick={() => {
+                    this.getCourses();
+                  }}>
+                  Select Course
+                </button>
+              </div>
+              <div class='col-sm'>
+                <button
+                  type='button'
+                  class='btn btn-primary'
+                  onClick={() => {
+                    this.charts();
+                  }}>
+                  Enter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (this.state.cselect === pid) {
+      var clist = this.state.clist;
+      console.log("course list  = ");
+      console.log(clist);
+      if (clist.length !== 0) {
+        clist = clist.map((program) => {
+          console.log("course instances =", program["courseInstances"]);
+          return (
+            <option
+              value={JSON.stringify(program["courseInstances"])}
+              key={program["_id"]}>
+              {program["courseID"]["courseName"]}
+            </option>
+          );
+        });
+      } else {
+        clist = <option>No active courses in this program</option>;
+      }
+
+      return (
+        <div className='col'>
+          <div class='card-body position-relative'>
+            <div class='row gx-5'>
+              <div class='col-sm'>
+                <select
+                  id='program'
+                  class='form-select'
+                  aria-label={ptitle}
+                  disabled>
+                  <option defaultValue={pid}>{ptitle}</option>
+                  {list}
+                </select>
+              </div>
+              <div class='col-sm'>
+                <select
+                  id='course'
+                  class='form-select'
+                  aria-label='Select Course'
+                  onChange={this.handleChange}>
+                  <option defaultValue={cid}>{ctitle}</option>
+                  {clist}
+                </select>
+              </div>
+              <div id='subcourse' className='col-sm'></div>
+              <div class='col-sm'>
+                <button
+                  type='button'
+                  class='btn btn-primary'
+                  onClick={() => {
+                    ReactDOM.render("", document.getElementById("subcourse"));
+                    pid = "Select Program";
+                    ptitle = "Select Program";
+                    this.setState({ cselect: "" });
+                    ctitle = "Select Course";
+                    cid = ctitle;
+                    loading = false;
+                  }}>
+                  Back
+                </button>
+              </div>
+              <div class='col-sm'>
+                <button
+                  type='button'
+                  class='btn btn-primary'
+                  onClick={() => {
+                    this.charts();
+                  }}>
+                  Enter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
   }
 
   render() {
-    // var ret = null;
-    var user = localStorage.getItem("token");
-    // console.log(`render list =`);
-    // console.log(this.state.list);
-    user ??
-      this.props.history.push({
-        pathname: "/",
-      });
-
-    var data = this.setData(true);
-    if (data !== null) {
-      return data;
-    }
-
-    let programSelectData = (
-      <div>
-        <NavBar />
-        <select
-          value={this.state.programId}
-          class='form-select form-select-sm program select'
-          aria-label='.form-select-sm example'
-          disabled={this.state.programId}
-          onChange={(e) => {
-            this.setState({ programId: e.target.value }, () => {
-              if (this.state.programId !== "") {
-                if (!this.state.courseList) {
-                  // this.setState({loading:false}) ;
-                  this.getCourses(this.state.programId);
-                  console.log("courselist in render", this.state.courseList);
-                }
-              }
-            });
-          }}>
-          <option>Select Your Program</option>
-          {programSelect}
-        </select>
-      </div>
-    );
-
-    // var coursedata = this.courseSelectData;
-
-    // console.log("coursedata:",courseList);
-    if (this.state.courseList) {
-      courseSelect = this.setDropDown(this.state.courseList, false);
-      var courseSelectData = "";
-      if (courseSelect?.length > 0) {
-        courseSelectData = (
-          <div>
-            <select
-              value={this.state.courseId}
-              disabled={this.state.courseId}
-              class='form-select form-select-sm courseselect'
-              aria-label='.form-select-sm course'
-              onChange={(e) => {
-                this.setState({ courseId: e.target.value });
-              }}>
-              <option>Select Your Course</option>
-              {courseSelect}
-            </select>
+    if (loading) {
+      console.log("in render loading");
+      return (
+        <div className='container'>
+          <NavBar></NavBar>
+          <div class='spinner-border' role='status'>
+            <span class='visually-hidden'>Loading...</span>
           </div>
-        );
-      } else {
-        alert("no Course found");
-      }
+        </div>
+      );
     }
+    loading = true;
+    var card = this.card();
     return (
-      <div>
-        {programSelectData}
-        {courseSelectData}
-        {this.state.programId && (
-          <div>
-            <button
-              type='submit'
-              class='btn btn-xs btn-default'
-              onClick={() => {
-                courseSelect = "";
-                if (this.state.courseId) {
-                  this.setState({
-                    courseId: "",
-                  });
-                } else
-                  this.setState({
-                    programId: "",
-                    courseId: "",
-                    courseList: null,
-                  });
-              }}>
-              Back
-            </button>
-            {this.state.courseId && (
-              <button type='submit' class='btn btn-xs btn-default'>
-                Enter
-              </button>
-            )}
-          </div>
-        )}
+      <div className='container'>
+        <NavBar></NavBar>
+        <div className='row'>{card}</div>
+        <div className='row'>
+          <div id='Tables' className='col'></div>
+        </div>
       </div>
     );
   }
 }
 
-export default withRouter(CourseStatus);
+export default CourseStatus;

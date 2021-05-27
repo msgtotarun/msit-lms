@@ -6,17 +6,20 @@ import SideBar from "./sideBar";
 import dompurify from "dompurify";
 import "./moduleCatalog.css";
 import { ReactVideo, YoutubePlayer } from "reactjs-media";
+import Submission from "./submission";
 
 var dropDownItems = "";
 var moduleDescription;
-let courseInstanceId,
-  programId,
-  courseId,
-  activityId,
-  questionId,
-  moduleId,
-  maxMarks,
-  activityType;
+var moduleData = {
+  courseInstanceId: "",
+  programId: "",
+  courseId: "",
+  activityId: "",
+  questionId: "",
+  moduleId: "",
+  maxMarks: "",
+  activityType: "",
+};
 
 class moduleCatalog extends Component {
   constructor(props) {
@@ -28,17 +31,17 @@ class moduleCatalog extends Component {
     this.setModuleDesc = this.setModuleDesc.bind(this);
     this.setSubModuleDesciption = this.setSubModuleDesciption.bind(this);
     // this.state.submission = this.submission.bind(this);
-    this.submitNow = this.submitNow.bind(this);
+    // this.submitNow = this.submitNow.bind(this);
   }
 
   componentDidMount() {
     var token = localStorage.getItem("token");
-    courseInstanceId = this.props.match.params.courseInstanceId;
-    courseId = this.props.match.params.courseId;
-    programId = this.props.match.params.programId;
-    console.log(courseId, programId);
+    moduleData.courseInstanceId = this.props.match.params.courseInstanceId;
+    moduleData.courseId = this.props.match.params.courseId;
+    moduleData.programId = this.props.match.params.programId;
+    console.log(moduleData.courseId, moduleData.programId);
 
-    let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${courseInstanceId}/?token=${token}`;
+    let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${moduleData.courseInstanceId}/?token=${token}`;
     console.log(link);
     fetch(link, {
       method: "get",
@@ -75,7 +78,7 @@ class moduleCatalog extends Component {
   }
 
   setSubModuleDesciption(Id, descript) {
-    moduleId = Id;
+    moduleData.moduleId = Id;
     descript = JSON.parse(descript);
     // console.log(descript);
     var description = descript["activity_json"];
@@ -87,10 +90,9 @@ class moduleCatalog extends Component {
     );
     if (description[0]["activityType"] === "quiz") {
       description = JSON.stringify(description);
-      moduleDescription = <Quiz mid={moduleId}>{description}</Quiz>;
+      moduleDescription = <Quiz mid={moduleData.moduleId}>{description}</Quiz>;
     } else if (description[0]["activityType"] === "assignment") {
-      console.log("in assignment case");
-      activityId = descript["activity_id"];
+      moduleData.activityId = descript["activity_id"];
       var html = "<div>";
       description.forEach((desc) => {
         console.log(desc);
@@ -98,10 +100,10 @@ class moduleCatalog extends Component {
         if (desc["text"] !== undefined) {
           html = html + desc["text"];
         } else if (desc["questions"]?.[0]) {
-          questionId = desc["questions"][0]["question_id"];
-          activityType = desc["activityType"];
-          console.log("qsId", questionId);
-          maxMarks = desc["questions"][0]["max_marks"];
+          moduleData.questionId = desc["questions"][0]["question_id"];
+          moduleData.activityType = desc["activityType"];
+          console.log("qsId", moduleData.questionId);
+          moduleData.maxMarks = desc["questions"][0]["max_marks"];
           html =
             html +
             desc["questions"][0]["questionText"][0]["text"] +
@@ -120,13 +122,12 @@ class moduleCatalog extends Component {
               __html: dompurify.sanitize(html),
             }}
           />
-          <div>{this.submission()}</div>
         </div>
       );
       // console.log("submod,:", moduleDescription);
     } else if (description[0]["activityType"] === "notes") {
       console.log("notes");
-      activityId = descript["activity_id"];
+      moduleData.activityId = descript["activity_id"];
       html = "<div>";
       description.forEach((desc) => {
         console.log(desc);
@@ -151,7 +152,7 @@ class moduleCatalog extends Component {
       description[0]["activityType"] === "video"
     ) {
       console.log("youtube vedio");
-      activityId = descript["activity_id"];
+      moduleData.activityId = descript["activity_id"];
       html = "<div>";
       description.forEach((desc) => {
         console.log(desc);
@@ -192,7 +193,7 @@ class moduleCatalog extends Component {
               <div className='player-wrapper'>
                 <ReactVideo
                   src={vedio} // Reqiured
-                  width={650}
+                  width={450}
                   height={600}
                   primaryColor='red'
                   type='video/mp4'
@@ -205,84 +206,6 @@ class moduleCatalog extends Component {
       });
     }
     this.setState({ loading: false });
-  }
-  async checkPreviousSubmission() {
-    var requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
-    await fetch(
-      `${
-        process.env.REACT_APP_APIBASE_URL
-      }/api/activityresponse/latest/${localStorage.getItem(
-        "id"
-      )}/${programId}/${courseId}/${courseInstanceId}/${moduleId}/${activityId}/${questionId}?token=${localStorage.getItem(
-        "token"
-      )}`,
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  }
-  submission() {
-    if (activityType === "assignment") {
-      let check = this.checkPreviousSubmission;
-      let submitLink = (
-        <div className='submission'>
-          <form autoComplete='off'>
-            <input
-              className='submitBox'
-              type='text'
-              name='submitLink'
-              id='submitLink'
-              placeholder='paste your submission link here'
-            />
-            <button id='link-submit' type='button' onClick={this.submitNow}>
-              submit
-            </button>
-          </form>
-        </div>
-      );
-      return submitLink;
-    } else return "";
-  }
-  async submitNow() {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({
-      programId: programId,
-      courseInstanceId: courseInstanceId,
-      courseId: courseId,
-      moduleId: moduleId,
-      activityType: activityType,
-      activityId: activityId,
-      questionId: questionId,
-      response: {
-        assignment: document.getElementById("submitLink").value,
-      },
-      maxMarks: maxMarks,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    await fetch(
-      `${
-        process.env.REACT_APP_APIBASE_URL
-      }/api/activityresponse/insert/?token=${localStorage.getItem("token")}`,
-      requestOptions
-    )
-      .then((response) => {
-        response.text();
-        activityType = "";
-      })
-      .catch((error) => console.log("error", error));
   }
 
   setModuleDesc(mod) {
@@ -316,7 +239,12 @@ class moduleCatalog extends Component {
             {dropDownItems}
           </div>
         </aside>
-        <main id='content'>{moduleDescription}</main>
+        <main id='content'>
+          {moduleDescription}
+          <div>
+            <Submission data={JSON.stringify(moduleData)}></Submission>
+          </div>
+        </main>
       </div>
     );
   }
