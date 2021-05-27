@@ -122,6 +122,9 @@ class moduleCatalog extends Component {
               __html: dompurify.sanitize(html),
             }}
           />
+          <Submission
+            key={moduleData.questionId}
+            data={JSON.stringify(moduleData)}></Submission>
         </div>
       );
       // console.log("submod,:", moduleDescription);
@@ -231,6 +234,7 @@ class moduleCatalog extends Component {
     }
 
     this.SetSideBar(this.state.list);
+    console.log(moduleData.questionId);
     return (
       <div>
         <NavBar></NavBar>
@@ -241,9 +245,7 @@ class moduleCatalog extends Component {
         </aside>
         <main id='content'>
           {moduleDescription}
-          <div>
-            <Submission data={JSON.stringify(moduleData)}></Submission>
-          </div>
+          <div></div>
         </main>
       </div>
     );
