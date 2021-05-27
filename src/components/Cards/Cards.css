@@ -19,3 +19,8 @@
   color: "red";
   background-color: "DodgerBlue";
 }
+.title {
+  margin-top: 6%;
+  text-align: center;
+  font-weight: bold;
+}
