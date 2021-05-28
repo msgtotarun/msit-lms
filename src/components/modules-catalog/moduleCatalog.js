@@ -34,7 +34,7 @@ class moduleCatalog extends Component {
     // this.submitNow = this.submitNow.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     var token = localStorage.getItem("token");
     moduleData.courseInstanceId = this.props.match.params.courseInstanceId;
     moduleData.courseId = this.props.match.params.courseId;
@@ -82,17 +82,17 @@ class moduleCatalog extends Component {
     descript = JSON.parse(descript);
     // console.log(descript);
     var description = descript["activity_json"];
+    moduleData.activityId = descript["activity_id"];
     console.log(description);
-    console.log(
-      `switch assignment condition ${
-        description[0]["activityType"] === "assignment"
-      }`
-    );
+
     if (description[0]["activityType"] === "quiz") {
       description = JSON.stringify(description);
-      moduleDescription = <Quiz mid={moduleData.moduleId}>{description}</Quiz>;
+      moduleDescription = (
+        <Quiz key={moduleData.activityId} data={moduleData}>
+          {description}
+        </Quiz>
+      );
     } else if (description[0]["activityType"] === "assignment") {
-      moduleData.activityId = descript["activity_id"];
       var html = "<div>";
       description.forEach((desc) => {
         console.log(desc);
@@ -124,7 +124,7 @@ class moduleCatalog extends Component {
           />
           <Submission
             key={moduleData.questionId}
-            data={JSON.stringify(moduleData)}></Submission>
+            data={moduleData}></Submission>
         </div>
       );
       // console.log("submod,:", moduleDescription);

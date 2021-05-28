@@ -8,7 +8,7 @@ import CourseStatus from "./components/CourseStatus/CourseStatus.js";
 import test from "./Pages/t";
 import profile from "./components/profile/profile";
 import credits from "./components/credits/credits";
-
+import forgotPassword from "./components/forgotPassword/forgotPassword";
 const Routes = () => {
   return (
     <Switch>
@@ -33,6 +33,7 @@ const Routes = () => {
       <Route exact path='/credits' component={credits}></Route>
       <Route exact path='/test' component={test}></Route>
       <Route exact path='/CourseStatus' component={CourseStatus}></Route>
+      <Route exact path='/forgotPassword' component={forgotPassword}></Route>
       <Route path='*' exact={true} component={pageNotFound} />
     </Switch>
   );

@@ -3,31 +3,30 @@ import ReactDOM from "react-dom";
 import dompurify from "dompurify";
 import "./Quiz.css";
 
-var questions = "";
-var size = 0;
-let qsize = 0;
-var submit = true;
-
+var questions, size, qsize, submit, contents;
 class Quiz extends Component {
   constructor(props) {
     super(props);
+    questions = "";
+    contents = [];
+    size = 0;
+    qsize = 0;
+    submit = true;
     this.state = {
       loading: true,
     };
     // this.child = React.createRef();
+    contents = JSON.parse(props.children);
+    console.log("content", contents);
+    contents = contents[0]["questions"];
+    qsize = contents.length;
     this.submission = this.submission.bind(this);
   }
 
-  // async componentDidMount(){
-  //   try{
-  //   await this.setQuiz();
-  //   }catch (err){
-  //     // this.setState({loading: false})
-  //     console.log(err)
-  //   }
-  // }
-
-  async getSubmitted(qid, item) {
+  async getSubmitted() {
+    console.log(`selected for index ${size} question = `);
+    console.log(contents[size]);
+    var qid = contents[size]["question_id"];
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -37,16 +36,18 @@ class Quiz extends Component {
       `${
         process.env.REACT_APP_APIBASE_URL
       }/api/activityresponse/latest/${localStorage.getItem("id")}/${
-        this.props.pid
-      }/${this.props.cid}/${this.props.cin}/${this.props.mid}/${
-        this.props.aid
-      }/${qid}?token=${localStorage.getItem("token")}`,
+        this.props.data.programId
+      }/${this.props.data.courseId}/${this.props.data.courseInstanceId}/${
+        this.props.data.moduleId
+      }/${this.props.data.activityId}/${qid}?token=${localStorage.getItem(
+        "token"
+      )}`,
       requestOptions
     )
-      .then((response) => response.text())
-      .then((result) => {
+      .then(async (response) => await response.text())
+      .then(async (result) => {
         console.log("result fetched in quiz api =", result);
-        result = JSON.parse(result);
+        result = await JSON.parse(result);
         if (
           (result["error"] !== undefined) &
           (result["error"] === "not found")
@@ -61,32 +62,34 @@ class Quiz extends Component {
           correct = result["error"];
         }
         json = result;
+        (correct !== null) | (correct !== undefined)
+          ? (correct = correct)
+          : (correct = "");
+        (json !== null) | (json !== undefined) ? (json = json) : (json = "");
+        contents[size]["correct"] = correct;
+        // contents[size] = Object.assign(contents[size],)
+        contents[size]["result"] = json;
+        if (size + 1 === qsize) {
+          this.setState({ loading: false });
+          submit = false;
+        } else {
+          size = size + 1;
+          this.setState({
+            loading: true,
+          });
+        }
       })
       .catch((error) => console.log("error", error));
-
-    console.log("correct in submitted =", correct);
-
-    var reached = false;
-    if (item === qsize) {
-      reached = true;
-    }
-
-    return [correct, reached, json];
   }
 
   async setQuiz() {
-    var contents = JSON.parse(this.props.children);
-    contents = contents[0];
-    size = 0;
-
     console.log("in quiz app contents = ");
     console.log(contents);
-    qsize = contents["questions"].length;
-    var correct, reached, json;
-    var content = await contents["questions"].map(async (con) => {
-      size = size + 1;
-      let question = `${size}) `;
-      con["questionText"].forEach((item, ind) => {
+    var correct, json;
+    var content = contents.map((con, qind) => {
+      qind = qind + 1;
+      let question = `${qind}) `;
+      con["questionText"].forEach((item) => {
         (item["text"] === null) | (item["text"] === undefined)
           ? (question =
               question +
@@ -97,146 +100,182 @@ class Quiz extends Component {
       });
       var op = 0;
       console.log("question id = ", con["question_id"]);
-      [correct, reached, json] = await this.getSubmitted(
-        con ?? ["question_id"],
-        size,
-        () => {
-          console.log("callback");
-        }
+      correct = con["correct"];
+      json = con["result"];
+      console.log(
+        `question id = ,${con["question_id"]}, correct = ${correct}, json = ${json}`
       );
-      console.log(`correct = ${correct}`);
 
-      //   let uniq = `QZ${size}`;
+      let uniq = `QZ${qind}`;
 
-      //   if ((correct === true) | (correct === false)) {
-      //     let options = json["response"]["choices"].map(async (opt) => {
-      //       op = op + 1;
-      //       let ouniq = `OPT${size}${op}`;
+      if ((correct === true) | (correct === false)) {
+        console.log("options if submitted");
+        console.log(con["options"]);
 
-      //       if (opt["selected"] === true) {
-      //         return (
-      //           <div key={ouniq} class='form-check'>
-      //             <input
-      //               className='form-check-input'
-      //               type='checkbox'
-      //               defaultChecked={true}
-      //               QID={con["question_id"]}
-      //               data={opt["option"]}
-      //               value={opt["selected"]}
-      //               disabled></input>
-      //             <label className='form-check-label' for='flexCheckDefault'>
-      //               {opt["option"]}
-      //             </label>
-      //           </div>
-      //         );
-      //       }
+        con["options"] = con["options"].filter((realOPT) => {
+          console.log("filter check = ");
+          console.log(realOPT["correct"]);
+          return realOPT["correct"] === true;
+        });
 
-      //       return (
-      //         <div key={ouniq} class='form-check'>
-      //           <input
-      //             className='form-check-input'
-      //             type='checkbox'
-      //             QID={con["question_id"]}
-      //             data={opt["option"]}
-      //             value={opt["selected"]}
-      //             disabled></input>
-      //           <label className='form-check-label' for='flexCheckDefault'>
-      //             {opt["option"]}
-      //           </label>
-      //         </div>
-      //       );
-      //     });
+        console.log("quizz after filter");
+        console.log(con["options"]);
 
-      //     var correctText, correctClass;
-      //     if (correct === true) {
-      //       correctText = "Correct";
-      //       correctClass = "text-success text-center";
-      //     } else {
-      //       correctText = "Incorrect";
-      //       correctClass = "text-danger text-center";
-      //     }
+        con["options"] = con["options"].map((realOPT) => {
+          return realOPT["option"];
+        });
+        // console.log("con[options]", con["options"]);
+        let options = json["response"]["choices"].map((opt) => {
+          op = op + 1;
+          let ouniq = `OPT${qind}${op}`;
+          var lclass = "form-check-label";
 
-      //     return (
-      //       <div key={uniq} className='card border-primary mb-3 custom-card'>
-      //         <div
-      //           className='card-header bg-transparent border-success'
-      //           dangerouslySetInnerHTML={{
-      //             __html: dompurify.sanitize(question),
-      //           }}
-      //         />
-      //         <div className='card-body' id={"Q" + size.toString()}>
-      //           {options}
-      //         </div>
-      //         <div
-      //           className='card-footer bg-transparent border-success'
-      //           id={"Sub" + size.toString()}>
-      //           <p className='text-start'>Score: {json["awardedMarks"]}</p>
-      //           <p className={correctClass}>{correctText}</p>
-      //           <p className='text-end'>submitted on {json["timestamp"]}</p>
-      //         </div>
-      //       </div>
-      //     );
-      //   }
+          // if(con['options'].includes(opt['option']) === true){
+          //   lclass = lclass + " text-success";
+          // }
 
-      //   let options = con["options"].map((opt) => {
-      //     op = op + 1;
-      //     let ouniq = `OPT${size}${op}`;
+          if (opt["selected"] === true) {
+            return (
+              <div key={ouniq} class='form-check'>
+                <input
+                  className='form-check-input'
+                  type='checkbox'
+                  defaultChecked={true}
+                  QID={con["question_id"]}
+                  data={opt["option"]}
+                  disabled></input>
+                <label className={lclass} for='flexCheckDefault'>
+                  {opt["option"]}
+                </label>
+              </div>
+            );
+          }
 
-      //     return (
-      //       <div key={ouniq} class='form-check'>
-      //         <input
-      //           className='form-check-input'
-      //           type='checkbox'
-      //           QID={con["question_id"]}
-      //           data={opt["option"]}
-      //           value={opt["correct"]}></input>
-      //         <label className='form-check-label' for='flexCheckDefault'>
-      //           {opt["option"]}
-      //         </label>
-      //       </div>
-      //     );
-      //   });
+          return (
+            <div key={ouniq} class='form-check'>
+              <input
+                className='form-check-input'
+                type='checkbox'
+                QID={con["question_id"]}
+                data={opt["option"]}
+                disabled></input>
+              <label className={lclass} for='flexCheckDefault'>
+                {opt["option"]}
+              </label>
+            </div>
+          );
+        });
 
-      //   return (
-      //     <div key={uniq} className='card border-primary mb-3 custom-card'>
-      //       <div
-      //         className='card-header bg-transparent'
-      //         dangerouslySetInnerHTML={{
-      //           __html: dompurify.sanitize(question),
-      //         }}
-      //       />
-      //       <div className='card-body' id={"Q" + size.toString()}>
-      //         {options}
-      //         <button
-      //           className='btn-primary custom-btn'
-      //           id={`Btn${size}`}
-      //           type='button'
-      //           onClick={() => {
-      //             this.submission(size.toString());
-      //           }}>
-      //           Submit
-      //         </button>
-      //       </div>
-      //       <div
-      //         className='card-footer bg-transparent'
-      //         id={"Sub" + size.toString()}></div>
-      //     </div>
-      //   );
-      // });
+        var correctText, correctClass;
+        if (correct === true) {
+          correctText = "Correct";
+          correctClass = "text-success text-center fw-bolder";
+        } else {
+          correctText = "Incorrect";
+          correctClass = "text-danger text-center fw-bolder";
+        }
 
-      // questions = <div class='col'>{content}</div>;
+        return (
+          <div key={uniq} className='card border-primary mb-3 custom-card'>
+            <div
+              className='card-header bg-transparent'
+              dangerouslySetInnerHTML={{
+                __html: dompurify.sanitize(question),
+              }}
+            />
+            <div className='card-body' id={"Q" + qind.toString()}>
+              {options}
+            </div>
+            <div
+              className='card-footer bg-transparent'
+              id={"Sub" + qind.toString()}>
+              <div class='container'>
+                <div class='row'>
+                  {/* <div class='col'>
+                    <p className='text-start'>Score: {json["awardedMarks"]}</p>
+                  </div> */}
 
-      // console.log("reached = ", reached);
-      // if (reached === true) {
-      //   this.setState({ loading: false });
-      // }
+                  <p className={correctClass}>{correctText}</p>
+
+                  {correctText === "Incorrect" && (
+                    <p className='text-success text-center fw-bolder'>
+                      Correct Answer is : {con["options"]}
+                    </p>
+                  )}
+
+                  {/* <div class='col'>
+                    <p className='text-end'>submitted on {json["timestamp"]}</p>
+                  </div> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      let options = con["options"].map((opt) => {
+        op = op + 1;
+        let ouniq = `OPT${size}${op}`;
+        let lid = `OPL${qind}${op}`;
+        return (
+          <div key={ouniq} class='form-check'>
+            <input
+              className='form-check-input'
+              type='checkbox'
+              QID={con["question_id"]}
+              data={opt["option"]}
+              labelid={lid}
+              value={opt["correct"]}></input>
+            <label id={lid} className='form-check-label' for='flexCheckDefault'>
+              {opt["option"]}
+            </label>
+          </div>
+        );
+      });
+
+      return (
+        <div key={uniq} className='card border-primary mb-3 custom-card'>
+          <div
+            className='card-header bg-transparent'
+            dangerouslySetInnerHTML={{
+              __html: dompurify.sanitize(question),
+            }}
+          />
+          <div
+            className='card-body position-relative'
+            id={"Q" + qind.toString()}>
+            {options}
+            <button
+              className='btn list-button custom-btn'
+              id={`Btn${qind}`}
+              type='button'
+              onClick={() => {
+                this.submission(qind.toString());
+              }}>
+              Submit
+            </button>
+          </div>
+          <div
+            className='card-footer bg-transparent'
+            id={"Sub" + qind.toString()}></div>
+        </div>
+      );
     });
+
+    console.log(content);
+
+    questions = <div class='col'>{content}</div>;
+
+    // if(reached === true){
+    // this.setState({loading: false});
+    // }
   }
 
-  postToDB(options, correct) {
+  postToDB(options, correct, ind) {
     var qid = "";
     options = options.map((opt) => {
       qid = opt.getAttribute("qid");
+
       return { option: opt.getAttribute("data"), selected: opt.checked };
     });
 
@@ -245,18 +284,25 @@ class Quiz extends Component {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+    console.log("moduleID's = ", this.props.data);
+
     var raw = JSON.stringify({
-      programId: this.props.pid,
-      courseInstanceId: this.props.cin,
-      courseId: this.props.cid,
-      moduleId: this.props.mid,
+      userId: localStorage.getItem("id"),
+      programId: this.props.data.programId,
+      courseInstanceId: this.props.data.courseInstanceId,
+      courseId: this.props.data.courseId,
+      moduleId: this.props.data.moduleId,
       activityType: "quiz",
-      activityId: this.props.aid,
+      activityId: this.props.data.activityId,
       questionId: qid,
       response: response,
       result: correct,
+      evaluationStatus: true,
+      awardedMarks: 0,
       maxMarks: 1,
     });
+
+    console.log("post data = ", raw);
 
     var requestOptions = {
       method: "POST",
@@ -272,7 +318,28 @@ class Quiz extends Component {
       requestOptions
     )
       .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((result) => {
+        console.log(result);
+
+        // console.log("options log =",options);
+        // options.forEach((opt,ind,arr)=>{
+        //   var opid = opt.getAttribute('labelid');
+        //   document.getElementById(opid).setAttribute('class',"text-success form-check-label")
+        // })
+
+        var info = document.getElementById("Sub" + ind);
+        if (correct === true) {
+          ReactDOM.render(
+            <p className='text-success fw-bolder'>Correct</p>,
+            info
+          );
+        } else {
+          ReactDOM.render(
+            <p className='text-danger fw-bolder'>Incorrect</p>,
+            info
+          );
+        }
+      })
       .catch((error) => console.log("error", error));
   }
 
@@ -290,29 +357,32 @@ class Quiz extends Component {
       element.disabled = true;
     });
 
-    document.getElementById(`Btn${ind}`).disabled = true;
+    console.log("answer indicies array =");
+    console.log(answers);
+
+    var button = document.getElementById(`Btn${ind}`);
+    button.outerHTML = "";
+    // button.className = "btn btn-secondary";
+    // button.disabled = true;
 
     var correct = true;
     var ans;
     for (ans in answers) {
-      if ((options[ans].checked !== true) | (options[ans].checked !== "true")) {
+      console.log("each answer index = ", ans);
+      console.log("answer not checked = ", options[ans].checked !== true);
+      if (options[ans].checked !== true) {
         correct = false;
         break;
       }
     }
 
+    console.log("correctness after checking =", correct);
+
     // answers = answers.filter(ans => {
     //     return (options[ans].checked === true | options[ans].checked === "true");
     // });
 
-    var info = document.getElementById("Sub" + ind);
-    if (correct === true) {
-      ReactDOM.render(<p className='text-success'>Correct</p>, info);
-    } else {
-      ReactDOM.render(<p className='text-danger'>Incorrect</p>, info);
-    }
-
-    this.postToDB(options, correct);
+    this.postToDB(options, correct, ind);
 
     // questions = document.getElementById('content').innerHTML;
     // console.log('question after getting inner html');
@@ -330,9 +400,11 @@ class Quiz extends Component {
   }
 
   render() {
+    console.log("loafing", this.state.loading);
+    console.log("submit", submit);
     if ((this.state.loading === true) & (submit === true)) {
-      this.setQuiz();
-      submit = false;
+      console.log("in render set quiz condition");
+      this.getSubmitted();
       return (
         <div class='spinner-border' role='status'>
           <span class='visually-hidden'>Loading...</span>
@@ -340,7 +412,7 @@ class Quiz extends Component {
       );
     }
 
-    // await this.setQuiz();
+    this.setQuiz();
 
     return (
       <div className='row' id='questions'>
