@@ -5,20 +5,22 @@ import ReactDOM from 'react-dom';
 import Quiz from './Quiz/Quiz';
 import SideBar from "./sideBar";
 import dompurify from "dompurify";
-import ReactPlayer from "react-player";
+import { ReactVideo, YoutubePlayer } from "reactjs-media";
+import Submission from "./submission";
 import "./moduleCatalog.css";
 
 var dropDownItems = "";
-var descType = "";
-var content = "";
-let courseInstanceId,
-  programId,
-  courseId,
-  activityId,
-  questionId,
-  moduleId,
-  maxMarks,
-  activityType;
+var moduleDescription;
+var moduleData = {
+  courseInstanceId: "",
+  programId: "",
+  courseId: "",
+  activityId: "",
+  questionId: "",
+  moduleId: "",
+  maxMarks: "",
+  activityType: "",
+};
 
 // const { Component } = React;
 
@@ -26,27 +28,23 @@ class moduleCatalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      desc: "",
       list: null,
       loading: true,
-      submitLink: "",
     };
-    // this.child = React.createRef();
     this.setModuleDesc = this.setModuleDesc.bind(this);
     this.setSubModuleDesciption = this.setSubModuleDesciption.bind(this);
-    this.state.submission = this.submission.bind(this);
-    this.submitNow = this.submitNow.bind(this);
+    // this.state.submission = this.submission.bind(this);
+    // this.submitNow = this.submitNow.bind(this);
   }
 
   componentDidMount() {
     var token = localStorage.getItem("token");
-    // let courseId = window.location.pathname.replace("/modules-catalog/", "");
-    courseInstanceId = this.props.match.params.courseInstanceId;
-    courseId = this.props.match.params.courseId;
-    programId = this.props.match.params.programId;
-    console.log(courseId, programId);
+    moduleData.courseInstanceId = this.props.match.params.courseInstanceId;
+    moduleData.courseId = this.props.match.params.courseId;
+    moduleData.programId = this.props.match.params.programId;
+    console.log(moduleData.courseId, moduleData.programId);
 
-    let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${courseInstanceId}/?token=${token}`;
+    let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${moduleData.courseInstanceId}/?token=${token}`;
     console.log(link);
     fetch(link, {
       method: "get",
@@ -83,207 +81,175 @@ class moduleCatalog extends Component {
   }
 
   setSubModuleDesciption(Id, descript) {
-
-    moduleId = Id;
-    // ReactDOM.render("",document.getElementById('content'));
     descript = JSON.parse(descript);
-    // console.log(descript);
+    console.log("module description = ",descript);
+    moduleData.moduleId = Id;
+    moduleData.activityId = descript['activity_id'];
     var description = descript["activity_json"];
     console.log(description);
-    console.log(`switch assignment condition ${(description[0]['activityType']=== "assignment")}`);
-    if(description[0]['activityType']==="quiz"){
+    console.log(
+      `switch assignment condition ${
+        description[0]["activityType"] === "assignment"
+      }`
+    );
+    if (description[0]["activityType"] === "quiz") {
       description = JSON.stringify(description);
-      // content = (<Quiz ref={this.child} mid={moduleId}>{description}</Quiz>);
-      content = (<Quiz pid={programId} cin={courseInstanceId} cid={courseId} aid={descript['activity_id']} mid={moduleId}>{description}</Quiz>);
-    }else if(description[0]['activityType']==="assignment"){
-      console.log('in assignment case');
-        activityId = descript["activity_id"];
-        var html = "<div>";
-        description.forEach((desc) => {
-          console.log(desc);
-          html = "<h1>" + html + desc["title"] + "</h1><br></br>";
-          if (desc["text"] !== undefined) {
-            html = html + desc["text"];
-            descType = "";
-          } else if (desc["questions"] ?? [0] === "undefined") {
-            descType = desc["questions"][0]["questionType"];
-            questionId = desc["questions"][0]["question_id"];
-            activityType = desc["activityType"];
-            console.log("qsId", questionId);
-            maxMarks = desc["questions"][0]["max_marks"];
-            html =
-              html +
-              desc["questions"][0]["questionText"][0]["text"] +
-              "</a><br><br>" +
-              "Max marks: " +
-              desc["questions"][0]["max_marks"];
-          }
-        });
-        html = html + "</div>";
-        content = (
-          <div className="container">
-          <div
-          className='contentarea'
-          dangerouslySetInnerHTML={{
-            __html: dompurify.sanitize(html),
-          }}
-        />
-        <div>{this.submission()}</div>
-        </div>);
-    }else if(description[0]['activityType']==="notes"){
-      console.log('notes');
-        activityId = descript["activity_id"];
-        var html = "<div>";
-        description.forEach((desc) => {
-          console.log(desc);
-          html = "<h1>" + html + desc["title"] + "</h1><br></br>";
-          if (desc["text"] !== undefined) {
-            html = html + desc["text"];
-            descType = "";
-          }
-        });
-          html = html + "</div>";
-        content = (
-          <div className="container">
-          <div
-          className='contentarea'
-          dangerouslySetInnerHTML={{
-            __html: dompurify.sanitize(html),
-          }}
-        />
-        </div>);
-    }
+      moduleDescription = <Quiz key={moduleData.activityId} data={moduleData}>{description}</Quiz>;
+    } else if (description[0]["activityType"] === "assignment") {
+      moduleData.activityId = descript["activity_id"];
+      var html = "<div>";
+      description.forEach((desc) => {
+        console.log(desc);
+        html = "<h1>" + html + desc["title"] + "</h1><br></br>";
+        if (desc["text"] !== undefined) {
+          html = html + desc["text"];
+        } else if (desc["questions"]?.[0]) {
+          moduleData.questionId = desc["questions"][0]["question_id"];
+          moduleData.activityType = desc["activityType"];
+          console.log("qsId", moduleData.questionId);
+          moduleData.maxMarks = desc["questions"][0]["max_marks"];
+          html =
+            html +
+            desc["questions"][0]["questionText"][0]["text"] +
+            "</a><br><br>" +
+            "Max marks: " +
+            desc["questions"][0]["max_marks"];
+        }
+      });
+      html = html + "</div>";
 
-    else if(description[0]['activityType']==="youtubevideo" | description[0]['activityType']==="video"){
-      console.log('youtube vedio');
-        activityId = descript["activity_id"];   
-        var html = "<div>";
-        description.forEach((desc) => {
-          console.log(desc);
-          html = "<h1>" + html + desc["title"] + "</h1><br></br>"; 
-        });
-        html = html + "</div>";
-        var vedio = "<div>";
-        description.forEach((desc) => {
-          //console.log(desc);;
-          (description[0]['activityType']==="youtubevideo")?
-          vedio =  "https://www.youtube.com/watch?v=" + desc['videoURL']:vedio = desc['videoURL'];
-          console.log(vedio);
-        });
-        vedio = vedio +"</div>"
-        
-        content = (
-          <div>
-            <div
-          dangerouslySetInnerHTML={{
-            __html: dompurify.sanitize(html),
-          }}
+      moduleDescription = (
+        <div className='container'>
+          <div
+            className='contentarea'
+            dangerouslySetInnerHTML={{
+              __html: dompurify.sanitize(html),
+            }}
           />
-          <div className="reactplayer">
-          <ReactPlayer url={vedio} />
-          </div>
-           
-        </div>);
-    }
-    // ReactDOM.render(content,document.getElementById('content'));
-    this.setState({ loading: false });
-
-  }
-
-  submission() {
-    // console.log("DESC", descType);
-    if (descType === "filesubmission") {
-      let submitLink = (
-        <div className='submission'>
-          <form>
-            <input
-              id="submit"
-              className='submitBox'
-              type='text'
-              name='submitLink'
-              placeholder='paste your submission link here'
-            />
-            <button id='link-submit' type='button' onClick={this.submitNow}>
-              submit
-            </button>
-          </form>
+          <Submission
+            key={moduleData.questionId}
+            data={JSON.stringify(moduleData)}></Submission>
         </div>
       );
-      descType = "";
-      return submitLink;
-    } else return "";
-  }
-  submitNow() {
-    console.log(" submission link =",document.getElementById('submit').value);
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+      // console.log("submod,:", moduleDescription);
+    } else if (description[0]["activityType"] === "notes") {
+      console.log("notes");
+      moduleData.activityId = descript["activity_id"];
+      html = "<div>";
+      description.forEach((desc) => {
+        console.log(desc);
+        html = "<h1>" + html + desc["title"] + "</h1><br></br>";
+        if (desc["text"] !== undefined) {
+          html = html + desc["text"];
+        }
+      });
+      html = html + "</div>";
+      moduleDescription = (
+        <div className='container'>
+          <div
+            className='contentarea'
+            dangerouslySetInnerHTML={{
+              __html: dompurify.sanitize(html),
+            }}
+          />
+        </div>
+      );
+    } else if (
+      description[0]["activityType"] === "youtubevideo" ||
+      description[0]["activityType"] === "video"
+    ) {
+      console.log("youtube vedio");
+      moduleData.activityId = descript["activity_id"];
+      html = "<div>";
+      description.forEach((desc) => {
+        console.log(desc);
+        html = "<h1>" + html + desc["title"] + "</h1><br></br>";
+      });
+      html = html + "</div>";
+      var vedio = "";
+      description.forEach((desc) => {
+        if (description[0]["activityType"] === "youtubevideo") {
+          vedio = "https://youtu.be/" + desc["videoURL"];
 
-    var raw = JSON.stringify({
-      programId: programId,
-      courseInstanceId: courseInstanceId,
-      courseId: courseId,
-      moduleId: moduleId,
-      activityType: activityType,
-      activityId: activityId,
-      questionId: questionId,
-      response: {
-        assignment: document.getElementById('submit').value,
-      },
-      maxMarks: maxMarks,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(
-      `${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/insert/?token=${localStorage.getItem('token')}`,
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+          moduleDescription = (
+            <div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: dompurify.sanitize(html),
+                }}
+              />
+              <div className='player-wrapper'>
+                <YoutubePlayer
+                  src={vedio} // Reqiured
+                  allowFullScreen='true'
+                  width={850}
+                  height={600}
+                />
+              </div>
+            </div>
+          );
+        } else {
+          vedio = desc["videoURL"];
+          moduleDescription = (
+            <div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: dompurify.sanitize(html),
+                }}
+              />
+              <div className='player-wrapper'>
+                <ReactVideo
+                  src={vedio} // Reqiured
+                  width={450}
+                  height={600}
+                  primaryColor='red'
+                  type='video/mp4'
+                  allowFullScreen='true'
+                />
+              </div>
+            </div>
+          );
+        }
+      });
+    }
+    this.setState({ loading: false });
   }
 
   setModuleDesc(mod) {
-    // ReactDOM.render("",document.getElementById('content'));
-    mod = JSON.parse(mod)
-    console.log("mod =",mod);
-    descType = "";
-    content = (
-      <div className="container">
-      <div
-      className='contentarea'
-      dangerouslySetInnerHTML={{
-        __html: dompurify.sanitize(mod['desc']),
-      }}
-    />
-    <div>{this.submission()}</div>
-    </div>);
-    // ReactDOM.render(content,document.getElementById('content'));
+    mod = JSON.parse(mod);
+    // console.log("in desc");
+    moduleDescription = (
+      <div className='container'>
+        <div
+          className='contentarea'
+          dangerouslySetInnerHTML={{
+            __html: dompurify.sanitize(mod["desc"]),
+          }}
+        />
+      </div>
+    );
     this.setState({ loading: false });
   }
 
   render() {
+    console.log("module render");
     if (this.state.loading) {
       return <NavBar></NavBar>;
     }
 
     this.SetSideBar(this.state.list);
+    console.log(moduleData.questionId);
     return (
       <div>
         <NavBar></NavBar>
-
         <aside id='aside'>
           <div className='accordion ' id='accordionExample'>
             {dropDownItems}
           </div>
         </aside>
-        <main id="content">
-        {content}
+        <main id='content'>
+          {moduleDescription}
+          <div></div>
         </main>
       </div>
     );
