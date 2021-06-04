@@ -56,7 +56,10 @@ class moduleCatalog extends Component {
           this.setState({ list: json.contentJSON, loading: false });
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+        this.setState({ loading: false });
+      });
   }
 
   SetSideBar(list) {
@@ -239,7 +242,22 @@ class moduleCatalog extends Component {
         </>
       );
     }
-
+    if (this.state.list === null)
+      return (
+        <>
+          <div className='nodata container mt-5'>
+            <NavBar />
+            <div class='alert alert-dark' role='alert'>
+              <h4 class='alert-heading'>No Modules to display</h4>
+              <p>You are not enrolled in this Program</p>
+              <hr></hr>
+              <p class='mb-0'>
+                Kindly, contact your mentor for more Information.
+              </p>
+            </div>
+          </div>
+        </>
+      );
     this.SetSideBar(this.state.list);
     // console.log(moduleData.questionId);
     return (
