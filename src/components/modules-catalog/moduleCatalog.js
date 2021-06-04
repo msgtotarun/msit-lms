@@ -39,7 +39,7 @@ class moduleCatalog extends Component {
     moduleData.courseInstanceId = this.props.match.params.courseInstanceId;
     moduleData.courseId = this.props.match.params.courseId;
     moduleData.programId = this.props.match.params.programId;
-    console.log(moduleData.courseId, moduleData.programId);
+    // console.log(moduleData.courseId, moduleData.programId);
 
     let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${moduleData.courseInstanceId}/?token=${token}`;
     console.log(link);
@@ -48,7 +48,7 @@ class moduleCatalog extends Component {
     })
       .then((response) => response.text())
       .then((result) => {
-        // console.log("result = ");
+        // //console.log("result = ");
         // console.log(result);
         var json = JSON.parse(result);
         // console.log(json.contentJSON[0]);
@@ -83,7 +83,7 @@ class moduleCatalog extends Component {
     // console.log(descript);
     var description = descript["activity_json"];
     moduleData.activityId = descript["activity_id"];
-    console.log(description);
+    //  console.log(description);
 
     if (description[0]["activityType"] === "quiz") {
       description = JSON.stringify(description);
@@ -95,14 +95,14 @@ class moduleCatalog extends Component {
     } else if (description[0]["activityType"] === "assignment") {
       var html = "<div>";
       description.forEach((desc) => {
-        console.log(desc);
+        //   console.log(desc);
         html = "<h1>" + html + desc["title"] + "</h1><br></br>";
         if (desc["text"] !== undefined) {
           html = html + desc["text"];
         } else if (desc["questions"]?.[0]) {
           moduleData.questionId = desc["questions"][0]["question_id"];
           moduleData.activityType = desc["activityType"];
-          console.log("qsId", moduleData.questionId);
+          // console.log("qsId", moduleData.questionId);
           moduleData.maxMarks = desc["questions"][0]["max_marks"];
           html =
             html +
@@ -133,7 +133,7 @@ class moduleCatalog extends Component {
       moduleData.activityId = descript["activity_id"];
       html = "<div>";
       description.forEach((desc) => {
-        console.log(desc);
+        // console.log(desc);
         html = "<h1>" + html + desc["title"] + "</h1><br></br>";
         if (desc["text"] !== undefined) {
           html = html + desc["text"];
@@ -154,11 +154,11 @@ class moduleCatalog extends Component {
       description[0]["activityType"] === "youtubevideo" ||
       description[0]["activityType"] === "video"
     ) {
-      console.log("youtube vedio");
+      //  console.log("youtube vedio");
       moduleData.activityId = descript["activity_id"];
       html = "<div>";
       description.forEach((desc) => {
-        console.log(desc);
+        //  console.log(desc);
         html = "<h1>" + html + desc["title"] + "</h1><br></br>";
       });
       html = html + "</div>";
@@ -228,13 +228,20 @@ class moduleCatalog extends Component {
   }
 
   render() {
-    console.log("module render");
+    // console.log("module render");
     if (this.state.loading) {
-      return <NavBar></NavBar>;
+      return (
+        <>
+          <NavBar />
+          <div class='spinner-border' role='status'>
+            <span class='visually-hidden'>Loading...</span>
+          </div>
+        </>
+      );
     }
 
     this.SetSideBar(this.state.list);
-    console.log(moduleData.questionId);
+    // console.log(moduleData.questionId);
     return (
       <div>
         <NavBar></NavBar>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Repo from "../Repo/Repo";
+import Repo from "../Repositories/Repositories";
 import NavBar from "../NavBar/NavBar";
 import "./profile.css";
 

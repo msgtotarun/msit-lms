@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 
-import { withRouter } from "react-router-dom";
-import "./Repo.css";
+import { Link, withRouter } from "react-router-dom";
+import "./Repositories.css";
 
 var showList = [];
-
+var layoutStyle = null;
 // var client = null
 const clientID = process.env.REACT_APP_GITHUB_CLIENT;
 const clientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
 const { REACT_APP_APIBASE_URL } = process.env;
-class Repo extends Component {
+class Repositories extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,7 +63,7 @@ class Repo extends Component {
       var desc = repo["description"];
 
       return (
-        <div class='col'>
+        <div key={rlink} class='col'>
           <div class='card repocard'>
             <div class='card-body'>
               <p class='fs-5 text-truncated'>
@@ -74,7 +74,12 @@ class Repo extends Component {
                 <i class='bi bi-info-circle'></i> {desc}
               </p>
               <i class='bi bi-link-45deg'></i>{" "}
-              <a href={rlink} class='card-link text-truncate'>
+              <a
+                href='#'
+                onClick={() => {
+                  window.open(rlink, "_blank");
+                }}
+                class='card-link text-truncate'>
                 Redirect to Repository
               </a>
             </div>
@@ -96,20 +101,16 @@ class Repo extends Component {
         <div class='card mb-3 customcard'>
           <div class='col-md-8'>
             <div class='card-body'>
-              <div class='input-group mb-3'>
-                <h3 className='text-center '>
-                  Authorize this acccount to access your github account
-                </h3>
-                <br></br>
-                <a
-                  class='link-primary'
+              <div class='input-group mb-3 position-relative'>
+                <button
+                  class='btn btn-primary position-absolute top-50 start-50 translate-middle'
                   onClick={() => {
                     window.location =
                       "https://github.com/login/oauth/authorize?client_id=" +
                       clientID;
                   }}>
                   Authorize
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -164,7 +165,7 @@ class Repo extends Component {
         console.log(result);
         console.log("check if message exists");
         console.log(result["message"]);
-        if (result["message"] === undefined) {
+        if (result["message"] == undefined) {
           this.repolistmapper(result);
           this.setState({ loading: false });
         } else {
@@ -208,4 +209,4 @@ function repoCard(props) {
   );
 }
 
-export default withRouter(Repo);
+export default withRouter(Repositories);

@@ -36,6 +36,40 @@ class ListPrograms extends Component {
     img = `data:image/jpeg;base64,${this.props.image}`;
   }
 
+  setOptions() {
+    var i = 0;
+    var options = JSON.parse(this.props.id);
+    options = options.map((obj) => {
+      if (i === 0) {
+        i = i + 1;
+        return (
+          <option
+            key={obj["_id"]}
+            value={obj["_id"]}
+            defaultValue={obj["courseInstanceLabel"]}>
+            {obj["courseInstanceLabel"]}
+          </option>
+        );
+      }
+
+      return (
+        <option key={obj["_id"]} value={obj["_id"]}>
+          {obj["courseInstanceLabel"]}
+        </option>
+      );
+    });
+
+    return (
+      <div className='row '>
+        <div className='col-sm'>
+          <select id={this.props.courseId} class='form-select programSelect'>
+            {options}
+          </select>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     // console.log('inside list programs component');
     // console.log('props in list-programs is as follows');
@@ -44,7 +78,9 @@ class ListPrograms extends Component {
     ++id;
     let colapse = "colapse" + id;
     let head = "head" + id;
-
+    var button =
+      "<button type='button' className='btn btn-outline-primary button1 bottom-0 end-0'>Enter</button>";
+    var selection = this.setOptions();
     return (
       <div className='accordion-item'>
         <h2 className='accordion-header' id={head}>
@@ -72,15 +108,18 @@ class ListPrograms extends Component {
                   __html: dompurify.sanitize(this.props.description),
                 }}
               />
-              <img className='flow-image' src={img} />
+              <img className='flow-image' src={img} alt='' />
+              {selection}
             </div>
             <button
               type='button'
               className='btn button1 list-button'
               onClick={() => {
-                this.handleListClick(this.props.id);
+                let course = document.getElementById(this.props.courseId);
+                let id = course.options[course.selectedIndex].value;
+                this.handleListClick(id);
               }}>
-              {this.props.button}
+              Course Home
             </button>
           </div>
         </div>

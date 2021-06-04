@@ -9,7 +9,6 @@ var showList = [];
 var view = null;
 var layoutStyle = null;
 var msitDescription = null;
-var programID = "";
 class ProgramCatalog extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +36,7 @@ class ProgramCatalog extends Component {
     // }
     layoutStyle = localStorage.getItem("layout");
     if ((layoutStyle === undefined) | (layoutStyle === null)) {
-      localStorage.getItem("layout", true);
+      localStorage.setItem("layout", true);
       layoutStyle = true;
     } else if (layoutStyle === "true") {
       layoutStyle = true;
@@ -67,7 +66,10 @@ class ProgramCatalog extends Component {
         // json = json[0]['enrollments'];
         console.log("get programs api fetched");
         console.log(json);
-        if (json[0]["enrollments"][0]["programID"] !== null) {
+        if (
+          (json[0]["enrollments"].length !== 0) |
+          (json[0]["enrollments"][0]["programID"] !== null)
+        ) {
           console.log(json[0]["enrollments"]);
           this.setState({
             list: json[0]["enrollments"],
@@ -86,7 +88,7 @@ class ProgramCatalog extends Component {
     token = localStorage.getItem("token");
     userID = localStorage.getItem("id");
     // programID = localStorage.getItem("program");
-    // programID = this.props.match.params.programId;
+    programID = this.props.match.params.programId;
     console.log(
       `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${programID}/?token=${token}`
     );
@@ -107,10 +109,31 @@ class ProgramCatalog extends Component {
         console.log("course data");
         console.log(json);
 
-        if (json["courses"][0]["courseID"] !== null) {
-          json["courses"] = json["courses"].filter((obj) => {
-            return obj["courseInstances"][0]["isLive"] === true;
+        if (json["courses"][0]["courseID"] !== undefined) {
+          json["courses"] = json["courses"].map((course) => {
+            course["courseInstances"] = course["courseInstances"].filter(
+              (obj) => {
+                return obj["isLive"] === true;
+              }
+            );
+            // console.log('mapped course =');
+            // console.log(course)
+            return course;
           });
+
+          json["courses"] = json["courses"].filter((obj) => {
+            // console.log('filtering courses =');
+            // console.log(obj)
+            // console.log('course instance details =');
+            // console.log(obj['courseInstances']);
+            return obj["courseInstances"].length !== 0;
+          });
+
+          // console.log('filtered and mapped courses = ');
+          // console.log(json['courses'])
+          // json["courses"] = json["courses"].filter((obj) => {
+          //   return obj["courseInstances"][0]["isLive"] === true;
+          // });
           this.setState(
             { list: json["courses"], layout: layoutStyle, loading: false },
             () => {
@@ -139,6 +162,7 @@ class ProgramCatalog extends Component {
         <NavBar />
         <div class='alert alert-dark' role='alert'>
           <h4 class='alert-heading'>No {view} to display</h4>
+          <p>You are not enrolled in any {view}</p>
           <hr></hr>
           <p class='mb-0'>Kindly, contact your mentor for more Information.</p>
         </div>
@@ -162,8 +186,8 @@ class ProgramCatalog extends Component {
       this.getPrograms(userID, token);
     } else {
       // var id = localStorage.getItem("program");
-      programID = this.props.match.params.programId;
-      this.getCourses(programID, userID, token);
+      var id = this.props.match.params.programId;
+      this.getCourses(id, userID, token);
     }
   }
 
@@ -172,16 +196,16 @@ class ProgramCatalog extends Component {
     // view = this.props.location.state.view;
     console.log(`view = ${view}`);
     List = List.map((program) => {
-      var [ID, courseId, Title, Desc, Img] = this.getData(program);
-      // console.log(
-      //   `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
-      // );
+      var [ID, Title, Desc, Img, instance] = this.getData(program);
+      console.log(
+        `List ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`
+      );
       return (
         <ListPrograms
           id={ID}
-          key={ID}
-          programId={programID}
-          courseId={courseId}
+          programId={this.props.match.params.programId}
+          courseId={instance}
+          key={JSON.parse(ID)["_id"]}
           view={view}
           title={Title}
           description={Desc}
@@ -206,9 +230,11 @@ class ProgramCatalog extends Component {
     // var view = this.props.location.state.view;
     console.log("inside set card");
     List = List.map((program) => {
-      var [ID, Title] = this.getData(program);
-      // console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
-      return <Cols id={ID} key={ID} view={view} title={Title}></Cols>;
+      var [ID, Title, Desc, Img] = this.getData(program);
+      console.log(`ID = ${ID},Title = ${Title}, Desc = ${Desc}, Img = ${Img}`);
+      return (
+        <Cols id={ID} key={ID} view={view} title={Title} button='Enter'></Cols>
+      );
     });
 
     console.log("card in html dom format is as shown below");
@@ -220,7 +246,7 @@ class ProgramCatalog extends Component {
   getData(program) {
     console.log("fetched data from api");
     console.log(program);
-    var [ID, Title] = [null, null];
+    var [ID, Title, Desc, Img, instance] = [null, null, null, null, null];
     if (view === "programs") {
       ID = program["programID"]["_id"];
       Title = program["programID"]["programName"];
@@ -230,17 +256,14 @@ class ProgramCatalog extends Component {
           ""
         );
       }
-
-      return [ID, Title];
     } else {
-      var [courseId, Desc, Img] = [null, null, null];
-      ID = program["courseInstances"][0]["_id"];
-      courseId = program["courseID"]["_id"];
+      ID = JSON.stringify(program["courseInstances"]);
       Title = program["courseID"]["courseName"];
       Desc = program["courseID"]["courseDescription"];
       Img = program["courseID"]["image"]["image"];
-      return [ID, courseId, Title, Desc, Img];
+      instance = program["courseID"]["_id"];
     }
+    return [ID, Title, Desc, Img, instance];
   }
 
   setLayout() {
@@ -317,8 +340,7 @@ function Cols(props) {
         key={props.id}
         layout={layoutStyle}
         id={props.id}
-        title={props.title}
-        description={props.description}></LargeCard>
+        title={props.title}></LargeCard>
     </>
   );
 }

@@ -178,7 +178,7 @@ class Quiz extends Component {
         return (
           <div key={uniq} className='card border-primary mb-3 custom-card'>
             <div
-              className='card-header bg-transparent '
+              className='quiz_header card-header '
               dangerouslySetInnerHTML={{
                 __html: dompurify.sanitize(question),
               }}
@@ -236,7 +236,7 @@ class Quiz extends Component {
       return (
         <div key={uniq} className='card border-primary mb-3 custom-card'>
           <div
-            className='card-header bg-transparent'
+            className='quiz_header card-header'
             dangerouslySetInnerHTML={{
               __html: dompurify.sanitize(question),
             }}
